@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1532" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/icon-180.png" />
+  <meta name="description" content="Novi Sad Smart Guide — interaktivni koncept turističke aplikacije, oktobar 2026." />
+  <title>Novi Sad Smart Guide — interaktivni prototip</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{--navy:#09152e;--navy2:#122849;--ink:#14243c;--muted:#627188;--line:#e8edf2;--teal:#20bfb0;--orange:#fb9869;--bg:#f3f6fa;--white:#fff;--r:19px;--shadow:0 14px 45px rgba(22,43,72,.075)}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--bg)}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #20bfb0;outline-offset:3px}a{color:inherit}h1,h2,h3,p{margin:0}.hidden{display:none!important}
+    .app-shell{display:grid;grid-template-columns:268px minmax(0,1fr);min-height:100vh}
+    .sidebar{background:var(--navy);color:#fff;padding:31px 22px;display:flex;flex-direction:column;gap:30px;position:sticky;top:0;height:100vh;overflow:auto}
+    .brand{display:flex;align-items:center;gap:13px;text-decoration:none}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(140deg,#25bfb3,#1179bd);display:grid;place-items:center;box-shadow:0 7px 22px #22bfb055}.logo svg{width:26px;height:26px}.brand-title{font-family:Manrope,sans-serif;font-weight:800;letter-spacing:.3px;font-size:14px;line-height:1.3}.brand-title small{font-size:10px;letter-spacing:2px;color:#73dacc;display:block;margin-top:3px}.side-label{color:#7f99bb;font-size:10px;letter-spacing:2.5px;font-weight:800;padding:0 14px}.nav{display:flex;flex-direction:column;gap:8px}.nav button{width:100%;border:0;text-align:left;background:none;color:#aec0d8;display:flex;align-items:center;gap:14px;padding:14px 15px;border-radius:12px;font-weight:700;font-size:13px}.nav button svg{width:19px;height:19px;stroke-width:1.8}.nav button:hover,.nav button.active{background:rgba(32,191,176,.15);color:#fff}.nav button.active{border:1px solid rgba(32,191,176,.2)}.nav button.active svg{color:#49ddcf}.sidebar-bottom{margin-top:auto;background:linear-gradient(150deg,#183657,#102340);border:1px solid #25466c;border-radius:18px;padding:18px}.sidebar-bottom span{color:#5de1d3;font-size:10px;letter-spacing:2px;font-weight:800}.sidebar-bottom h3{font-size:15px;line-height:1.5;margin:9px 0 8px}.sidebar-bottom p{font-size:11px;color:#b1c1d6;line-height:1.6}.side-foot{color:#7e92b0;font-size:10px;line-height:1.6;margin-top:-14px}
+    .main{min-width:0;padding:24px clamp(20px,4vw,58px) 90px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.eyebrow{font-size:10px;font-weight:800;letter-spacing:2.3px;color:#2b8f98;text-transform:uppercase}.top-left{display:flex;align-items:center;gap:11px}.dot{width:8px;height:8px;border-radius:50%;background:#20bfae;box-shadow:0 0 0 5px #20bfb01c}.top-right{display:flex;align-items:center;gap:10px}.pill{border:1px solid #e2e8ee;background:#fff;padding:11px 15px;border-radius:100px;font-size:12px;font-weight:800;color:#32465e}.pill.soft{background:#e6f6f3;border-color:#ccf1eb;color:#138f83}.pill.click:hover{background:#edf6f6}.desktop-page-title{font-family:Manrope,sans-serif;font-size:29px;line-height:1.25;letter-spacing:-1.2px;margin-bottom:7px}.subtitle{color:var(--muted);font-size:13px;line-height:1.6}.page-head{margin:0 0 24px}
+    .hero{min-height:295px;border-radius:24px;background:linear-gradient(90deg,#07152feF 2%,#0b213aca 50%,#0c244477),url('https://upload.wikimedia.org/wikipedia/commons/7/7a/Panorama_of_Novi_Sad.jpg') center 53%/cover,linear-gradient(135deg,#132d50,#247c89);position:relative;overflow:hidden;color:#fff;padding:40px 42px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between}.hero:before{content:"";position:absolute;width:240px;height:240px;border:1px solid #ffffff25;right:-70px;top:-105px;border-radius:50%;box-shadow:0 0 0 48px #ffffff08,0 0 0 105px #ffffff08}.hero>*{position:relative}.hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid #ffffff35;background:#ffffff14;padding:9px 12px;border-radius:100px;font-size:11px;letter-spacing:.5px;align-self:flex-start;font-weight:700}.hero h1{max-width:530px;font-family:Manrope,sans-serif;font-weight:800;letter-spacing:-1.6px;line-height:1.18;font-size:clamp(29px,3vw,46px);margin:20px 0 9px}.hero h1 em{color:#67e2d2;font-style:normal}.hero p{font-size:13px;color:#e1eaf1;line-height:1.7;max-width:520px}.hero-bottom{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:13px 19px;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:800;font-size:12px;transition:transform .15s,background .15s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--teal);color:#053540}.btn-primary:hover{background:#41d2c3}.btn-ghost{background:#ffffff20;color:white;border:1px solid #ffffff40}.btn-white{background:#fff;color:#213e5b;border:1px solid var(--line)}.btn svg{width:16px;height:16px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:30px 0 17px}.section-title h2{font-size:18px;font-family:Manrope,sans-serif;letter-spacing:-.5px}.section-title .link{border:0;background:none;color:#178d83;font-size:12px;font-weight:800}.grid-feature{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.feature{background:#fff;border:1px solid #eaf0f5;border-radius:17px;padding:20px;box-shadow:var(--shadow);text-align:left;min-height:174px;display:flex;flex-direction:column;align-items:flex-start;gap:13px}.feature:hover{border-color:#bde8e4;transform:translateY(-2px)}.feature-ico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:#eaf9f5}.feature:nth-child(2) .feature-ico{background:#fff1e6}.feature:nth-child(3) .feature-ico{background:#edf2fd}.feature:nth-child(4) .feature-ico{background:#f1f0fb}.feature:nth-child(5) .feature-ico{background:#e9f4fd}.feature:nth-child(6) .feature-ico{background:#fceff3}.feature strong{font-size:13px}.feature small{color:#79899b;font-size:11px;line-height:1.5;display:block;margin-top:5px}.section-split{display:grid;grid-template-columns:minmax(0,1.58fr) minmax(260px,1fr);gap:18px}.info-banner{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);display:flex;gap:15px;align-items:flex-start}.info-banner .bubble{flex:0 0 42px;height:42px;border-radius:13px;background:#e8f8f4;display:grid;place-items:center;color:#188d84;font-size:20px}.info-banner strong{font-size:14px}.info-banner p{color:#6f8093;line-height:1.6;margin-top:6px;font-size:12px}.notice-orange{background:#fff4ee;border:1px solid #ffe3d0;padding:16px 18px;border-radius:16px;color:#8e4d30;font-size:12px;line-height:1.6}.prototype-note{margin-top:22px;color:#8b99a8;font-size:10px;line-height:1.7}
+    .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:20px 0 17px}.chip{border-radius:100px;padding:10px 14px;border:1px solid #e1e9ee;background:#fff;font-size:12px;color:#697a8e;font-weight:800}.chip.active{background:#102847;border-color:#102847;color:#fff}.map-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:16px;align-items:start}.map-wrap{position:relative;border:1px solid #dfe8ec;background:#e6f0ee;border-radius:20px;height:535px;overflow:hidden;box-shadow:var(--shadow)}#map{height:100%;width:100%;background:linear-gradient(120deg,#d7e9dc,#f0ece0)}.map-cover{position:absolute;inset:0;background:#e3eee6;overflow:hidden;display:none;align-items:center;justify-content:center}.map-cover .roads{position:absolute;inset:-20%;transform:rotate(-12deg);background:repeating-linear-gradient(0deg,transparent 0 50px,#fff 51px 63px,transparent 64px 115px),repeating-linear-gradient(90deg,transparent 0 65px,#f9fcfb 66px 79px,transparent 80px 153px)}.map-cover .river{position:absolute;inset:30% -40% 27% 6%;transform:rotate(-24deg);background:#a9d7df;border-radius:48%;box-shadow:0 0 0 15px #cae6e5}.map-cover p{position:absolute;bottom:20px;background:#ffffffe0;padding:12px;border-radius:9px;color:#476170;font-size:12px;text-align:center;max-width:260px}.map-badge{position:absolute;top:17px;left:17px;z-index:500;background:#fff;padding:11px 15px;border-radius:12px;box-shadow:0 6px 22px #0001;display:flex;align-items:center;gap:9px;font-size:11px;font-weight:800}.map-badge .pulse{width:9px;height:9px;border-radius:50%;background:#1fc2b2;box-shadow:0 0 0 5px #17b7a92a}.map-actions{position:absolute;bottom:20px;left:18px;right:18px;display:flex;gap:10px;z-index:500}.map-actions button{box-shadow:0 10px 25px #0002}.map-actions .btn{white-space:nowrap}.map-actions .btn-white{background:#fff}.map-actions .btn-primary{background:#122d50;color:#fff}.radius-select{margin-left:auto;border:1px solid var(--line);padding:10px 13px;background:#fff;border-radius:13px;color:#355063;font-weight:800;font-size:12px}.results-panel{background:#fff;border-radius:20px;padding:20px;border:1px solid var(--line);box-shadow:var(--shadow);height:535px;overflow:auto}.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.panel-title strong{font-size:14px}.counter{color:#0a9386;background:#e1f7f2;border-radius:100px;padding:6px 9px;font-size:11px;font-weight:800}.search{width:100%;border:1px solid #e1e9ef;background:#f7f9fb;border-radius:11px;padding:12px 13px;font-size:12px;margin-bottom:13px;outline:none}.place{display:flex;gap:12px;padding:14px 2px;border-bottom:1px solid #eef2f5;cursor:pointer;align-items:center}.place:hover .place-name{color:#0f9f95}.place:last-child{border-bottom:0}.place-icon{flex:0 0 47px;height:49px;display:grid;place-items:center;border-radius:13px;font-size:22px;background:linear-gradient(145deg,#e9f4f1,#def1ed)}.place-icon.park{background:#e9f5e7}.place-icon.culture{background:#f6edfa}.place-name{font-size:12px;font-weight:800;margin-bottom:5px}.place-sub{font-size:10px;color:#91a0ae;line-height:1.5}.place-fav{margin-left:auto;border:0;background:transparent;font-size:18px;color:#f39b6e;padding:6px}.map-pin{background:#fff;border:3px solid #1db9ac;width:36px;height:36px;border-radius:13px;display:grid;place-items:center;font-size:19px;box-shadow:0 6px 15px #122b4440}.leaflet-div-icon{background:transparent;border:0}.leaflet-popup-content-wrapper{border-radius:14px}.leaflet-popup-content{font-family:'DM Sans',sans-serif}
+    .tour-hero{background:linear-gradient(135deg,#092541,#1f5d65);color:#fff;padding:24px;border-radius:20px;margin-bottom:18px}.tour-hero h2{font-family:Manrope,sans-serif;font-size:23px;margin:8px 0}.tour-hero p{font-size:12px;line-height:1.7;color:#c7dfdf}.route-steps{background:#fff;border:1px solid var(--line);border-radius:18px;padding:23px}.step{display:flex;gap:15px;padding-bottom:22px;position:relative}.step:not(:last-child):before{content:"";position:absolute;top:30px;bottom:0;width:2px;background:#d9eeeb;left:15px}.step:last-child{padding:0}.num{width:31px;height:31px;display:grid;place-items:center;border-radius:50%;color:#007c76;background:#d9f8f0;font-size:11px;font-weight:800;z-index:1;flex:0 0 31px}.step h3{font-size:13px;margin:4px 0 4px}.step p{font-size:11px;color:#7f91a0}.step button{margin-left:auto;align-self:flex-start;border:0;border-radius:9px;background:#e9f8f3;color:#168b81;font-size:11px;font-weight:800;padding:9px 11px}.empty{padding:44px 17px;text-align:center;color:#7f90a0;font-size:13px;line-height:1.7}.empty .illustration{font-size:40px;display:block;margin-bottom:12px}
+    .modal-shade{position:fixed;inset:0;background:#071528ab;z-index:1500;display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(4px)}.modal{width:min(100%,500px);background:#fff;border-radius:23px;overflow:hidden;box-shadow:0 30px 100px #07152855;max-height:min(90vh,760px);overflow-y:auto}.modal-visual{height:176px;position:relative;background:linear-gradient(145deg,#102f50,#167d87);display:flex;align-items:center;justify-content:center;color:#fff}.modal-visual .large-emoji{font-size:86px;filter:drop-shadow(0 15px 20px #0003)}.modal-topper{position:absolute;top:17px;left:22px;border:1px solid #ffffff77;background:#ffffff29;border-radius:30px;padding:7px 10px;font-size:10px;font-weight:800}.modal-close{position:absolute;right:16px;top:16px;background:#ffffffde;color:#142940;border:0;border-radius:100px;width:33px;height:33px;font-weight:900;font-size:17px}.modal-body{padding:26px}.modal-body h2{font-size:23px;font-family:Manrope,sans-serif;letter-spacing:-.7px;margin:5px 0 10px}.modal-body p{font-size:13px;line-height:1.8;color:#65798b}.detail-tag{color:#189b90;font-size:10px;letter-spacing:1.5px;font-weight:800}.detail-facts{display:flex;gap:9px;flex-wrap:wrap;margin:19px 0}.detail-facts span{border:1px solid #e4ecf0;padding:9px 11px;border-radius:9px;font-size:10px;color:#577085;font-weight:700}.modal-actions{display:flex;gap:9px;flex-wrap:wrap}.modal-actions .btn{flex:1;min-width:110px}.toast{position:fixed;right:24px;bottom:24px;z-index:3000;background:#112e42;color:#fff;padding:15px 19px;border-radius:15px;max-width:390px;box-shadow:0 20px 40px #0003;font-size:12px;line-height:1.6;display:none}.toast.show{display:block}.footnote{display:flex;align-items:center;gap:9px;margin-top:22px;color:#8293a5;font-size:10px;line-height:1.8}.mobile-nav{display:none}
+    @media(max-width:1100px){.app-shell{grid-template-columns:220px minmax(0,1fr)}.sidebar{padding:24px 15px}.main{padding:23px 24px 70px}.hero{min-height:265px}.grid-feature{grid-template-columns:repeat(2,minmax(0,1fr))}.map-layout{grid-template-columns:1fr}.results-panel{height:auto;max-height:410px}.map-wrap{height:420px}.section-split{grid-template-columns:1fr}}
+    @media(max-width:740px){.app-shell{display:block}.sidebar{display:none}.main{padding:16px 15px 104px}.top{margin-bottom:18px}.top-right .pill.soft{display:none}.pill{padding:10px 12px}.hero{min-height:290px;border-radius:21px;padding:26px 23px}.hero h1{font-size:34px;margin:16px 0 7px}.hero p{font-size:12px}.hero-bottom .btn{padding:12px}.grid-feature{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.feature{min-height:150px;padding:16px;gap:10px}.feature small{font-size:10px}.section-title{margin:25px 0 14px}.map-wrap{height:425px}.map-actions{flex-wrap:wrap;bottom:13px;left:10px;right:10px}.map-actions .btn{padding:11px;font-size:11px}.radius-select{font-size:11px;padding:9px}.map-badge{top:13px;left:11px}.desktop-page-title{font-size:24px}.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;z-index:1000;background:#fff;border-top:1px solid #e7edf2;padding:9px 8px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -9px 30px #20355012}.mobile-nav button{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;color:#8494a6;font-size:9px;font-weight:800}.mobile-nav button svg{width:21px;height:21px}.mobile-nav button.active{color:#178e88}.modal-shade{padding:10px}.modal-visual{height:155px}.modal-body{padding:21px}.toast{left:14px;bottom:90px;right:14px}.chip{font-size:11px;padding:9px 12px}}
+    .map-badge{max-width:calc(100% - 85px);line-height:1.35}.map-badge span:last-child{overflow-wrap:anywhere}.map-actions{align-items:center}.map-actions button{max-width:46%;white-space:normal;text-align:center}.map-cover{z-index:2}.map-actions,.map-badge{z-index:500}
+    @media(max-width:740px){.map-actions button{font-size:10px;max-width:45%;padding:10px 9px}.radius-select{margin-left:0;max-width:30%;padding:10px 6px}.map-badge{font-size:10px;max-width:75%}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+
+    /* Modern vector map experience; attribution remains visible. */
+    #map{position:absolute;inset:0;width:100%;height:100%;background:#e9f0f2}
+    .maplibregl-map{font-family:'DM Sans',sans-serif}
+    .maplibregl-ctrl-top-right{top:76px;right:12px}
+    .maplibregl-ctrl-group{border:1px solid #e4ebed!important;border-radius:13px!important;overflow:hidden;box-shadow:0 8px 26px #10284718!important}
+    .maplibregl-ctrl-attrib{background:#ffffffdd!important;font-size:10px!important;border-radius:8px 0 0 0}
+    .map-style-control{position:absolute;z-index:501;top:76px;left:16px;display:flex;gap:3px;padding:5px;background:#fff;border:1px solid #e5ebef;border-radius:13px;box-shadow:0 8px 25px #10284718}
+    .map-style-control button{font-size:11px;padding:9px 11px;border:0;border-radius:9px;background:transparent;color:#536c82;font-weight:800}
+    .map-style-control button.active{background:#142c4d;color:#fff}
+    .map-style-control button:focus-visible{outline:2px solid #20bfb0}
+    .map-pin{width:39px;height:39px;border:2px solid white;border-radius:14px;background:#fff;box-shadow:0 4px 15px #132c4160;display:grid;place-items:center;font-size:19px;cursor:pointer;transition:transform .15s ease}
+    .map-pin:hover{transform:translateY(-3px) scale(1.06)}
+    .map-pin.park{background:#e5f6e5}.map-pin.culture{background:#f5ecfc}
+    .user-position-marker{width:20px;height:20px;border-radius:50%;background:#028dc5;border:4px solid #fff;box-shadow:0 0 0 5px #018dca45,0 3px 11px #19344f55}
+    .map-cover{z-index:2;background:#e5eef0}
+    .map-cover .roads,.map-cover .river{display:none}
+    .map-error-content{text-align:center;padding:25px 20px;max-width:320px;position:relative;z-index:2}
+    .map-error-content strong{font:800 18px Manrope,sans-serif;display:block;margin-bottom:8px}
+    .map-error-content p{position:static;background:none;padding:0;color:#466174;font-size:13px;margin-bottom:14px;max-width:initial}
+    .map-error-content button{border:0;border-radius:12px;background:#102847;color:#fff;font-weight:800;padding:11px 15px}
+    .gps-inline-status{position:absolute;bottom:82px;left:18px;right:18px;z-index:500;max-width:440px;border-radius:12px;background:#ffffffed;color:#3c6074;border:1px solid #dae7e9;padding:9px 12px;font-size:11px;font-weight:700;box-shadow:0 7px 24px #10284712}
+    .gps-inline-status.error{color:#a34d37;background:#fff8f4;border-color:#f5d4c5}
+    @media(max-width:740px){.map-style-control{top:72px;left:12px}.map-style-control button{padding:8px;font-size:10px}.maplibregl-ctrl-top-right{top:70px;right:9px}.gps-inline-status{bottom:83px;left:12px;right:12px;font-size:10px}.map-badge{top:13px;left:12px}}
+
+    /* v0.3.6: visible fallback with reason, so map errors aren't blank mystery screens. */
+    #mapFallback{padding:0;justify-content:stretch;align-items:stretch;background:#e5eff2}
+    #mapFallback iframe{border:0;width:100%;height:100%;position:absolute;inset:0;opacity:.98}
+    #mapFallback .map-error-content{position:absolute;left:12px;right:12px;top:76px;margin:auto;background:rgba(255,255,255,.96);padding:13px 16px;border:1px solid #dce8ef;box-shadow:0 8px 34px rgba(9,26,49,.17);border-radius:13px;max-width:360px}
+    #mapFallback .map-error-content strong{font-size:14px;margin-bottom:5px}
+    #mapFallback .map-error-content p{font-size:11px;margin-bottom:10px;line-height:1.5}
+    #mapFallback .map-error-buttons{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}
+    #mapFallback .map-error-buttons button{padding:8px 10px;font-size:11px}
+    #mapFallback .map-error-buttons a{font-size:11px;font-weight:800;background:#ecf5f7;padding:8px 10px;border-radius:11px;text-decoration:none;color:#123c52}
+    @media(max-width:740px){#mapFallback .map-error-content{top:115px;left:8px;right:8px}}
+  
+/* Lightweight interactive map v0.3.6 */
+.tour-raster{position:relative;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none;overscroll-behavior:contain;cursor:grab;background:#e2eced}
+.tour-raster:active{cursor:grabbing}
+.raster-tiles{position:absolute;inset:0;pointer-events:none;overflow:visible;transform-origin:50% 50%;will-change:transform}
+.raster-tile{position:absolute;object-fit:fill;max-width:none;user-select:none}
+.raster-tiles.raster-soft{filter:saturate(.50) contrast(.96) brightness(1.05)}
+.raster-overlay{position:absolute;inset:0;pointer-events:none;transform-origin:50% 50%;will-change:transform}
+.raster-circle{position:absolute;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none}
+.raster-search-radius{border:2px dashed rgba(4,142,138,.55);background:rgba(19,191,175,.07)}
+.raster-accuracy{border:1px solid rgba(35,137,207,.5);background:rgba(21,135,229,.13)}
+.raster-you{position:absolute;transform:translate(-50%,-50%);width:18px;height:18px;border:3px solid #fff;border-radius:50%;background:#1688f2;box-shadow:0 0 0 7px #1d96e82b,0 2px 9px #1238}
+.raster-pin{position:absolute;transform:translate(-50%,-100%);width:40px;height:40px;display:grid;place-items:center;font-size:20px;border:3px solid #fff;border-radius:13px;background:#effffb;box-shadow:0 5px 15px #052d4460;pointer-events:auto;cursor:pointer}
+.raster-pin:hover{transform:translate(-50%,-105%) scale(1.08);background:#d0f7ee}
+.raster-pin:focus-visible{outline:3px solid #008a82}
+.raster-zoom{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;z-index:6;border:1px solid #dce6eb;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px #132b2833}
+.raster-zoom button{width:37px;height:38px;border:0;background:#fff;color:#17334f;font-size:24px;line-height:1}
+.raster-zoom button+button{border-top:1px solid #e4e8ec}
+.raster-attribution{position:absolute;bottom:2px;right:7px;z-index:6;background:#ffffffe9;border-radius:5px;font-size:10px;color:#2d4556;padding:3px 5px}
+.raster-attribution a{color:inherit}
+@media(max-width:740px){.raster-zoom{top:8px;right:8px}.raster-pin{width:36px;height:36px;font-size:18px}}
+
+
+/* v0.3.6 — refined cartography and internal route panel */
+.raster-tiles.raster-modern{filter:saturate(.69) contrast(.91) brightness(1.08) hue-rotate(-4deg)}
+.raster-tiles.raster-soft{filter:saturate(.26) contrast(.86) brightness(1.1)}
+.map-wrap{border-radius:26px;box-shadow:0 20px 45px rgba(19,45,64,.12)}
+.raster-pin{border:2px solid rgba(255,255,255,.97);background:linear-gradient(150deg,#ffffff,#e5fbf6);border-radius:16px;box-shadow:0 5px 16px rgba(10,60,80,.25),0 1px 2px rgba(0,0,0,.07);transition:transform .15s ease,box-shadow .15s ease}
+.raster-pin:hover{box-shadow:0 12px 24px #0e4a6c50}
+.raster-route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;filter:drop-shadow(0 2px 5px #2189e855)}
+.route-end-marker{position:absolute;z-index:4;transform:translate(-50%,-100%);background:#163958;border:3px solid white;border-radius:15px 15px 15px 4px;color:#fff;width:40px;height:40px;display:grid;place-items:center;font-size:24px;box-shadow:0 5px 15px #16395860}
+#routePanel{position:absolute;left:14px;right:14px;top:117px;z-index:510;background:#ffffffed;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid #d9e8ee;border-radius:19px;padding:16px;box-shadow:0 12px 35px #17354e33;max-width:450px}
+.route-panel-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}.route-panel-head strong{font:800 14px Manrope,sans-serif}.route-panel-head p{font-size:11px;color:#627c91;margin-top:4px;line-height:1.45}
+.route-close{border:0;border-radius:10px;background:#e8f0f4;color:#21435a;font-size:18px;width:32px;height:32px;flex:none}
+.route-stats{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}.route-stats span{background:#e7f6fc;color:#1e6589;font-weight:800;font-size:12px;padding:9px 11px;border-radius:10px}
+.route-steps-preview{max-height:155px;overflow:auto;margin-top:12px;padding-left:17px;color:#49657b;font-size:11px;line-height:1.6}.route-steps-preview li{margin-bottom:5px}
+.route-panel-foot{color:#667f90;font-size:10px;margin-top:9px;line-height:1.5}
+.route-panel-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.route-panel-actions button,.route-panel-actions a{border:0;border-radius:10px;background:#163958;color:#fff;padding:10px 12px;font-size:11px;font-weight:800;text-decoration:none}.route-panel-actions a{background:#ebf3f6;color:#174d6b}
+@media(max-width:740px){#routePanel{top:126px;left:8px;right:8px;padding:12px}.route-steps-preview{max-height:94px}.map-actions{bottom:12px;left:8px;right:8px;gap:5px}.map-actions .btn{padding:9px 11px;font-size:10px}}
+
+
+/* v0.3.6 navigation: hiding instructions never deletes the route */
+.route-close{font-weight:900;font-size:18px;line-height:1;transition:background .2s}
+.route-close:hover{background:#d5e9f2}
+.route-restore{position:absolute;z-index:510;left:16px;bottom:86px;max-width:calc(100% - 32px);border:1px solid #d5e8f0;background:#fff;border-radius:16px;padding:12px 15px;color:#163958;font-size:12px;font-weight:850;box-shadow:0 9px 30px rgba(13,56,84,.26);display:flex;align-items:center;gap:12px}
+.route-restore .route-rest-arrow{font-size:17px;color:#0b8b94}
+.route-end-btn{background:#edf0f2!important;color:#536474!important}
+.map-poi-toggle{position:absolute;top:126px;left:16px;z-index:505;border:1px solid rgba(197,225,228,.9);border-radius:12px;background:rgba(255,255,255,.96);padding:10px 13px;box-shadow:0 8px 24px rgba(9,40,60,.14);color:#214b63;font-weight:800;font-size:11px}
+.map-poi-toggle:disabled{opacity:.65;cursor:wait}
+.map-poi-status{position:absolute;top:173px;left:16px;max-width:330px;z-index:505;background:#fffef3;border:1px solid #ebe0b6;border-radius:12px;padding:10px;color:#726134;font-size:11px;line-height:1.45;box-shadow:0 6px 16px #1b3e4b18}
+.raster-poi{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;background:#fff;border:2px solid rgba(252,254,255,.96);box-shadow:0 4px 11px #15364a35;border-radius:50%;width:31px;height:31px;display:grid;place-items:center;font-size:14px;cursor:pointer;z-index:3}
+.raster-poi:hover,.raster-poi:focus-visible{outline:3px solid #21baac;transform:translate(-50%,-50%) scale(1.12)}
+.poi-popup{position:absolute;z-index:512;right:12px;bottom:86px;width:min(315px,calc(100% - 24px));padding:15px 17px;border:1px solid #d9e8ef;background:#fff;border-radius:17px;box-shadow:0 15px 45px rgba(13,43,65,.28)}
+.poi-popup strong{display:block;font:800 15px Manrope,sans-serif;margin:7px 28px 7px 0;line-height:1.35;color:#122e49}
+.poi-popup-label{color:#078f8a;font-size:10px;font-weight:900;letter-spacing:.4px}
+.poi-popup p{color:#6c7c8c;font-size:11px;line-height:1.5}
+.poi-popup-x{position:absolute;right:12px;top:10px;border:0;background:#edf3f6;border-radius:9px;width:29px;height:29px;font-size:19px;color:#24475f}
+.poi-popup-actions{display:flex;gap:8px;margin-top:12px;align-items:center}
+.poi-popup-actions button,.poi-popup-actions a{background:#173753;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-size:11px;font-weight:800;text-decoration:none}
+.poi-popup-actions a{background:#eff5f5;color:#164058}
+@media(min-width:900px){.map-wrap{height:585px}.results-panel{height:585px}}
+@media(max-width:740px){.map-poi-toggle{top:120px;left:12px;padding:9px;font-size:10px}.map-poi-status{top:158px;left:12px;right:12px;max-width:none;font-size:10px}.route-restore{bottom:80px;left:9px}.poi-popup{bottom:87px;right:8px}.map-wrap{height:490px}}
+
+
+    /* v0.4.0 navigation UI. These controls stay fixed when the map underneath rotates. */
+    .raster-heading-arrow{position:absolute;top:-7px;left:50%;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:17px solid #0874cf;transform-origin:50% 100%;filter:drop-shadow(0 1px 2px #fff)}
+    .heading-controls{position:absolute;top:160px;right:10px;z-index:505;display:flex;flex-direction:column;gap:7px}
+    .heading-controls button{border:1px solid #d8e5eb;background:#fff;color:#163354;box-shadow:0 4px 15px #193b5130;border-radius:12px;min-width:50px;padding:9px 10px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px}
+    .heading-controls button.active{background:#123958;color:#fff}
+    .heading-controls .bearing-needle{display:block;font-size:19px;line-height:22px;font-weight:900;color:#dc5b4d;transform-origin:center;transition:transform .14s linear}
+    .heading-controls button.active .bearing-needle{color:#59f4de}
+    .heading-status{position:absolute;z-index:505;top:88px;right:13px;max-width:170px;text-align:right;background:#ffffffed;padding:6px 9px;border-radius:9px;color:#345773;font-size:10px;box-shadow:0 3px 12px #102b4918}
+    .nav-hud{position:absolute;left:11px;right:11px;bottom:92px;z-index:512;display:flex;gap:11px;align-items:center;background:#0e2a48ed;color:#fff;border-radius:16px;border:1px solid #66bcda55;box-shadow:0 10px 28px #0a1b3450;padding:11px 13px;max-width:540px;backdrop-filter:blur(12px)}
+    .nav-hud .nav-arrow{flex:0 0 36px;height:36px;display:grid;place-items:center;font-size:25px;color:#5de6e0;transition:transform .15s linear}
+    .nav-hud strong{font-size:12px;display:block}.nav-hud small{font-size:10px;color:#d2e2ee;display:block;margin-top:3px;line-height:1.45}
+    .nav-hud button{border:1px solid #d9e9f477;color:#fff;background:#ffffff19;border-radius:9px;padding:8px;font-size:11px;font-weight:800;margin-left:auto}
+    .nav-live-controls{position:absolute;z-index:512;left:11px;bottom:164px;display:flex;gap:7px}
+    .nav-live-controls button{border:0;background:#fff;color:#183c59;border-radius:10px;box-shadow:0 3px 17px #193b5130;padding:9px 11px;font-size:11px;font-weight:800}
+    .nav-live-controls button.active{background:#0e5367;color:#fff}
+    @media(max-width:740px){.heading-controls{top:172px;right:8px}.heading-controls button{min-width:45px;padding:7px 8px;font-size:10px}.heading-status{top:85px;right:8px}.nav-hud{bottom:95px;padding:9px;left:8px;right:8px}.nav-live-controls{bottom:166px;left:8px}.route-restore{bottom:176px;left:8px}.nav-hud small{font-size:9px}.map-wrap{height:550px}}
+
+/* v0.4.0 place content, accessibility and navigation */
+.nav-reroute{background:#fdf2d8!important;color:#1d3850!important;font-weight:800!important}
+.nearby-title{font-size:15px;margin:18px 0 8px}
+.nearby-grid{display:grid;gap:7px}
+.nearby-place{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border:1px solid #dfebee;border-radius:12px;background:#f8fbfc;color:#18324d;text-align:left;cursor:pointer}
+.nearby-place span{font-size:20px}.nearby-place strong{font-size:12px;flex:1}.nearby-place small{color:#658198}
+.place-source a{color:#126f89;text-decoration:underline;font-weight:700;font-size:12px}
+.detail-disclaimer{padding:9px 12px;background:#fff5e5;color:#77551c;border-radius:10px;font-size:11px;line-height:1.5}
+.walk-card{border:1px solid #dae7ee;border-radius:18px;background:#fff;overflow:hidden;margin:14px 0 22px}
+.walk-card-head{padding:22px;background:#102b4a;color:#fff}.walk-card-head h2{margin:10px 0;font-size:21px}.walk-card-head p{opacity:.8;font-size:12px}
+.walk-card .route-steps{padding:10px 18px 17px}
+@media(max-width:740px){.nav-hud{gap:6px}.nav-hud .nav-reroute{padding:6px;font-size:10px}.nav-hud strong{font-size:11px}.nav-hud .nav-arrow{flex-basis:23px}.walk-card-head{padding:16px}}
+</style>
+<link rel="stylesheet" href="./discovery-v050.css?v=050" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#home" onclick="showPage('home');return false">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M12 2 16.3 7.7 22 12l-5.7 4.3L12 22l-4.3-5.7L2 12l5.7-4.3L12 2Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div class="brand-title">NOVI SAD<small>SMART GUIDE</small></div>
+    </a>
+    <div class="side-label" data-i18n="navigation">NAVIGACIJA</div>
+    <nav class="nav" id="sideNav"></nav>
+    <div class="sidebar-bottom"><span>THE CITY IS YOURS</span><h3 data-i18n="sideHeadline">Grad koji se otkriva dok šetaš.</h3><p data-i18n="sideText">Jedna aplikacija. Bez komplikacija. Novi Sad baš tamo gde jesi.</p></div>
+    <p class="side-foot" data-i18n="prototypeFoot">DEMO v0.5.1 · OKTOBAR 2026<br>Nezvanični razvojni prototip</p>
+  </aside>
+  <main class="main">
+    <header class="top"><div class="top-left"><div class="dot"></div><span class="eyebrow" data-i18n="previewLabel">DEMO v0.5.1 · 30.10.2026.</span></div><div class="top-right"><span class="pill soft" data-i18n="demoLabel">INTERAKTIVNI DEMO</span><button id="langBtn" class="pill click" onclick="toggleLang()" aria-label="Promeni jezik">SR / EN ↗</button></div></header>
+    <div id="page"></div>
+    <div class="footnote"><span>✦</span><span data-i18n="footer">Ovaj pregled demonstrira korisničko iskustvo i nije objavljena aplikacija niti zvanični proizvod Grada Novog Sada. Fotografija: Ivan Aleksic / Wikimedia Commons, CC BY 2.0. Mapa: © OpenStreetMap contributors; CARTO ako je omogućen.</span></div>
+  </main>
+</div>
+<nav class="mobile-nav" id="mobileNav" aria-label="Glavna navigacija"></nav>
+<div class="modal-shade hidden" id="modalShade" onclick="if(event.target===this) closeModal()"><div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<!-- MapLibre is loaded dynamically with CDN fallbacks so the demo reports a useful failure reason. -->
+<script src="./map-config.js?v=040"></script>
+<script src="./map-engine.js?v=040"></script>
+<script>
+'use strict';
+const center={lat:45.25565,lng:19.84563};
+const MAP_STYLES={modern:"standard",minimal:"soft"};
+const places=[
+{id:'trg',sr:'Trg slobode',en:'Liberty Square',cat:'sights',emoji:'🏛️',lat:45.25562,lng:19.84548,descriptionSr:'Glavni gradski trg i odlična polazna tačka za upoznavanje centra Novog Sada.',descriptionEn:'The city’s central square and a perfect starting point for exploring Novi Sad.'},
+{id:'crkva',sr:'Crkva Imena Marijinog',en:'Name of Mary Church',cat:'sights',emoji:'⛪',lat:45.255651,lng:19.845630,descriptionSr:'Prepoznatljiva neogotička crkva u samom srcu Novog Sada, na Trgu slobode.',descriptionEn:'A distinctive Gothic Revival church in the heart of Novi Sad, on Liberty Square.'},
+{id:'tvrdjava',sr:'Petrovaradinska tvrđava',en:'Petrovaradin Fortress',cat:'sights',emoji:'🏰',lat:45.25236,lng:19.86089,descriptionSr:'Jedna od najpoznatijih znamenitosti grada, sa pogledom na Dunav i Novi Sad.',descriptionEn:'One of the city’s best-known landmarks, overlooking the Danube and Novi Sad.'},
+{id:'dunavski',sr:'Dunavski park',en:'Danube Park',cat:'parks',emoji:'🌳',lat:45.2574,lng:19.8527,descriptionSr:'Mirna zelena oaza na nekoliko minuta od pešačke zone u centru.',descriptionEn:'A peaceful green space a short walk from the pedestrian centre.'},
+{id:'muzej',sr:'Muzej Vojvodine',en:'Museum of Vojvodina',cat:'culture',emoji:'🏺',lat:45.2577,lng:19.85375,descriptionSr:'Mesto za otkrivanje kulturne i istorijske baštine Vojvodine.',descriptionEn:'Discover the culture and history of the Vojvodina region.'},
+{id:'zmaj',sr:'Zmaj Jovina ulica',en:'Zmaj Jovina Street',cat:'sights',emoji:'🏘️',lat:45.25585,lng:19.8481,descriptionSr:'Jedna od najpoznatijih pešačkih ulica, sa istorijskim fasadama i gradskim ritmom.',descriptionEn:'A celebrated pedestrian street with historic facades and a lively atmosphere.'},
+{id:'sinagoga',sr:'Novosadska sinagoga',en:'Novi Sad Synagogue',cat:'culture',emoji:'🎼',lat:45.2545,lng:19.8398,descriptionSr:'Upečatljiva kulturno-istorijska građevina poznata i kao koncertni prostor.',descriptionEn:'An impressive historic landmark also known as a concert venue.'},
+{id:'galerija',sr:'Galerija Matice srpske',en:'Gallery of Matica Srpska',cat:'culture',emoji:'🖼️',lat:45.252601,lng:19.845808,descriptionSr:'Umetnička galerija na Trgu galerija 1, sa važnim zbirkama srpske umetnosti.',descriptionEn:'Art museum at Trg galerija 1, presenting important collections of Serbian art.',source:'https://www.digitalizacija.ns.rs/sr/institucije/galerija-matice-srpske'},
+{id:'snp',sr:'Srpsko narodno pozorište',en:'Serbian National Theatre',cat:'culture',emoji:'🎭',lat:45.2550863,lng:19.8427834,descriptionSr:'Jedna od najvažnijih kulturnih institucija u Novom Sadu, na Pozorišnom trgu 1.',descriptionEn:'A landmark performing arts institution at Pozorišni trg 1.',source:'https://www.snp.org.rs/'},
+{id:'dunavska',sr:'Dunavska ulica',en:'Dunavska Street',cat:'sights',emoji:'🏘️',lat:45.256231,lng:19.851065,descriptionSr:'Stara gradska pešačka ulica koja povezuje Zmaj Jovinu ulicu i Dunavski park.',descriptionEn:'Historic pedestrian street connecting Zmaj Jovina Street to Danube Park.',source:'https://novisad.travel/arhitektura-single/dunavska-ulica/'},
+{id:'vladicanski',sr:'Vladičanski dvor',en:'Bishop’s Palace',cat:'sights',emoji:'🏰',lat:45.2570,lng:19.8479,descriptionSr:'Istorijska rezidencija episkopa Bačke eparhije na kraju Zmaj Jovine ulice.',descriptionEn:'Historic bishop’s residence at the end of Zmaj Jovina pedestrian street.',source:'https://novisad.rs/eng/tourism'},
+{id:'gradskakuca',sr:'Gradska kuća',en:'Novi Sad City Hall',cat:'sights',emoji:'🏛️',lat:45.254809,lng:19.844404,descriptionSr:'Neorenesansno zdanje na Trgu slobode, izgrađeno krajem 19. veka.',descriptionEn:'Neo-Renaissance city hall on Liberty Square, dating to the late 19th century.',source:'https://www.digitalizacija.ns.rs/en/city-hall'},
+{id:'biblioteka',sr:'Biblioteka Matice srpske',en:'Library of Matica Srpska',cat:'culture',emoji:'📚',lat:45.259269,lng:19.845276,descriptionSr:'Značajna nacionalna biblioteka na adresi Matice srpske 1.',descriptionEn:'Major research and national library at Matice srpske 1.',source:'https://www.digitalizacija.ns.rs/en/institucije/library-matica-srpska'},
+{id:'beljanski',sr:'Spomen-zbirka Pavla Beljanskog',en:'Pavle Beljanski Memorial Collection',cat:'culture',emoji:'🖼️',lat:45.252778,lng:19.846111,descriptionSr:'Zbirka srpske i jugoslovenske umetnosti, Trg galerija 2.',descriptionEn:'Art collection featuring Serbian and Yugoslav painters at Trg galerija 2.',source:'https://novisad.travel/ns-price/novosadske-price-spomen-zbirka-pavla-beljanskog/'},
+{id:'zmaj-spomenik',sr:'Spomenik Jovanu Jovanoviću Zmaju',en:'Jovan Jovanović Zmaj Monument',cat:'sights',emoji:'🗿',lat:45.25687,lng:19.84774,descriptionSr:'Bronzana statua pesnika Jovana Jovanovića Zmaja ispred Vladičanskog dvora.',descriptionEn:'Bronze monument to the poet Jovan Jovanović Zmaj in front of the Bishop’s Palace.',source:'https://novisad.rs/lat/figura-lekara-i-pesnika-jovana-jovanovica-zmaja'},
+{id:'racija',sr:'Spomenik žrtvama racije',en:'Monument to the Victims of the Raid',cat:'culture',emoji:'🕯️',lat:45.252634,lng:19.855775,descriptionSr:'Memorijal na Keju žrtava racije posvećen stradalim sugrađanima u januaru 1942.',descriptionEn:'Memorial along the riverside to Novi Sad residents killed in January 1942.',source:'https://vojvodina.travel/atrakcije/spomenik-zrtvama-racije-novi-sad/'},
+{id:'strand',sr:'Štrand',en:'Štrand Beach',cat:'parks',emoji:'🌊',lat:45.2367,lng:19.8487,descriptionSr:'Poznata gradska plaža na Dunavu i omiljeno mesto za predah.',descriptionEn:'Novi Sad’s popular city beach on the Danube.'}
+];
+const TXT={
+ sr:{navigation:'NAVIGACIJA',home:'Početna',explore:'Istraži',saved:'Omiljeno',tours:'Šetnje',about:'O konceptu',previewLabel:'DEMO v0.5.1 · 30.10.2026.',demoLabel:'INTERAKTIVNI DEMO',sideHeadline:'Grad koji se otkriva dok šetaš.',sideText:'Jedna aplikacija. Bez komplikacija. Novi Sad baš tamo gde jesi.',prototypeFoot:'DEMO v0.5.1 · OKTOBAR 2026<br>Nezvanični razvojni prototip',footer:'Ovaj pregled demonstrira korisničko iskustvo i nije objavljena aplikacija niti zvanični proizvod Grada Novog Sada. Fotografija: Ivan Aleksic / Wikimedia Commons, CC BY 2.0. Mapa: © OpenStreetMap contributors; CARTO ako je omogućen.',welcome:'DOBRO DOŠLI U NOVI SAD',hero:'Tvoj grad. <em>Tvoje otkriće.</em>',heroSub:'Otkrij znamenitosti, pronađi put i upoznaj Novi Sad u svom ritmu — sve na jednom mestu.',exploreBtn:'Istraži u blizini',whereBtn:'Gde sam?',quick:'Šta želiš da radiš?',seeAll:'Otvori mapu ↗',featNearby:'Istraži okolinu',featNearbyD:'Zanimljiva mesta u tvojoj blizini.',featRoute:'Odvedi me',featRouteD:'Jednostavno do odabrane lokacije.',featPlaces:'Znamenitosti',featPlacesD:'Priče i mesta koja vredi upoznati.',featFood:'Hrana i piće',featFoodD:'Lokalni ukusi i preporuke.',featEvents:'Događaji',featEventsD:'Aktuelna dešavanja u gradu.',featTours:'Gradske šetnje',featToursD:'Istraži grad korak po korak.',howWorks:'Kako će ovo raditi?',howText:'Turista ulazi u zonu zanimljive lokacije, dobija diskretno obaveštenje i bira da pročita priču ili pokrene navigaciju. Ovo je pregled koncepta; obaveštenja u pozadini razvijaju se u mobilnoj verziji.',demoNotice:'Ovo je razvojni demo: turistički vodič ima ograničen izbor lokacija, a dodatni lokali zavise od OpenStreetMap servisa. Obaveštenja u pozadini, offline navigacija, audio i administracija nisu još implementirani.',findTitle:'Šta je u tvojoj blizini?',findSub:'Istraži lokacije na mapi, filtriraj i otvori detalje.',all:'Sve',sights:'Znamenitosti',parks:'Parkovi',culture:'Kultura',food:'Hrana',events:'Događaji',around:'Prikaz: centar Novog Sada',mapGps:'Moja lokacija',notify:'Primer obaveštenja',rad:'Radijus',results:'Lokacije',search:'Pretraži lokacije…',metres:'od centra (demo)',details:'Detalji lokacije',walk:'Pešačka ruta',favourite:'Sačuvaj',removeFav:'Ukloni',demoGps:'Prikaz demo centra; za tvoju lokaciju odobri GPS dozvolu.',gpsDone:'Lokacija je očitana. Prikazujemo mesta oko tebe.',gpsNo:'GPS nije dostupan. Prikazujemo centar Novog Sada kao primer.',notiTitle:'Pametno obaveštenje — demonstracija',notiText:'Nalaziš se blizu Crkve Imena Marijinog. Otvori detalje ili izaberi navigaciju.',routeInfo:'Računamo pešačku rutu unutar aplikacije…',savedTitle:'Tvoja omiljena mesta',savedSub:'Sačuvane lokacije ostaju na ovom uređaju.',savedEmpty:'Još nema sačuvanih lokacija. Otvori mapu i dodirni ♡ da dodaš mesto.',toursTitle:'Predložene šetnje',toursSub:'Primeri tura koje će biti dostupne u aplikaciji.',tourLabel:'ISTRAŽI GRAD',tourName:'Centar Novog Sada',tourText:'Kratka demonstraciona šetnja kroz srce grada. Redosled stanica je primer, a ne izračunata putanja.',tourStop:'Otvori',aboutTitle:'O projektu',aboutSub:'Prvi pogled na ideju Novi Sad Smart Guide.',aboutCopy:'Novi Sad Smart Guide je zamišljen kao lokacijski svestan turistički vodič. Fokus je na jednostavnoj mapi, sadržaju u blizini, pametnim obaveštenjima, navigaciji i povratku do sačuvane baze.',roadmap:'Šta je sledeće?',roadmapDesc:'Android aplikacija sa GPS-om i geofencing testiranjem, backend i admin panel, sadržaj, offline mapa i iOS.',baseSave:'Sačuvaj ovu lokaciju kao My Base',baseSaved:'Baza je sačuvana na ovom uređaju.',baseNo:'Najpre dozvoli GPS ili izaberi demonstracioni centar.',takeBack:'Vrati me na bazu',baseMissing:'Nema sačuvane baze. Prvo je sačuvaj na mapi.',noResult:'Nema lokacija za izabrani filter.',licence:'Fotografija: Ivan Aleksic / Wikimedia Commons (CC BY 2.0).'},
+ en:{navigation:'NAVIGATION',home:'Home',explore:'Explore',saved:'Saved',tours:'Walks',about:'About',previewLabel:'DEMO v0.5.1 · OCT 30, 2026',demoLabel:'INTERACTIVE DEMO',sideHeadline:'The city reveals itself as you walk.',sideText:'One app. No hassle. Discover Novi Sad wherever you are.',prototypeFoot:'DEMO v0.5.1 · OCTOBER 2026<br>Unofficial development prototype',footer:'This preview illustrates the user experience. It is not a published app or an official product of the City of Novi Sad. Photo: Ivan Aleksic / Wikimedia Commons, CC BY 2.0. Map: © OpenStreetMap contributors; CARTO if enabled.',welcome:'WELCOME TO NOVI SAD',hero:'Your city. <em>Your discovery.</em>',heroSub:'Discover landmarks, find your way and explore Novi Sad at your own pace — all in one place.',exploreBtn:'Explore nearby',whereBtn:'Where am I?',quick:'What would you like to do?',seeAll:'Open map ↗',featNearby:'Explore nearby',featNearbyD:'Interesting places around you.',featRoute:'Take me there',featRouteD:'Find your way to a destination.',featPlaces:'Places to see',featPlacesD:'Stories and sights worth discovering.',featFood:'Food & drink',featFoodD:'Local flavours and recommendations.',featEvents:'Events',featEventsD:'What is happening around the city.',featTours:'Walks & tours',featToursD:'Discover the city step by step.',howWorks:'How will it work?',howText:'As visitors approach a landmark, they receive a discreet notification and can read the story or start navigation. This is a concept preview; background notifications will be built in the native app.',demoNotice:'Development demo: the tourist guide has a limited curated list, and nearby businesses depend on OpenStreetMap data. Background GPS alerts, offline routing, audio and administration are not yet implemented.',findTitle:'What is near you?',findSub:'Explore places on the map, filter and open details.',all:'All',sights:'Landmarks',parks:'Parks',culture:'Culture',food:'Food',events:'Events',around:'Showing: Novi Sad centre',mapGps:'My location',notify:'Preview notification',rad:'Radius',results:'Places',search:'Search places…',metres:'from demo centre',details:'Place details',walk:'Walking directions',favourite:'Save',removeFav:'Remove',demoGps:'Showing demo centre; grant GPS permission to use your location.',gpsDone:'Your location was found. Showing places around you.',gpsNo:'GPS unavailable. Using Novi Sad centre for demo.',notiTitle:'Smart location alert — demonstration',notiText:'You are near the Name of Mary Church. Open details or choose navigation.',routeInfo:'Calculating a walking route inside the app…',savedTitle:'Your saved places',savedSub:'Saved places stay on this device.',savedEmpty:'Nothing saved yet. Open the map and tap ♡ to save a place.',toursTitle:'Suggested city walks',toursSub:'Examples of tours planned for the app.',tourLabel:'EXPLORE THE CITY',tourName:'Central Novi Sad',tourText:'A sample walk through the heart of the city. Stop order is illustrative, not a calculated route.',tourStop:'Open',aboutTitle:'About the project',aboutSub:'A first look at the Novi Sad Smart Guide concept.',aboutCopy:'Novi Sad Smart Guide is planned as a location-aware city companion. It focuses on nearby content, smart alerts, directions, and an easy way back to a saved place.',roadmap:'What comes next?',roadmapDesc:'Android GPS and geofencing, backend and admin panel, curated content, offline maps and iOS.',baseSave:'Save this position as My Base',baseSaved:'Your base was saved on this device.',baseNo:'First allow GPS access or use the demonstration centre.',takeBack:'Take me back to My Base',baseMissing:'No base saved yet. Save your position first.',noResult:'No places in this filter.',licence:'Photo: Ivan Aleksic / Wikimedia Commons (CC BY 2.0).'}
+};
+const icons={home:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/>',explore:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.1 4.9-4.9 2.1 2.1-4.9z"/>',saved:'<path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/>',tours:'<path d="M4 20 10 4l4 9 6-9"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="4" r="2"/>',about:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/>'};
+const svg=i=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" aria-hidden="true">${icons[i]}</svg>`;
+let state={poiList:[],poiLastFetchAt:0,poiLoading:false,poiConsent:false,poiConsentDeclined:false,poiSelected:null,routePanelHTML:"",routeRequestSeq:0,activeRoute:null,offRouteSince:0,liveWatchId:null,navWatchId:null,followMode:false,heading:null,headingSource:null,compassEnabled:false,lastAlertId:null,lastAlertAt:0,page:'home',lang:'sr',cat:'all',radius:3000,position:center,map:null,mapStyle:'modern',mapLoaded:false,markers:[],selfMarker:null,locationAccuracy:null,favorites:new Set(),base:null,search:'',fromGps:false};
+try{const storedLang=localStorage.getItem('nssg-lang');state.poiConsent=localStorage.getItem('nssg-poi-consent')==='yes';if(storedLang==='sr'||storedLang==='en')state.lang=storedLang;const storedMap=localStorage.getItem('nssg-mapstyle');if(storedMap in MAP_STYLES)state.mapStyle=storedMap;state.favorites=new Set(JSON.parse(localStorage.getItem('nssg-favs')||'[]'));const b=JSON.parse(localStorage.getItem('nssg-base')||'null');if(b&&typeof b.lat==='number'&&typeof b.lng==='number')state.base=b;}catch(e){}
+const t=k=>TXT[state.lang][k]||k; const name=p=>p[state.lang];const desc=p=>p['description'+(state.lang==='sr'?'Sr':'En')];
+function numDistance(p){const R=6371000;const rad=d=>d*Math.PI/180;const dLat=rad(p.lat-state.position.lat),dLon=rad(p.lng-state.position.lng),la1=rad(state.position.lat),la2=rad(p.lat);const a=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLon/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(a)));}
+function distStr(p){const d=numDistance(p);const label=d<1000?`${d} m`:`${(d/1000).toFixed(1)} km`;return state.fromGps?label:label+(state.lang==='sr'?' (demo)':' (demo)');}
+function filtered(){return places.filter(p=>(state.cat==='all'||p.cat===state.cat)&&numDistance(p)<=state.radius&&name(p).toLocaleLowerCase().includes(state.search.toLocaleLowerCase())).sort((a,b)=>numDistance(a)-numDistance(b));}
+function renderNav(){const pages=['home','explore','saved','tours','about'];const html=mobile=>pages.map(p=>`<button type="button" class="${state.page===p?'active':''}" onclick="showPage('${p}')" aria-label="${t(p)}">${svg(p)}<span>${t(p)}</span></button>`).join('');document.getElementById('sideNav').innerHTML=html(false);document.getElementById('mobileNav').innerHTML=html(true);}
+function translatePage(){document.querySelectorAll('[data-i18n]').forEach(el=>{const value=t(el.dataset.i18n);if(el.dataset.i18n==='prototypeFoot')el.innerHTML=value;else el.textContent=value;});document.documentElement.lang=state.lang;}
+function render(){if(state.map){state.map.remove();state.map=null;state.mapLoaded=false;state.markers=[];state.selfMarker=null;}renderNav();translatePage();const el=document.getElementById('page');if(state.page==='home')home(el);if(state.page==='explore')explore(el);if(state.page==='saved')saved(el);if(state.page==='tours')tours(el);if(state.page==='about')about(el);}
+function showPage(page){if(state.map){state.map.remove();state.map=null;state.mapLoaded=false;state.markers=[];state.selfMarker=null;}state.page=page;state.search='';render();window.scrollTo({top:0,behavior:'smooth'});}
+function toggleLang(){state.lang=state.lang==='sr'?'en':'sr';try{localStorage.setItem('nssg-lang',state.lang)}catch(e){}render();}
+function home(el){const features=[['explore','🧭','featNearby','featNearbyD'],['explore','↗️','featRoute','featRouteD'],['explore','🏛️','featPlaces','featPlacesD'],['explore','🍽️','featFood','featFoodD'],['explore','📅','featEvents','featEventsD'],['tours','🚶','featTours','featToursD']];el.innerHTML=`<section class="hero"><div class="hero-tag">✦ ${t('welcome')}</div><div><h1>${t('hero')}</h1><p>${t('heroSub')}</p><div class="hero-bottom"><button class="btn btn-primary" onclick="showPage('explore')">🧭 ${t('exploreBtn')} →</button><button class="btn btn-ghost" onclick="showPage('explore');setTimeout(gps,200)">◎ ${t('whereBtn')}</button><button class="btn btn-white" onclick="takeBack()">↩ ${t('takeBack')}</button></div></div></section><div class="section-title"><h2>${t('quick')}</h2><button class="link" onclick="showPage('explore')">${t('seeAll')}</button></div><section class="grid-feature">${features.map(x=>`<button class="feature" onclick="${x[2]==='featEvents'?"showUnavailable('events')":x[2]==='featFood'?"setCat('food')":`showPage('${x[0]}')`}"><span class="feature-ico">${x[1]}</span><div><strong>${t(x[2])}</strong><small>${t(x[3])}</small></div></button>`).join('')}</section><div class="section-title"><h2>${t('howWorks')}</h2></div><div class="info-banner"><div class="bubble">📍</div><div><strong>${state.lang==='sr'?'Smart Location Notifications':'Smart Location Notifications'}</strong><p>${t('howText')}</p><button class="link" style="margin-top:11px;padding:0" onclick="showPage('explore');setTimeout(previewNotification,300)">${t('notify')} ↗</button></div></div><p class="prototype-note">${t('demoNotice')}</p>`;}
+function explore(el){el.innerHTML=`<div class="page-head"><h1 class="desktop-page-title">${t('findTitle')}</h1><p class="subtitle">${t('findSub')}</p></div><div class="filter-bar">${['all','sights','parks','culture','food','events'].map(cat=>`<button class="chip ${state.cat===cat?'active':''}" onclick="setCat('${cat}')">${cat==='sights'?'🏛️ ':cat==='parks'?'🌿 ':cat==='culture'?'🎭 ':cat==='food'?'🍴 ':cat==='events'?'📅 ':''}${t(cat)}</button>`).join('')}</div><div class="map-layout"><div class="map-wrap"><div id="map"></div><div class="heading-controls"><button id="northBtn" type="button" onclick="resetNorth()" aria-label="Postavi sever gore"><span id="northNeedle" class="bearing-needle">▲</span>N</button><button id="compassBtn" type="button" onclick="enableCompass()" aria-label="Uključi smer telefona">🧭<span id="compassLabel">Kompas</span></button></div><div id="headingStatus" class="heading-status">Sever je gore · smer telefona nije poznat</div><div id="navLiveControls" class="nav-live-controls hidden"><button id="trackBtn" type="button" onclick="toggleRouteTracking()">◎ Prati me tokom šetnje</button><button id="followBtn" type="button" onclick="recenterDuringRoute()">⌖ Prati na mapi</button></div><div id="navHud" class="nav-hud hidden" role="status" aria-live="off"><span class="nav-arrow" id="navArrow">↑</span><span><strong id="navHeadline">Rute</strong><small id="navDetail"></small></span><button type="button" class="nav-reroute hidden" id="navReroute" onclick="requestReroute()">↻ Nova ruta</button><button type="button" onclick="restoreRoutePanel()" aria-label="Detalji rute">Detalji</button></div><section id="routePanel" class="hidden" role="region" aria-live="polite" aria-label="Pešačka ruta"></section><button type="button" id="routeRestore" class="route-restore hidden" onclick="restoreRoutePanel()" aria-label="Prikaži uputstva rute">🧭 <span id="routeRestoreLabel">Prikaži uputstva</span> <span class="route-rest-arrow">⌃</span></button><div id="poiPopup" class="poi-popup hidden" role="region" aria-label="Informacije o lokalu"></div><div id="mapFallback" class="map-cover" role="status"><iframe id="fallbackMapFrame" title="Rezervni prikaz mape Novog Sada" loading="lazy" referrerpolicy="no-referrer" src="https://www.openstreetmap.org/export/embed.html?bbox=19.815%2C45.225%2C19.885%2C45.278&layer=mapnik&marker=45.25565%2C19.84563"></iframe><div class="map-error-content"><strong>🗺️ ${state.lang==='sr'?'Rezervni prikaz mape':'Map backup view'}</strong><p id="mapErrorDetail">${state.lang==='sr'?'Proveravamo mapu…':'Checking the map…'}</p><div class="map-error-buttons"><button onclick="retryMap()">↻ ${state.lang==='sr'?'Ponovo učitaj':'Retry'}</button><a href="https://www.google.com/maps/@45.25565,19.84563,14z" target="_blank" rel="noopener noreferrer">${state.lang==='sr'?'Otvori Google Maps':'Open Google Maps'} ↗</a></div></div></div><div class="map-badge"><span class="pulse"></span><span id="positionMode">${positionStatus()}</span></div><div class="map-style-control" role="group" aria-label="Stil mape"><button id="styleModern" onclick="changeMapStyle('modern')" class="${state.mapStyle==='modern'?'active':''}">${state.lang==='sr'?'✦ Moderna':'✦ Modern'}</button><button id="styleMinimal" onclick="changeMapStyle('minimal')" class="${state.mapStyle==='minimal'?'active':''}">${state.lang==='sr'?'Minimalna':'Minimal'}</button></div><button id="poiToggle" type="button" class="map-poi-toggle" onclick="loadNearbyPois()">☕ ${state.lang==='sr'?'Lokali na mapi':'Nearby businesses'}</button><div id="poiLoadInfo" class="map-poi-status hidden" role="status"></div><div id="gpsAccuracy" class="gps-inline-status" style="display:none" role="status"></div><div class="map-actions"><button class="btn btn-white" onclick="gps()">◎ ${t('mapGps')}</button><button class="btn btn-primary" id="liveRadarButton" onclick="toggleLiveRadar()">${state.liveWatchId===null?'◎ '+(state.lang==='sr'?'Radar uživo':'Live radar'):'■ '+(state.lang==='sr'?'Zaustavi radar':'Stop radar')}</button><select class="radius-select" onchange="setRadius(this.value)" aria-label="Radius">${[200,500,1000,3000,5000].map(r=>`<option value="${r}" ${r===state.radius?'selected':''}>${r>=1000?r/1000+' km':r+' m'}</option>`).join('')}</select></div></div><aside class="results-panel"><div class="panel-title"><strong>${t('results')}</strong><span class="counter" id="resultCount"></span></div><input class="search" id="placeSearch" placeholder="${t('search')}" autocomplete="off" value="" aria-label="${t('search')}"/><div id="results"></div><div class="notice-orange" style="margin-top:16px">${t('demoNotice')}<div style="margin-top:8px"><button class="link" onclick="previewNotification()" style="background:none;border:0;text-decoration:underline;cursor:pointer;font-weight:700">${state.lang==='sr'?'Pogledaj simulaciju obaveštenja':'View notification simulation'}</button></div></div><button class="btn btn-white" style="width:100%;margin-top:12px" onclick="saveBase()">📍 ${t('baseSave')}</button><button class="btn btn-white" style="width:100%;margin-top:9px" onclick="takeBack()">↩ ${t('takeBack')}</button><button class="btn btn-white" style="width:100%;margin-top:9px" onclick="clearBase()">✕ ${state.lang==='sr'?'Obriši My Base':'Clear My Base'}</button></aside></div>`;document.getElementById('placeSearch').addEventListener('input',e=>{state.search=e.target.value;updateResults()});initMap();updateResults();}
+function setCat(cat){
+ state.cat=cat;showPage('explore');
+ // Load user-selected categories from OSM only after consent; never send their map position silently.
+ if((cat==='food'||cat==='culture') && !state.poiList.length && !state.poiConsentDeclined) {
+   setTimeout(()=>{if(state.page==='explore')loadNearbyPois();},100);
+ }
+}
+function setRadius(value){state.radius=Number(value);updateResults();updateMarkers();}
+function filteredPois(){
+ const query=state.search.toLocaleLowerCase();
+ return state.poiList.filter(p=>(state.cat==='all'||p.category.cat===state.cat)
+  && numDistance(p)<=state.radius && p.label.toLocaleLowerCase().includes(query))
+  .sort((a,b)=>numDistance(a)-numDistance(b));
+}
+function updateResults(){
+ const els=filtered(),osm=filteredPois(),root=document.getElementById('results');if(!root)return;
+ document.getElementById('resultCount').textContent=els.length+osm.length;
+ const main=els.map(p=>`<div class="place"><div class="place-icon ${p.cat==='parks'?'park':p.cat==='culture'?'culture':''}" onclick="openPlace('${p.id}')">${p.emoji}</div><div style="min-width:0;flex:1" onclick="openPlace('${p.id}')"><div class="place-name">${name(p)}</div><div class="place-sub">${distStr(p)} · ${t(p.cat)}</div></div><button class="place-fav" aria-label="Favorite ${name(p)}" onclick="toggleFav('${p.id}')">${state.favorites.has(p.id)?'♥':'♡'}</button></div>`).join('');
+ const others=osm.map(p=>`<button type="button" class="place osm-list-row" data-osm-id="${escapeHTML(p.id)}"><span class="place-icon">${p.emoji}</span><span style="min-width:0;flex:1;text-align:left"><span class="place-name">${escapeHTML(p.label)}</span><span class="place-sub">${distStr(p)} · ${escapeHTML(p.category.label)} · OSM</span></span><span class="poi-chevron">↗</span></button>`).join('');
+ const hint=state.cat==='food'&&!osm.length?`<div class="poi-empty-hint">${state.lang==='sr'?'Nema učitanih restorana za izabranu oblast. Klikni „Učitaj mesta“ kako bismo proverili dostupne OpenStreetMap podatke.':'No restaurants loaded for this area. Tap Load places to check available OSM data.'}<button type="button" class="btn btn-white" onclick="loadNearbyPois()">${state.lang==='sr'?'Učitaj mesta':'Load places'}</button></div>`:'';
+ root.innerHTML=(main+others+hint)||`<div class="empty">${t('noResult')}</div>`;
+ root.querySelectorAll('[data-osm-id]').forEach(el=>el.addEventListener('click',()=>openPoiPopup(el.dataset.osmId)));
+ updateMarkers();
+}
+// v0.3.6: map uses bundled map-engine.js, not an external CDN library.
+function showMapError(reason){
+  const fb=document.getElementById('mapFallback');if(!fb)return;
+  fb.style.display='flex';
+  const msg=document.getElementById('mapErrorDetail');
+  if(msg)msg.textContent=state.lang==='sr'
+   ? 'Mapne pločice trenutno nisu dostupne. Ovo je rezervni OpenStreetMap prikaz; pokušaj ponovo ili otvori Google Maps.'
+   : 'Map tiles are temporarily unavailable. This is a backup OpenStreetMap view; retry or open Google Maps.';
+}
+function retryMap(){
+  const fb=document.getElementById('mapFallback');if(fb)fb.style.display='none';
+  if(state.map){state.map.remove();state.map=null;state.mapLoaded=false;}
+  initMap();
+}
+function initMap(){
+  const host=document.getElementById('map');if(!host)return;
+  try{
+    if(typeof window.SimpleTourMap!=='function')throw Error('local-map-engine-not-loaded');
+    const map=new window.SimpleTourMap(host,{
+      lat:state.position.lat,lng:state.position.lng,zoom:14,
+      style:state.mapStyle,onUserGesture:()=>{state.followMode=false;refreshHeadingControls();updateNavigationHUD();},onStatus:(s)=>{
+        if(state.map!==map)return;
+        if(s==='ready'){
+          state.mapLoaded=true;
+          const fb=document.getElementById('mapFallback');if(fb)fb.style.display='none';
+        }else if(s==='tiles')showMapError('tiles');
+      }
+    });
+    state.map=map;updateMarkers();map.setPois(filteredPois());
+    map.setHeading(state.heading);refreshHeadingControls();updateNavigationHUD();
+    if(state.activeRoute&&state.activeRoute.coords?.length){map.setRoute(state.activeRoute.coords,state.activeRoute.destination);hideRoutePanel();}
+  }catch(e){console.error('Map renderer failed:',e);showMapError('runtime');}
+}
+function changeMapStyle(style){
+  if(!(style in MAP_STYLES)||style===state.mapStyle)return;
+  state.mapStyle=style;try{localStorage.setItem('nssg-mapstyle',style)}catch(e){}
+  document.getElementById('styleModern')?.classList.toggle('active',style==='modern');
+  document.getElementById('styleMinimal')?.classList.toggle('active',style==='minimal');
+  if(state.map)state.map.setStyle(style);
+}
+function updateMapPosition(){
+  if(!state.map)return;
+  state.map.setPosition(state.fromGps?state.position:null,state.fromGps?state.locationAccuracy:null,state.radius);
+}
+function updateMarkers(){
+  if(!state.map)return;
+  updateMapPosition();
+  state.map.setPlaces(filtered().map(p=>({lat:p.lat,lng:p.lng,emoji:p.emoji,label:name(p),click:()=>openPlace(p.id)})));state.map.setPois(filteredPois());
+}
+function positionStatus(){return state.fromGps?(state.lang==='sr'?'Lokacija uređaja':'Device location'):(state.lang==='sr'?'Demo centar · dozvoli GPS':'Demo centre · allow GPS');}
+function applyPosition(pos){
+  const {latitude:lat,longitude:lng,accuracy}=pos.coords;
+  if(!Number.isFinite(lat)||!Number.isFinite(lng))return;
+  const firstFix=!state.fromGps;
+  state.position={lat,lng};state.fromGps=true;
+  // GPS heading represents movement course, not where the phone is pointed.
+  if(!state.compassEnabled&&Number.isFinite(pos.coords.heading)&&pos.coords.speed>0.8){
+    state.heading=((pos.coords.heading%360)+360)%360;state.headingSource='course';
+  }
+  state.locationAccuracy=Number.isFinite(accuracy)?Math.max(0,Math.round(accuracy)):null;
+  if(state.map){
+    if(firstFix||state.followMode)state.map.easeTo({center:[lng,lat],zoom:Math.max(state.map.getZoom(),14)});
+    state.map.setHeading(state.heading);updateMapPosition();
+    if(state.followMode&&state.compassEnabled&&state.headingSource==='compass')state.map.setBearing(state.heading);
+  }
+  updateNavigationHUD();refreshHeadingControls();
+  const indicator=document.getElementById('positionMode');if(indicator)indicator.textContent=positionStatus();
+  updateResults();
+  const info=document.getElementById('gpsAccuracy');if(info){info.style.display='block';info.classList.toggle('error',accuracy>500);info.textContent=state.lang==='sr'?`Lokacija sa uređaja · procenjena preciznost ±${Math.round(accuracy)} m${accuracy>500?' · probaj na telefonu za precizniji GPS':''}`:`Device location · estimated accuracy ±${Math.round(accuracy)} m${accuracy>500?' · try a phone for more accurate GPS':''}`;}
+  if(state.liveWatchId!==null && accuracy<=120)checkNearPlaces();
+}
+function gps(successCallback){
+  state.followMode=true;
+  if(!navigator.geolocation||!window.isSecureContext){showToast(state.lang==='sr'?'GPS zahteva HTTPS i dozvolu lokacije.':'GPS needs HTTPS and location permission.');return;}
+  showToast(state.lang==='sr'?'Tražimo dozvolu za lokaciju…':'Requesting location permission…');
+  navigator.geolocation.getCurrentPosition(pos=>{applyPosition(pos);showToast(t('gpsDone'));if(typeof successCallback==='function')successCallback();},err=>{const msg=err.code===1?(state.lang==='sr'?'Lokacija nije dozvoljena. Proveri podešavanja pregledača i macOS-a.':'Location denied. Check browser and system settings.'):err.code===3?(state.lang==='sr'?'GPS nije odgovorio na vreme. Pokušaj opet.':'Location timed out. Try again.'):t('gpsNo');showToast(msg);},{enableHighAccuracy:true,timeout:18000,maximumAge:10000});
+}
+async function autoLocateOnOpen(){
+ // Single automatic one-shot. The browser handles the permission prompt; no background tracking.
+ if(!navigator.geolocation||!window.isSecureContext)return;
+ try{if(sessionStorage.getItem('nssg-auto-locate-attempted')==='yes')return;
+     sessionStorage.setItem('nssg-auto-locate-attempted','yes');}catch(e){}
+ try{if(navigator.permissions?.query){const permission=await navigator.permissions.query({name:'geolocation'});if(permission.state==='denied')return;}}catch(e){}
+ navigator.geolocation.getCurrentPosition(pos=>{
+   applyPosition(pos);
+   const msg=state.lang==='sr'?'Lokacija je automatski prepoznata.':'Location detected automatically.';
+   showToast(msg);
+ },err=>{
+   if(err.code!==1)console.warn('Automatic GPS unavailable:',err.code);
+ },{enableHighAccuracy:true,maximumAge:30000,timeout:13000});
+}
+function toggleLiveRadar(){
+  if(state.liveWatchId!==null){stopLiveRadar();return;}
+  if(!navigator.geolocation||!window.isSecureContext){showToast(state.lang==='sr'?'Radar zahteva HTTPS i dozvolu za GPS.':'Radar requires HTTPS and location permission.');return;}
+  if(!window.confirm(state.lang==='sr'?'Uključiti radar uživo? Koristi GPS samo dok je ova stranica otvorena. Ne radi u pozadini niti šalje podatke na naš server.':'Enable live radar? Uses GPS only while this page is open. It does not run in the background or send location to our server.'))return;
+  state.liveWatchId=navigator.geolocation.watchPosition(pos=>{applyPosition(pos);},err=>{stopLiveRadar();showToast(state.lang==='sr'?'Radar nije dostupan: proveri GPS dozvolu.':'Radar unavailable: check GPS permission.');},{enableHighAccuracy:true,maximumAge:15000,timeout:15000});
+  refreshRadarButton();showToast(state.lang==='sr'?'Radar uključen: prati lokaciju dok je stranica otvorena.':'Radar on: checks location while the page is open.');
+}
+function stopLiveRadar(){if(state.liveWatchId!==null&&navigator.geolocation)navigator.geolocation.clearWatch(state.liveWatchId);state.liveWatchId=null;refreshRadarButton();}
+function refreshRadarButton(){const btn=document.getElementById('liveRadarButton');if(btn)btn.textContent=state.liveWatchId===null?(state.lang==='sr'?'◎ Radar uživo':'◎ Live radar'):(state.lang==='sr'?'■ Zaustavi radar':'■ Stop radar');}
+function checkNearPlaces(){
+  const now=Date.now();if(now-state.lastAlertAt<120000)return;
+  const near=places.filter(p=>numDistance(p)<=140).sort((a,b)=>numDistance(a)-numDistance(b));
+  for(const p of near){
+    const key='nssg-radar-'+p.id;let seen=0;try{seen=Number(localStorage.getItem(key)||0)}catch(e){}
+    if(now-seen<86400000)continue;
+    state.lastAlertAt=now;state.lastAlertId=p.id;
+    try{localStorage.setItem(key,String(now))}catch(e){}
+    showNearbyAlert(p);break;
+  }
+}
+function showNearbyAlert(p){
+  const prefix=state.lang==='sr'?'U blizini si: ':'You are near: ';
+  showToast('📍 '+prefix+name(p)+' · '+distStr(p));
+  document.getElementById('modal').innerHTML=`<div class="modal-visual" style="height:130px"><span class="modal-topper">${state.lang==='sr'?'RADAR UŽIVO':'LIVE RADAR'} · ${t('details')}</span><span style="font-size:64px">📍</span><button class="modal-close" onclick="closeModal()" aria-label="Close">×</button></div><div class="modal-body"><div class="detail-tag">${t(p.cat).toUpperCase()}</div><h2 id="modalTitle">${name(p)}</h2><p>${desc(p)}</p><div class="detail-facts"><span>◎ ${distStr(p)}</span><span>${state.lang==='sr'?'Radi samo dok je stranica aktivna':'Only while page is active'}</span></div><div class="modal-actions"><button class="btn btn-primary" onclick="openPlace('${p.id}')">${t('details')}</button><button class="btn btn-white" onclick="openDirections('${p.id}')">${t('walk')}</button></div></div>`;
+  document.getElementById('modalShade').classList.remove('hidden');
+}
+
+function showToast(msg){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>e.classList.remove('show'),4800);}
+function toggleFav(id){if(state.favorites.has(id))state.favorites.delete(id);else state.favorites.add(id);try{localStorage.setItem('nssg-favs',JSON.stringify([...state.favorites]));}catch(e){}if(state.page==='explore')updateResults();else if(state.page==='saved')saved(document.getElementById('page'));}
+function openPlace(id){
+ const p=places.find(x=>x.id===id);if(!p)return;
+ const nearby=places.filter(x=>x.id!==id).map(x=>({...x,m:geoDistance(p,x)})).sort((a,b)=>a.m-b.m).slice(0,3);
+ const source=p.source?`<p class="place-source"><a href="${escapeHTML(p.source)}" target="_blank" rel="noopener noreferrer">${state.lang==='sr'?'Zvanični izvor / dodatne informacije':'Official source / more information'} ↗</a></p>`:'';
+ const nearHtml=nearby.map(x=>`<button type="button" class="nearby-place" onclick="openPlace('${x.id}')"><span>${x.emoji}</span><strong>${escapeHTML(name(x))}</strong><small>≈ ${Math.round(x.m)} m</small></button>`).join('');
+ document.getElementById('modal').innerHTML=`<div class="modal-visual"><span class="modal-topper">${t('details')}</span><span class="large-emoji">${p.emoji}</span><button class="modal-close" onclick="closeModal()" aria-label="Close">×</button></div><div class="modal-body"><div class="detail-tag">${t(p.cat).toUpperCase()}</div><h2 id="modalTitle">${escapeHTML(name(p))}</h2><p>${escapeHTML(desc(p))}</p><div class="detail-facts"><span>◎ ${distStr(p)}</span><span>📍 ${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}</span></div><p class="detail-disclaimer">${state.lang==='sr'?'Rastojanje je vazdušnom linijom; radno vreme i cene nisu potvrđeni.':'Distance is straight-line; opening hours and prices are not confirmed.'}</p>${source}<h3 class="nearby-title">${state.lang==='sr'?'U blizini':'Nearby places'}</h3><div class="nearby-grid">${nearHtml}</div><div class="modal-actions"><button class="btn btn-primary" onclick="openDirections('${p.id}')">↗ ${t('walk')}</button><button class="btn btn-white" onclick="toggleFav('${p.id}');closeModal()">${state.favorites.has(id)?'♥ '+t('removeFav'):'♡ '+t('favourite')}</button></div></div>`;
+ document.getElementById('modalShade').classList.remove('hidden');
+}
+function closeModal(){document.getElementById('modalShade').classList.add('hidden');}
+/* OpenStreetMap local POIs: ON-DEMAND demo lookup, not a guaranteed business directory.
+ * Public Overpass is intentionally used ONLY on explicit click, for one small radius.
+ * Production must use an agreed, supported POI provider or curated data feed. */
+function poiCategory(tags){
+ const type=tags.amenity||tags.shop||tags.tourism||tags.historic||tags.leisure||'other';
+ const kinds={restaurant:['Restoran','🍽️','food'],cafe:['Kafić','☕','food'],bar:['Bar','🍸','food'],pub:['Pub','🍺','food'],fast_food:['Brza hrana','🥙','food'],
+ pharmacy:['Apoteka','💊','other'],bank:['Banka','🏦','other'],atm:['Bankomat','🏧','other'],supermarket:['Market','🛒','other'],convenience:['Prodavnica','🛒','other'],bakery:['Pekara','🥐','food'],clothes:['Odeća','👕','other'],books:['Knjižara','📚','other'],gift:['Suveniri','🎁','other'],hotel:['Hotel','🛏️','other'],
+ museum:['Muzej','🏛️','culture'],gallery:['Galerija','🖼️','culture'],artwork:['Umetnost','🎨','culture'],attraction:['Atrakcija','📍','sights'],viewpoint:['Vidikovac','🔭','sights'],
+ monument:['Spomenik','🗿','sights'],memorial:['Spomen-obeležje','🗿','sights'],castle:['Tvrđava','🏰','sights'],archaeological_site:['Arheološko nalazište','🏺','sights'],
+ theatre:['Pozorište','🎭','culture'],arts_centre:['Kulturni centar','🎭','culture'],park:['Park','🌳','parks']};
+ const info=kinds[type]||['Lokal','📍','other'];return {type,label:info[0],emoji:info[1],cat:info[2]};
+}
+function showPoiInfo(message){const el=document.getElementById('poiLoadInfo');if(!el)return;el.textContent=message;el.classList.remove('hidden');}
+function closePoiPopup(){state.poiSelected=null;document.getElementById('poiPopup')?.classList.add('hidden');}
+function openPoiPopup(id){
+ const item=state.poiList.find(x=>x.id===id);if(!item)return;state.poiSelected=item;state.map?.easeTo({center:[item.lng,item.lat],zoom:Math.max(15,state.map.getZoom()),duration:350});
+ const panel=document.getElementById('poiPopup');if(!panel)return;
+ const osmUrl=`https://www.openstreetmap.org/${item.osmType}/${item.osmId}`;
+ panel.innerHTML=`<button type="button" class="poi-popup-x" onclick="closePoiPopup()" aria-label="Zatvori">×</button><span class="poi-popup-label">${escapeHTML(item.category.label)} · OpenStreetMap</span><strong>${escapeHTML(item.label)}</strong><p>${state.lang==='sr'?'Podaci preuzeti iz OpenStreetMap-a; radno vreme i dostupnost proveriti.':'From OpenStreetMap; confirm opening hours and availability.'}</p><div class="poi-popup-actions"><button id="poiRouteButton" type="button">🚶 ${state.lang==='sr'?'Pešačka ruta':'Walking route'}</button><a href="${osmUrl}" target="_blank" rel="noopener noreferrer">OSM ↗</a></div>`;
+ panel.classList.remove('hidden');
+ panel.querySelector('#poiRouteButton')?.addEventListener('click',()=>{closePoiPopup();startRoute({lat:item.lat,lng:item.lng},item.label)});
+}
+async function loadNearbyPois(){
+ if(state.poiLoading)return;
+  const now=Date.now();if(now-state.poiLastFetchAt<30000){showPoiInfo(state.lang==='sr'?'Sačekaj malo pre ponovnog učitavanja lokala.':'Please wait before loading businesses again.');return;}
+ const center=state.map?.getCenter();if(!center||!Number.isFinite(center.lat)||!Number.isFinite(center.lng))return;
+ // Only fetch small, valid Novi Sad demonstration areas; avoid using this public server for large data scraping.
+ if(center.lat<45.13||center.lat>45.38||center.lng<19.64||center.lng>20.04){showPoiInfo(state.lang==='sr'?'Pretraživanje lokala je za sada ograničeno na Novi Sad.':'Business lookup is currently limited to Novi Sad.');return;}
+ if(!state.poiConsent){
+  const ok=window.confirm(state.lang==='sr'?
+   'Za prikaz lokala poslaćemo koordinate centra trenutne mape servisu OpenStreetMap Overpass. Centar mape može biti blizu tvoje GPS lokacije. Nastaviti?':
+   'To show nearby businesses we will send the current map centre coordinates to OpenStreetMap Overpass. The map centre may be near your GPS location. Continue?');
+  if(!ok){state.poiConsentDeclined=true;return;}state.poiConsent=true;try{localStorage.setItem('nssg-poi-consent','yes')}catch(e){}
+ }
+ // Short-lived local fallback: retain last successful on-demand OSM response for the same area.
+ // This is NOT an offline directory and must never display "open now" or current prices.
+ const cacheKey='nssg-pois-'+(Math.round(center.lat*1000))+'-'+(Math.round(center.lng*1000));
+ let prior=null;
+ try{prior=JSON.parse(localStorage.getItem(cacheKey)||'null')}catch(_){/* unavailable storage */}
+ if(prior?.at && now-prior.at<24*3600*1000 && Array.isArray(prior.items)){
+   const valid=prior.items.filter(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lng)&&typeof p.label==='string'&&p.label.length<110);
+   if(valid.length){state.poiList=valid.map(p=>({...p,category:poiCategory(p.tags||{}),click:()=>openPoiPopup(p.id)}));updateResults();
+     showPoiInfo(state.lang==='sr'?'Privremeno prikazani ranije učitani OSM podaci (mogu biti zastareli).':'Showing previously fetched OSM data (may be stale).');
+   }
+ }
+ state.poiLoading=true;state.poiLastFetchAt=now;
+ const button=document.getElementById('poiToggle');if(button){button.disabled=true;button.textContent=state.lang==='sr'?'Učitavam lokale…':'Loading…';}
+ showPoiInfo(state.lang==='sr'?'Preuzimamo dostupne lokale oko centra mape…':'Loading places around map centre…');
+ const lat=center.lat.toFixed(5),lng=center.lng.toFixed(5);
+ const query=`[out:json][timeout:14];(
+ nwr(around:1100,${lat},${lng})[name][amenity~"^(restaurant|cafe|bar|pub|fast_food|pharmacy|bank|atm|theatre|arts_centre)$"];
+ nwr(around:1100,${lat},${lng})[name][shop~"^(supermarket|convenience|bakery|clothes|books|gift)$"];
+ nwr(around:1100,${lat},${lng})[name][tourism~"^(museum|gallery|attraction|viewpoint|artwork|hotel)$"];
+ nwr(around:1100,${lat},${lng})[name][historic~"^(monument|memorial|castle|archaeological_site)$"];
+);out center 140;`;
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15500);
+ try{
+  const response=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:'data='+encodeURIComponent(query),signal:controller.signal});
+  if(!response.ok)throw Error('Overpass HTTP '+response.status);
+  const data=await response.json();if(!Array.isArray(data.elements))throw Error('Invalid POI response');
+  const found=data.elements.filter(item=>Number.isFinite(item.lat??item.center?.lat)&&Number.isFinite(item.lon??item.center?.lon)
+     &&typeof item.tags?.name==='string' &&item.tags.name.length<110).slice(0,140);
+  state.poiList=found.map(item=>({id:'poi-'+item.id,osmType:item.type,osmId:item.id,lat:item.lat??item.center.lat,lng:item.lon??item.center.lon,label:item.tags.name.slice(0,90),category:poiCategory(item.tags),tags:item.tags,emoji:poiCategory(item.tags).emoji,click:()=>openPoiPopup('poi-'+item.id)}));
+  try{const cacheItems=state.poiList.map(({id,osmType,osmId,lat,lng,label,tags,emoji})=>({id,osmType,osmId,lat,lng,label,tags,emoji}));
+    localStorage.setItem(cacheKey,JSON.stringify({at:Date.now(),items:cacheItems}));}catch(_){/* browser quota */}
+  closePoiPopup();updateResults();
+  showPoiInfo(state.lang==='sr'?`Učitano ${state.poiList.length} mesta iz OpenStreetMap-a u okolini mape (nije potpun katalog grada).`:`Loaded ${state.poiList.length} OpenStreetMap places around the map (not a complete city catalog).`);
+ }catch(error){console.warn('Optional OSM POI lookup unavailable:',error);showPoiInfo(state.poiList.length?(state.lang==='sr'?'Mrežni servis trenutno ne radi; prikazani su ranije učitani OSM podaci (mogu biti zastareli).':'POI service unavailable; showing cached OSM data (may be outdated).'):(state.lang==='sr'?'Lokali nisu dostupni. Turističke znamenitosti i ruta nastavljaju da rade.':'Businesses unavailable; tourist places and routes still work.'));}
+ finally{clearTimeout(timer);state.poiLoading=false;if(button){button.disabled=false;button.textContent=state.lang==='sr'?'⌕ Učitaj mesta':'⌕ Load places';}}
+}
+
+/* v0.3.6: in-app pedestrian route. Public Valhalla server is DEMO ONLY; never fake a path. */
+function decodePolyline6(encoded){
+  const out=[];let pos=0,lat=0,lng=0;
+  while(pos<encoded.length){
+    const read=()=>{let shift=0,n=0,b;do{if(pos>=encoded.length||shift>35)throw Error('Invalid encoded polyline');b=encoded.charCodeAt(pos++)-63;n|=(b&31)<<shift;shift+=5;}while(b>=32);return (n&1)?~(n>>1):(n>>1);};
+    lat+=read();lng+=read();out.push([lng/1e6,lat/1e6]);
+    if(out.length>20000)throw Error('Route too large');
+  }
+  return out;
+}
+function escapeHTML(text){return String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function routePanel(html){
+ state.routePanelHTML=html;
+ const p=document.getElementById('routePanel');if(!p)return;
+ p.innerHTML=html;p.classList.remove('hidden');document.getElementById('routeRestore')?.classList.add('hidden');
+}
+// Hide instructions WITHOUT clearing the map route. X and 'Hide instructions' use this.
+function hideRoutePanel(){
+ document.getElementById('routePanel')?.classList.add('hidden');
+ const restore=document.getElementById('routeRestore');
+ if(restore&&state.activeRoute)restore.classList.remove('hidden');
+ const label=document.getElementById('routeRestoreLabel');if(label)label.textContent=state.lang==='sr'?'Prikaži uputstva':'Show directions';
+}
+function restoreRoutePanel(){
+ const p=document.getElementById('routePanel');if(!p||!state.activeRoute)return;
+ p.innerHTML=state.routePanelHTML;p.classList.remove('hidden');document.getElementById('routeRestore')?.classList.add('hidden');
+}
+// End route: the ONLY user action that intentionally deletes the blue route.
+function closeRoute(){
+ stopRouteTracking();state.followMode=false;
+ state.routeRequestSeq++;state.activeRoute=null;state.routePanelHTML='';state.map?.clearRoute();
+ document.getElementById('routePanel')?.classList.add('hidden');
+ document.getElementById('routeRestore')?.classList.add('hidden');
+ updateNavigationHUD();
+}
+
+function showRouteError(title,reason,destination){updateNavigationHUD();
+ const demoOrigin=state.activeRoute?.isDemo?(state.lang==='sr'?' · DEMO polazak iz centra Novog Sada.':' · DEMO start in Novi Sad centre.') : '';
+ const external=`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination.lat+','+destination.lng)}&travelmode=walking`;
+ routePanel(`<div class="route-panel-head"><div><strong>${escapeHTML(title)}</strong><p>${escapeHTML(reason)}${escapeHTML(demoOrigin)}</p></div><button class="route-close" onclick="hideRoutePanel()" aria-label="Sakrij uputstva">×</button></div><div class="route-panel-actions"><button onclick="startRoute(state.activeRoute?.destination||{lat:${destination.lat},lng:${destination.lng}},state.activeRoute?.name||'Odredište')">${state.lang==='sr'?'Pokušaj ponovo':'Try again'}</button><a href="${external}" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div>`);
+}
+function openDirections(id){
+ const p=places.find(p=>p.id===id);if(!p)return;
+ closeModal();showPage('explore');
+ startRoute({lat:p.lat,lng:p.lng},name(p));
+}
+function startRoute(destination,destinationName){
+ const from={lat:state.position.lat,lng:state.position.lng};
+ const requestId=++state.routeRequestSeq;
+ const status=state.fromGps?'':(state.lang==='sr'?'DEMO: ruta počinje od centra Novog Sada; uključi GPS za svoju lokaciju.':'DEMO: route starts in Novi Sad centre; enable GPS for your position.');
+ state.activeRoute={destination,name:destinationName,coords:[],isDemo:!state.fromGps};updateNavigationHUD();
+ if(!document.getElementById('map'))showPage('explore');
+ const locationWarning=state.fromGps?'':(state.lang==='sr'?' · demo početak':' · demo start');
+ routePanel(`<div class="route-panel-head"><div><strong>🚶 ${escapeHTML(destinationName)}</strong><p>${state.lang==='sr'?'Računamo pešačku putanju':'Calculating walking directions'}${locationWarning}…</p></div><button class="route-close" onclick="hideRoutePanel()" aria-label="Sakrij uputstva">×</button></div>`);
+ if(state.map)state.map.clearRoute();
+ // A real GPS position goes to a third-party demo server only after the user requests the route.
+ // Prompt explicit consent before sharing real coordinates with the public routing provider.
+ if(state.fromGps&&!window.confirm(state.lang==='sr'?'Za izračunavanje pešačke rute poslaćemo tvoju trenutnu GPS lokaciju i odredište servisu Valhalla (OpenStreetMap). Nastaviti?':'To calculate this walking route, we will send your GPS position and destination to Valhalla (OpenStreetMap). Continue?')){closeRoute();return;}
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),14000);
+ const payload={locations:[{lat:from.lat,lon:from.lng},{lat:destination.lat,lon:destination.lng}],costing:'pedestrian',units:'kilometers',language:'en-US',directions_type:'instructions'};
+ fetch('https://valhalla1.openstreetmap.de/route',{method:'POST',headers:{'Content-Type':'application/json','X-Client-Id':'novi-sad-smart-guide-demo'},body:JSON.stringify(payload),signal:controller.signal})
+  .then(async response=>{if(!response.ok)throw Error('Routing service returned '+response.status);return await response.json();})
+  .then(data=>{
+    if(requestId!==state.routeRequestSeq)return;
+    const legs=data?.trip?.legs,summary=data?.trip?.summary;
+    if(!Array.isArray(legs)||!legs.length||typeof legs[0].shape!=='string'||!summary||!Number.isFinite(Number(summary.length)))throw Error('Route data incomplete');
+    const coords=legs.flatMap((leg,i)=>{const path=decodePolyline6(leg.shape);return i?path.slice(1):path});
+    if(coords.length<2||!coords.every(c=>Math.abs(c[0])<=180&&Math.abs(c[1])<=90))throw Error('Invalid route geometry');
+    const kms=Number(summary.length),minutes=Math.ceil(Number(summary.time)/60);
+    let offset=0;
+    const allManeuvers=[];
+    for(const leg of legs){
+      const m=Array.isArray(leg.maneuvers)?leg.maneuvers:[];
+      for(const step of m){
+        const idx=Math.max(0,Number(step.begin_shape_index)||0)+offset;
+        allManeuvers.push({index:idx,type:Number(step.type),instruction:String(step.instruction||'').slice(0,250)});
+      }
+      offset+=decodePolyline6(leg.shape).length-1;
+    }
+    state.activeRoute={destination,name:destinationName,coords,maneuvers:allManeuvers,isDemo:!state.fromGps,rerouteAt:0};
+    state.map?.setRoute(coords,destination);
+    updateNavigationHUD();
+    const maneuvers=legs.flatMap(leg=>Array.isArray(leg.maneuvers)?leg.maneuvers:[]).slice(0,14);
+    const steps=maneuvers.map(x=>`<li>${escapeHTML(x.instruction||'')}</li>`).join('');
+    const demotext=state.fromGps?'':(state.lang==='sr'?'Polazna tačka je demo centar grada, a ne tvoja GPS pozicija.':'Starting point is the demo city centre, not your GPS position.');
+    const external=`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination.lat+','+destination.lng)}&travelmode=walking`;
+    routePanel(`<div class="route-panel-head"><div><strong>🚶 ${escapeHTML(destinationName)}</strong><p>${state.lang==='sr'?'Pešačka putanja unutar aplikacije':'Walking route inside the app'}</p></div><button class="route-close" onclick="hideRoutePanel()" aria-label="Sakrij uputstva">×</button></div><div class="route-stats"><span>↝ ${kms<1?Math.round(kms*1000)+' m':kms.toFixed(1)+' km'}</span><span>◷ ~${minutes} min</span>${!state.fromGps?'<span>DEMO polazak</span>':''}</div>${steps?`<p class="route-panel-foot">${state.lang==='sr'?'Uputstva za skretanje su trenutno na engleskom.':'Turn-by-turn instructions:'}</p><ol class="route-steps-preview">${steps}</ol>`:''}<p class="route-panel-foot">${escapeHTML(demotext)} ${state.lang==='sr'?'Procena, bez navigacije glasom i praćenja kretanja u pozadini. Prati pešačke prelaze i signalizaciju.':'Estimate only, without voice guidance or background tracking.'}</p><div class="route-panel-actions"><button onclick="hideRoutePanel()">${state.lang==='sr'?'Sakrij uputstva':'Hide directions'}</button><button class="route-end-btn" onclick="closeRoute()">${state.lang==='sr'?'Završi rutu':'End route'}</button><a href="${external}" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div>`);
+  })
+  .catch(err=>{if(requestId!==state.routeRequestSeq)return;console.warn('Walking route unavailable:',err);state.map?.clearRoute();showRouteError(state.lang==='sr'?'Ruta nije dostupna':'Route unavailable',state.lang==='sr'?'Servis za izračunavanje pešačke rute trenutno ne odgovara. Nećemo prikazati izmišljenu putanju.':'Walking route service is not responding. We will not display a made-up route.',destination);})
+  .finally(()=>clearTimeout(timer));
+}
+
+// Navigation HUD is deliberately conservative: an arrow exists only for an actual GPS fix
+// and a real routed geometry; it never guesses a compass bearing from an arbitrary alpha.
+const toRad=d=>d*Math.PI/180;
+function geoDistance(a,b){const p=toRad(a.lat),q=toRad(b.lat),dp=q-p,dl=toRad(b.lng-a.lng);const h=Math.sin(dp/2)**2+Math.cos(p)*Math.cos(q)*Math.sin(dl/2)**2;return 12742000*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)));}
+function geoBearing(a,b){const d=toRad(b.lng-a.lng),p=toRad(a.lat),q=toRad(b.lat);return (Math.atan2(Math.sin(d)*Math.cos(q),Math.cos(p)*Math.sin(q)-Math.sin(p)*Math.cos(q)*Math.cos(d))*180/Math.PI+360)%360;}
+function routeNextPoint(coords,pos){
+ if(!Array.isArray(coords)||coords.length<2)return null;
+ let nearest=Infinity,seg=-1;
+ for(let i=0;i<coords.length-1;i++){
+   const a={lat:coords[i][1],lng:coords[i][0]},b={lat:coords[i+1][1],lng:coords[i+1][0]};
+   const factor=Math.cos(toRad(pos.lat));
+   const dx=(b.lng-a.lng)*factor,dy=b.lat-a.lat;
+   const fraction=Math.max(0,Math.min(1,((pos.lng-a.lng)*factor*dx+(pos.lat-a.lat)*dy)/Math.max(1e-15,dx*dx+dy*dy)));
+   const projected={lat:a.lat+(b.lat-a.lat)*fraction,lng:a.lng+(b.lng-a.lng)*fraction};
+   const dist=geoDistance(pos,projected);
+   if(dist<nearest){nearest=dist;seg=i;}
+ }
+ let look=seg+1;
+ while(look<coords.length-1&&geoDistance(pos,{lat:coords[look][1],lng:coords[look][0]})<22)look++;
+ const next={lat:coords[look][1],lng:coords[look][0]};
+ return {next,segment:seg,offRoute:nearest,distanceToNext:geoDistance(pos,next),bearing:geoBearing(pos,next)};
+}
+function guidanceStep(route,segment){
+ const maneuvers=Array.isArray(route.maneuvers)?route.maneuvers:[];
+ return maneuvers.find(x=>x.index>segment+1) || null;
+}
+function formatMeters(m){return m<1000?Math.round(m)+' m':(m/1000).toFixed(1)+' km';}
+function navigationProgress(route,position){
+ const item=routeNextPoint(route.coords,position);if(!item)return null;
+ const step=guidanceStep(route,item.segment);
+ const end=step?Math.min(step.index,route.coords.length-1):route.coords.length-1;
+ let remaining=geoDistance(position,{lat:route.coords[item.segment+1][1],lng:route.coords[item.segment+1][0]});
+ for(let i=item.segment+1;i<end;i++)remaining+=geoDistance({lat:route.coords[i][1],lng:route.coords[i][0]},{lat:route.coords[i+1][1],lng:route.coords[i+1][0]});
+ let toFinish=remaining;
+ for(let i=end;i<route.coords.length-1;i++)toFinish+=geoDistance({lat:route.coords[i][1],lng:route.coords[i][0]},{lat:route.coords[i+1][1],lng:route.coords[i+1][0]});
+ return {...item,step,remaining,toFinish};
+}
+function requestReroute(){
+ if(!state.activeRoute?.coords?.length||!state.fromGps)return;
+ const accuracy=Number.isFinite(state.locationAccuracy)?state.locationAccuracy:Infinity;
+ if(accuracy>65){showToast(state.lang==='sr'?'GPS nije dovoljno precizan za novu putanju.':'GPS is not accurate enough to reroute.');return;}
+ const dest={...state.activeRoute.destination},name=state.activeRoute.name;
+ const now=Date.now();if(state.activeRoute.rerouteAt && now-state.activeRoute.rerouteAt<20000)return;
+ // Recalculations always require a tap and a privacy consent before GPS is sent.
+ startRoute(dest,name);
+}
+function updateNavigationHUD(){
+ const panel=document.getElementById('navHud'),tools=document.getElementById('navLiveControls');
+ if(!panel||!tools)return;
+ const route=state.activeRoute;
+ if(!route?.coords?.length){panel.classList.add('hidden');tools.classList.add('hidden');return;}
+ panel.classList.remove('hidden');tools.classList.remove('hidden');
+ const title=document.getElementById('navHeadline'),info=document.getElementById('navDetail'),arrow=document.getElementById('navArrow');
+ const recalc=document.getElementById('navReroute');
+ if(recalc)recalc.classList.add('hidden');
+ if(!state.fromGps){title.textContent=state.lang==='sr'?'DEMO ruta · uključi GPS':'DEMO route · enable GPS';
+   info.textContent=state.lang==='sr'?'Polazak je centar grada, ne tvoja pozicija.':'Route starts in city centre, not your position.';
+   arrow.textContent='?';arrow.style.transform='none';return;}
+ const progress=navigationProgress(route,state.position);if(!progress)return;
+ const accuracy=Number.isFinite(state.locationAccuracy)?state.locationAccuracy:Infinity;
+ const atDestination=geoDistance(state.position,route.destination)<=Math.max(20,Math.min(45,accuracy));
+ const offRoute=progress.offRoute>Math.max(55,accuracy*2) && accuracy<=65;
+ if(atDestination){title.textContent=state.lang==='sr'?'Blizu si odredišta':'You are near your destination';}
+ else if(offRoute){title.textContent=state.lang==='sr'?'Skrenuo si sa rute':'You are off route';if(recalc)recalc.classList.remove('hidden');}
+ else if(progress.step?.instruction){title.textContent=progress.step.instruction;}
+ else title.textContent=state.lang==='sr'?'Prati plavu putanju':'Follow the blue route';
+ info.textContent=(offRoute?(state.lang==='sr'?'Udaljen od rute ':'Distance off route ')+formatMeters(progress.offRoute)+' · ':'')+
+   (state.lang==='sr'?'Do sledećeg koraka ':'To next step ')+formatMeters(progress.remaining)+' · '+
+   (state.lang==='sr'?'Preostalo ':'Remaining ')+formatMeters(progress.toFinish)+
+   (accuracy>65?(state.lang==='sr'?' · GPS neprecizan':' · GPS accuracy low'):'');
+ // Only the map-relative route vector is displayed. This is not falsely called phone heading.
+ const bearing=state.map?.getBearing()||0;
+ arrow.textContent='↑';arrow.style.transform='rotate('+((progress.bearing-bearing+360)%360)+'deg)';
+}
+function refreshHeadingControls(){
+ const status=document.getElementById('headingStatus'),needle=document.getElementById('northNeedle'),btn=document.getElementById('compassBtn');
+ if(needle)needle.style.transform='rotate('+(-(state.map?.getBearing()||0))+'deg)';
+ if(btn)btn.classList.toggle('active',state.compassEnabled&&state.headingSource==='compass');
+ const compassLabel=document.getElementById('compassLabel');if(compassLabel)compassLabel.textContent=state.lang==='sr'?'Kompas':'Compass';
+ if(status){const bearing=Math.round(state.map?.getBearing()||0);
+   status.textContent=state.headingSource==='compass'?(state.lang==='sr'?'Smer telefona · kompas · mapa '+bearing+'°':'Phone facing · compass · map '+bearing+'°'):
+    state.headingSource==='course'?(state.lang==='sr'?'Smer hodanja (GPS), ne telefona':'GPS travel course, not phone direction'):
+    (state.lang==='sr'?'Smer telefona nedostupan · mapa '+bearing+'°':'Phone heading unavailable · map '+bearing+'°');}
+}
+function resetNorth(){state.compassEnabled=false;if(state.headingSource==='compass'){state.heading=null;state.headingSource=null;state.map?.setHeading(null);}state.map?.setBearing(0);refreshHeadingControls();updateNavigationHUD();}
+function setCompassHeading(heading){
+ if(!Number.isFinite(heading))return;
+ state.heading=(heading%360+360)%360;state.headingSource='compass';
+ state.map?.setHeading(state.heading);
+ if(state.compassEnabled&&state.followMode)state.map?.setBearing(state.heading);
+ refreshHeadingControls();updateNavigationHUD();
+}
+let compassListening=false;
+function onCompassReading(e){
+ if(!state.compassEnabled)return;
+ let heading=null;
+ // iPhone Safari provides the calibrated geographic compass heading here.
+ if(Number.isFinite(e.webkitCompassHeading)&&(!Number.isFinite(e.webkitCompassAccuracy)||e.webkitCompassAccuracy>=0))heading=e.webkitCompassHeading;
+ else if(e.absolute===true&&Number.isFinite(e.alpha))heading=(360-e.alpha+(screen.orientation?.angle||0))%360;
+ if(heading!==null)setCompassHeading(heading);
+}
+async function enableCompass(){
+ if(state.compassEnabled){state.compassEnabled=false;if(state.headingSource==='compass'){state.heading=null;state.headingSource=null;state.map?.setHeading(null);}refreshHeadingControls();return;}
+ if(!window.isSecureContext||typeof DeviceOrientationEvent==='undefined'){
+   showToast(state.lang==='sr'?'Kompas nije dostupan na ovom uređaju.':'Compass unavailable on this device.');return;}
+ try{
+   if(typeof DeviceOrientationEvent.requestPermission==='function'){
+     // iOS needs a real click. Do not call this on page load.
+     let permission;
+     try{permission=await DeviceOrientationEvent.requestPermission(true);}catch(_){permission=await DeviceOrientationEvent.requestPermission();}
+     if(permission!=='granted'){showToast(state.lang==='sr'?'Dozvola za kompas nije odobrena.':'Compass permission denied.');return;}
+   }
+   state.compassEnabled=true;state.followMode=true;
+   if(!compassListening){window.addEventListener('deviceorientationabsolute',onCompassReading);
+     window.addEventListener('deviceorientation',onCompassReading);compassListening=true;}
+   showToast(state.lang==='sr'?'Kompas uključen. Ako nema pokazivanja, uređaj ne šalje pouzdan smer.':'Compass enabled. Device heading may be unavailable.');
+   refreshHeadingControls();
+ }catch(e){state.compassEnabled=false;showToast(state.lang==='sr'?'Kompas nije dostupan u ovom pregledaču.':'Compass not supported in this browser.');}
+}
+function startRouteTracking(){
+ if(!state.activeRoute?.coords?.length||state.navWatchId!==null)return;
+ if(!navigator.geolocation||!window.isSecureContext){showToast('GPS nije dostupan.');return;}
+ state.followMode=true;
+ state.navWatchId=navigator.geolocation.watchPosition(pos=>applyPosition(pos),err=>{
+    stopRouteTracking();showToast(state.lang==='sr'?'Praćenje nije dostupno: proveri GPS dozvolu.':'Tracking unavailable: check GPS permission.');
+ },{enableHighAccuracy:true,maximumAge:3000,timeout:15000});
+ updateRouteTrackingButton();showToast(state.lang==='sr'?'Praćenje radi samo dok je aplikacija otvorena.':'Tracking only while this app is open.');
+}
+function stopRouteTracking(){if(state.navWatchId!==null&&navigator.geolocation)navigator.geolocation.clearWatch(state.navWatchId);state.navWatchId=null;updateRouteTrackingButton();}
+function toggleRouteTracking(){if(state.navWatchId!==null){stopRouteTracking();return;}startRouteTracking();}
+function recenterDuringRoute(){state.followMode=true;
+ if(state.fromGps){state.map?.easeTo({center:[state.position.lng,state.position.lat]});if(state.compassEnabled&&state.headingSource==='compass')state.map?.setBearing(state.heading);}
+ else gps();refreshHeadingControls();updateNavigationHUD();}
+function updateRouteTrackingButton(){const btn=document.getElementById('trackBtn');if(!btn)return;
+ btn.classList.toggle('active',state.navWatchId!==null);
+ btn.textContent=state.navWatchId===null?(state.lang==='sr'?'◎ Prati me tokom šetnje':'◎ Track walking'):(state.lang==='sr'?'■ Zaustavi praćenje':'■ Stop tracking');}
+
+function saveBase(){if(!state.fromGps){showToast(state.lang==='sr'?'Prvo dozvoli GPS da sačuvaš stvarnu lokaciju.':'Enable GPS first to save your actual location.');gps(()=>saveBase());return;}state.base={lat:state.position.lat,lng:state.position.lng};try{localStorage.setItem('nssg-base',JSON.stringify(state.base));}catch(e){}showToast(t('baseSaved'));}
+function clearBase(){if(!state.base)return;const yes=window.confirm(state.lang==='sr'?'Da obrišem sačuvanu My Base lokaciju sa ovog uređaja?':'Remove your saved My Base point from this device?');if(!yes)return;state.base=null;try{localStorage.removeItem('nssg-base')}catch(e){}showToast(state.lang==='sr'?'My Base je obrisan.':'My Base removed.');}
+function takeBack(){if(!state.base){showToast(t('baseMissing'));return;}showPage('explore');startRoute(state.base,state.lang==='sr'?'Moja baza':'My Base');}
+function previewNotification(){const p=places.find(x=>x.id==='crkva');document.getElementById('modal').innerHTML=`<div class="modal-visual" style="height:130px"><span class="modal-topper">DEMO · SMART LOCATION</span><span style="font-size:64px">🔔</span><button class="modal-close" onclick="closeModal()" aria-label="Close">×</button></div><div class="modal-body"><div class="detail-tag">${t('notiTitle')}</div><h2 id="modalTitle">${state.lang==='sr'?p.sr:p.en}</h2><p>${t('notiText')}</p><div class="detail-facts"><span>📍 ${t('around')}</span><span>DEMO ONLY</span></div><div class="modal-actions"><button class="btn btn-primary" onclick="openPlace('crkva')">${t('details')} →</button><button class="btn btn-white" onclick="openDirections('crkva')">${t('walk')}</button></div></div>`;document.getElementById('modalShade').classList.remove('hidden');}
+function saved(el){const fav=[...state.favorites].map(id=>places.find(p=>p.id===id)).filter(Boolean);el.innerHTML=`<div class="page-head"><h1 class="desktop-page-title">${t('savedTitle')}</h1><p class="subtitle">${t('savedSub')}</p></div>${fav.length?`<div class="grid-feature">${fav.map(p=>`<button class="feature" onclick="openPlace('${p.id}')"><span class="feature-ico">${p.emoji}</span><div><strong>${name(p)}</strong><small>${distStr(p)} · ${t(p.cat)}</small></div></button>`).join('')}</div>`:`<div class="empty" style="background:#fff;border-radius:20px;padding:65px"><span class="illustration">♡</span>${t('savedEmpty')}<div style="margin-top:20px"><button class="btn btn-primary" onclick="showPage('explore')">${t('exploreBtn')}</button></div></div>`}`;}
+const CURATED_WALKS=[
+ {nameSr:'Stari gradski centar',nameEn:'Historic city centre',duration:'30–50 min',ids:['trg','crkva','zmaj','vladicanski','dunavska','dunavski']},
+ {nameSr:'Umetnost i kultura',nameEn:'Arts and culture',duration:'35–60 min',ids:['galerija','beljanski','snp','sinagoga','muzej']},
+ {nameSr:'Petrovaradin i Dunav',nameEn:'Fortress and Danube',duration:'60–90 min',ids:['tvrdjava','racija','dunavski']}
+];
+function tours(el){
+ el.innerHTML=`<div class="page-head"><h1 class="desktop-page-title">${t('toursTitle')}</h1><p class="subtitle">${state.lang==='sr'?'Tri predloga za samostalnu šetnju. Vremena su okvirna, ne izračunate rute.':'Three self-guided walks. Times are illustrative, not calculated routes.'}</p></div>`+
+ CURATED_WALKS.map((walk,i)=>`<section class="walk-card"><div class="walk-card-head"><span class="eyebrow">${state.lang==='sr'?'ŠETNJA':'WALK'} ${i+1} · ${walk.ids.length} ${state.lang==='sr'?'stanica':'stops'}</span><h2>${state.lang==='sr'?walk.nameSr:walk.nameEn}</h2><p>⏱ ${walk.duration} · ${state.lang==='sr'?'Procena / demo':'Estimate / demo'}</p></div><div class="route-steps">${walk.ids.map((id,k)=>{const p=places.find(x=>x.id===id);return `<div class="step"><span class="num">${k+1}</span><div style="flex:1"><h3>${escapeHTML(name(p))}</h3><p>${t(p.cat)}</p></div><button onclick="openPlace('${id}')">${t('tourStop')} ↗</button><button onclick="openDirections('${id}')">🚶</button></div>`}).join('')}</div></section>`).join('')+
+ `<p class="prototype-note">${state.lang==='sr'?'Dužine i vreme šetnji nisu izračunati. Navigacija se pokreće do pojedinačne stanice; stvarna grupna ruta nije još implementirana.':'Walk times are illustrative. Navigation is to a single stop; multi-stop routing is not yet implemented.'}</p>`;
+}
+function about(el){el.innerHTML=`<div class="page-head"><h1 class="desktop-page-title">${t('aboutTitle')}</h1><p class="subtitle">${t('aboutSub')}</p></div><div class="section-split"><div class="info-banner" style="min-height:185px"><div class="bubble">🧭</div><div><strong>Don't search Novi Sad. Let Novi Sad discover you.</strong><p>${t('aboutCopy')}</p></div></div><div class="info-banner" style="min-height:185px"><div class="bubble">⚡</div><div><strong>${t('roadmap')}</strong><p>${t('roadmapDesc')}</p></div></div></div><div class="section-title"><h2>DEMO / MVP</h2></div><div class="notice-orange">${t('demoNotice')}</div><p class="prototype-note"><a href="https://commons.wikimedia.org/wiki/File:Panorama_of_Novi_Sad.jpg" target="_blank" rel="noopener">${t('licence')}</a></p>`;}
+function showUnavailable(cat){state.cat=cat;showPage('explore');showToast(t('demoNotice'));}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});document.addEventListener('visibilitychange',()=>{if(document.hidden){if(state.liveWatchId!==null)stopLiveRadar();stopRouteTracking()}});if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));render();window.addEventListener('load',()=>setTimeout(autoLocateOnOpen,350));
+</script>
+<script src="./discovery-v050.js?v=050"></script>
+<link rel="stylesheet" href="./discovery-v051.css?v=051" />
+<script src="./discovery-v051.js?v=051"></script>
+</body>
+</html>
