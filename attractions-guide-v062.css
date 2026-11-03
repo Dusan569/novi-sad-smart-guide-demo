@@ -1,0 +1,52 @@
+/* Novi Sad Smart Guide v0.6.2 — embedded attraction stories and discoverability. */
+.guide-picks{margin:14px 0 22px;padding:15px;border:1px solid #deebe9;border-radius:20px;background:linear-gradient(135deg,#e6f8f5,#fff 58%);box-shadow:0 8px 22px #122e3c08}
+.guide-picks-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.guide-picks-heading strong{display:block;font-family:Manrope,system-ui,sans-serif;font-size:16px;letter-spacing:-.3px;color:#1c3b4b}
+.guide-picks-heading small{display:block;color:#597587;font-size:12px;line-height:1.45;margin-top:3px}
+.guide-picks-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.guide-pick{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0;min-height:108px;border:1px solid #d6e9e7;background:#fff;border-radius:15px;padding:13px;text-align:left;color:#1d3b52;box-shadow:0 6px 13px #082e2510;cursor:pointer}
+.guide-pick:hover,.guide-pick:focus-visible{border-color:#159e92;box-shadow:0 0 0 2px #20bfb033}
+.guide-pick-emoji{font-size:23px;line-height:1.2}
+.guide-pick strong{font-size:12px;font-weight:800;line-height:1.3}
+.guide-pick small{font-size:11px;color:#718399;line-height:1.3}
+.modal.guide-modal{width:min(100%,640px);max-height:min(94vh,880px);overscroll-behavior:contain;scrollbar-gutter:stable}
+.guide-hero{background:radial-gradient(circle at 75% 15%,#3ba0a273,transparent 45%),linear-gradient(140deg,#092c49,#146c71);height:156px;display:flex;align-items:center;justify-content:center;position:relative;color:#fff;overflow:hidden}
+.guide-hero:before{content:"";width:210px;height:210px;border:1px solid #ffffff2c;border-radius:50%;position:absolute;right:-60px;bottom:-85px}
+.guide-hero-top{position:absolute;top:15px;left:17px;right:15px;display:flex;justify-content:space-between;align-items:center}
+.guide-hero-top span{font-size:10px;letter-spacing:1.6px;font-weight:900;color:#cbf5eb}
+.guide-x{height:37px;width:37px;border-radius:50%;background:#fff;color:#183950;border:0;font-size:21px;font-weight:700;cursor:pointer}
+.guide-hero-emoji{font-size:70px;filter:drop-shadow(0 8px 8px #001c2a55);line-height:1}
+.guide-hero-note{position:absolute;bottom:12px;font-size:11px;font-weight:700;background:#ffffff30;border-radius:30px;padding:5px 12px}
+.guide-content{padding:22px 23px 26px}
+.guide-kicker{font-size:10px;letter-spacing:1.8px;font-weight:900;color:#148f88}
+.guide-content h2{font-family:Manrope,system-ui,sans-serif;font-size:26px;line-height:1.22;color:#132e49;margin:7px 0 12px}
+.guide-lead{font-size:14px!important;line-height:1.7!important;color:#466073!important}
+.guide-meta{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 16px}
+.guide-meta span{font-size:11px;font-weight:700;background:#eff5f6;border:1px solid #dce8ea;border-radius:999px;padding:7px 10px;color:#456270}
+.guide-feature{padding:16px 0;border-top:1px solid #ebf0f1}
+.guide-feature h3,.guide-near-title{font-size:16px;font-weight:850;color:#1b3b51;margin:0 0 8px}
+.guide-feature p,.guide-tip p,.guide-fact p{font-size:13px;line-height:1.75;color:#50677c;margin:0}
+.guide-fact{display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:15px;background:#edf9f5;margin:4px 0 14px}
+.guide-fact>span{font-size:23px}
+.guide-fact strong,.guide-tip strong{font-size:12px;display:block;margin-bottom:5px;color:#21665a}
+.guide-tip{border-left:3px solid #159e91;padding:9px 14px;margin:3px 0 16px;background:#f7fafb;border-radius:0 11px 11px 0}
+.guide-notes{padding:11px 13px;background:#f8f9fc;border-radius:10px;color:#607386;margin:13px 0 18px}
+.guide-notes p{font-size:11px;line-height:1.55;margin:3px 0;color:#64768b}
+.guide-near-title{margin:18px 0 10px}
+.guide-nearby-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.guide-nearby{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #dde8eb;border-radius:12px;background:#fff;text-align:left;color:#25465b;min-width:0;cursor:pointer}
+.guide-nearby:hover,.guide-nearby:focus-visible{background:#f1faf7;border-color:#159e91}
+.guide-nearby>span:first-child{font-size:23px}
+.guide-nearby strong{display:block;font-size:11px;line-height:1.4}
+.guide-nearby small{display:block;font-size:10px;color:#7b8c9b;line-height:1.4}
+.guide-source{border-top:1px solid #e8eeef;margin:18px 0 8px;padding-top:13px;color:#576e82;font-size:12px}
+.guide-source summary{cursor:pointer;font-weight:800;color:#276f79}
+.guide-source p{font-size:11px;line-height:1.55;margin:8px 0}
+.guide-source a{font-weight:750;text-decoration:underline;color:#166c84}
+.guide-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:17px}
+.guide-actions .btn{min-width:0;width:100%;padding:12px 9px;font-size:12px;min-height:44px}
+.guide-actions .btn:disabled{opacity:.55;cursor:not-allowed}
+.guide-actions [aria-pressed=true]{border:1px solid #17a69b;background:#e9f7f4}
+@media(max-width:740px){.guide-picks{padding:12px;margin:9px 0 18px}.guide-picks-list{display:flex;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:5px;gap:8px}.guide-pick{flex:0 0 138px;scroll-snap-align:start;min-height:105px}.guide-picks-heading strong{font-size:15px}.guide-picks-heading small{font-size:11px}.modal.guide-modal{max-height:calc(96dvh - env(safe-area-inset-bottom));width:100%;border-radius:19px}.guide-hero{height:135px}.guide-hero-emoji{font-size:59px}.guide-content{padding:17px}.guide-content h2{font-size:23px}.guide-nearby-grid{grid-template-columns:1fr 1fr;gap:7px}.guide-actions{grid-template-columns:1fr 1fr}}
+@media(max-width:370px){.guide-nearby-grid{grid-template-columns:1fr}.guide-actions{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.guide-picks-list{scroll-behavior:auto}}
