@@ -62,3 +62,54 @@
 .raster-tour-menu button{border:0;border-radius:8px;background:#f1f8f7;text-align:left;padding:8px;font-size:11px;color:#12394d;font-weight:800}
 
 .tour-overview-top #tourOverviewDetails{margin-left:auto;background:#e5f4f0;color:#0c6967;font-size:19px}
+
+
+/* v0.5.2: off-map discovery controls and uncluttered active navigation. */
+.city-discovery-bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:2px 0 14px;padding:13px;background:#e8f4f1;border:1px solid #d6e6e1;border-radius:17px}
+.city-discovery-bar span{flex:1 1 200px;display:flex;flex-direction:column;gap:2px;color:#18394c}
+.city-discovery-bar strong{font-size:13px}.city-discovery-bar small{font-size:10px;line-height:1.45;color:#54747d}
+.city-discovery-bar button{min-height:42px;padding:10px;border:1px solid #b9d8d2;border-radius:11px;background:#fff;color:#16646a;font-weight:850;font-size:11px}
+.calm-map:has(#navHud.calm-nav-active:not(.hidden)) .raster-pin,
+.calm-map:has(#navHud.calm-nav-active:not(.hidden)) .raster-poi,
+.calm-map:has(#navHud.calm-nav-active:not(.hidden)) .raster-cluster,
+.calm-map:has(#navHud.calm-nav-active:not(.hidden)) .raster-tour-stop{display:none!important}
+@media(max-width:740px){.city-discovery-bar span{flex-basis:100%}.city-discovery-bar button{flex:1 1 42%}}
+
+/* v0.5.3 P0: pointer gestures beginning on interactive map symbols must pan the map on iOS. */
+.tour-raster .raster-tour-stop,.tour-raster .raster-cluster,.tour-raster .raster-pin,.tour-raster .raster-poi{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
+/* v0.5.4 P0 — iPhone tourist-tour dialog: prevent horizontal clipping on narrow screens.
+   The underlying modal and its descendants must never create a side-scrolling canvas. */
+#modalShade,#modalShade *{box-sizing:border-box}
+#modalShade .modal{min-width:0;max-width:calc(100vw - 24px);overflow-x:hidden}
+#modal .tour-detail-hero,#modal .tour-detail-body,#modal .tour-detail-stops,
+#modal .tour-detail-stop,#modal .tour-stop-body{min-width:0;max-width:100%}
+#modal .tour-detail-hero>div:not(.tour-detail-icon){min-width:0;flex:1}
+#modal .tour-detail-hero h2,#modal .tour-detail-hero p,
+#modal .tour-stop-body strong,#modal .tour-stop-body small{overflow-wrap:anywhere}
+#modal .tour-detail-body{width:100%;overflow-x:hidden}
+#modal .tour-detail-footer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:stretch}
+#modal .tour-detail-footer .tour-preview-link{grid-column:1/-1}
+#modal .tour-detail-footer .btn{width:100%;min-width:0;white-space:normal;line-height:1.35;
+  min-height:46px;text-align:center;overflow-wrap:anywhere}
+#modal .tour-stop-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#modal .tour-stop-actions button{min-width:0;min-height:44px;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:740px){
+  #modalShade{padding:12px;padding-top:max(12px,env(safe-area-inset-top));
+    padding-bottom:max(12px,env(safe-area-inset-bottom));align-items:center}
+  #modalShade .modal{width:100%;max-width:calc(100vw - 24px);
+    max-height:min(86dvh,calc(100dvh - 24px));overflow-y:auto;overscroll-behavior:contain}
+  #modal .tour-detail-hero{padding:17px 46px 17px 14px;gap:10px}
+  #modal .tour-detail-hero .tour-detail-icon{flex:0 0 34px;font-size:31px}
+  #modal .tour-detail-body{max-height:none;padding:14px}
+  #modal .tour-detail-stop{gap:8px}
+  #modal .tour-stop-body{padding:10px}
+  #modal .tour-detail-footer{gap:9px}
+}
+
+/* Walk preview: numbers on the map are supplemented by a readable name and explicit stop-list control. */
+.tour-overview-top .tour-overview-next{display:flex;flex-direction:column;gap:2px;padding-top:7px;min-width:0}
+.tour-overview-next span{font-size:9px;letter-spacing:.5px;color:#0d8b80;font-weight:850}
+.tour-overview-next strong{font-size:12px;line-height:1.35;overflow-wrap:anywhere}
+.tour-overview-top #tourOverviewDetails{width:auto;min-width:67px;max-width:89px;min-height:40px;
+  padding:7px;font-size:11px;line-height:1.2;white-space:normal}
