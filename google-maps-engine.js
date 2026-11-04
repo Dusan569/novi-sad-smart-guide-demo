@@ -171,7 +171,16 @@
       this.host.innerHTML='';
     }
   }
+  function classifyRouteError(error){
+    const raw=(String(error?.code||'')+' '+String(error?.message||error||'')).toLowerCase();
+    if(/quota|resource_exhausted|over_query_limit|rate.limit|429/.test(raw))return 'QUOTA';
+    if(/billing|permission|not.enabled|not.authoriz|api.key|referer|referrer|request_denied|403|denied/.test(raw))return 'CONFIG';
+    if(/no_walking_route|zero_results|no.route|empty.route/.test(raw))return 'NO_ROUTE';
+    if(/network|fetch|timeout|offline|failed.to.load|internet/.test(raw))return 'NETWORK';
+    return 'UNKNOWN';
+  }
   async function googleWalkingRoute(origin,destination,language='sr'){
+   try{
     if(!valid(origin)||!valid(destination))throw new Error('invalid_coordinate');
     await loadGoogle();
     const {Route}=await google.maps.importLibrary('routes');
@@ -189,6 +198,12 @@
     }));
     return {coords:path,meters:r.distanceMeters,minutes:Math.ceil((r.durationMillis||0)/60000),
       maneuvers,routesProvider:'Google Maps Routes'};
+   }catch(cause){
+     const error=new Error(String(cause?.message||cause||'route_error'));
+     error.code=classifyRouteError(cause);
+     error.cause=cause;
+     throw error;
+   }
   }
-  root.NSSG_GOOGLE_ENGINE=Object.freeze({loadGoogle,GoogleTourMap,googleWalkingRoute});
+  root.NSSG_GOOGLE_ENGINE=Object.freeze({loadGoogle,GoogleTourMap,googleWalkingRoute,classifyRouteError});
 })(window);

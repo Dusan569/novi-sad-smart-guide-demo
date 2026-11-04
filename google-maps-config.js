@@ -6,12 +6,22 @@
 (function(root){
   'use strict';
   const store='nssg_google_demo_key_session_v1';
+  const persistentStore='nssg_google_maps_browser_key_local_v063';
   const valid=x=>typeof x==='string'&&/^[A-Za-z0-9_-]{20,}$/.test(x);
   let browserKey='';
+  // Browser-only prototype persistence: never commit a key, and never treat localStorage as a vault.
   try {
-    const x=root.sessionStorage?.getItem(store)||'';
-    if(valid(x))browserKey=x;
+    const saved=root.localStorage?.getItem(persistentStore)||'';
+    if(valid(saved))browserKey=saved;
   } catch (_) {}
+  if(!browserKey){
+    try {
+      const session=root.sessionStorage?.getItem(store)||'';
+      if(valid(session))browserKey=session;
+    } catch (_) {}
+  }
+  if(browserKey){try{root.localStorage?.setItem(persistentStore,browserKey);}catch(_){}}
+
   root.NSSG_GOOGLE_CONFIG=Object.freeze({
     browserKey,
     mapId:'DEMO_MAP_ID',
@@ -43,7 +53,7 @@
       '<input id="nssg-demo-input" type="password" autocomplete="off" spellcheck="false" required placeholder="Nalepi svoj demo ključ">'+
       '<p id="nssg-demo-error" role="alert" aria-live="polite"></p>'+
       '<div class="actions"><button type="submit">Prikaži Google mapu</button><button type="button" data-skip>Nastavi bez mape</button></div></form>'+
-      '<p>Ključ ostaje samo u kartici pregledača (sessionStorage), nije u GitHub-u. Ovo je prototip; važe Google kvote.</p></div>';
+      '<p>Demo ključ se čuva u pregledaču na ovom uređaju da ne moraš ponovo da ga unosiš. Nije u GitHub-u; ovo NIJE tajno skladište. Koristi ključ ograničen na svoj web domen i potrebne Google API-je.</p></div>';
     root.document.body.appendChild(ui);
     ui.querySelector('[data-skip]').addEventListener('click',()=>ui.remove());
     ui.querySelector('#nssg-demo-form').addEventListener('submit',e=>{
@@ -51,8 +61,10 @@
       const key=ui.querySelector('#nssg-demo-input').value.trim();
       const error=ui.querySelector('#nssg-demo-error');
       if(!valid(key)){error.textContent='Proveri ključ: najmanje 20 dozvoljenih znakova.';return;}
-      try {root.sessionStorage.setItem(store,key);}
-      catch (_) {error.textContent='Pregledač blokira privremeno čuvanje. Otvori običan tab.';return;}
+      let stored=false;
+      try {root.localStorage?.setItem(persistentStore,key);stored=true;} catch (_) {}
+      try {root.sessionStorage?.setItem(store,key);stored=true;} catch (_) {}
+      if(!stored){error.textContent='Pregledač blokira čuvanje ključa. Proveri Safari podešavanja.';return;}
       root.location.reload();
     });
   }

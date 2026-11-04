@@ -2,6 +2,11 @@
 (function(root){
 'use strict';
 function text(sr,en){return state.lang==='sr'?sr:en;}
+function distanceMeters(a,b){
+ const rad=Math.PI/180, dlat=(Number(b.lat)-Number(a.lat))*rad,dlng=(Number(b.lng)-Number(a.lng))*rad;
+ const x=Math.sin(dlat/2)**2+Math.cos(Number(a.lat)*rad)*Math.cos(Number(b.lat)*rad)*Math.sin(dlng/2)**2;
+ return 12742000*Math.atan2(Math.sqrt(x),Math.sqrt(Math.max(0,1-x)));
+}
 function geoDist(pt,coords){
   const lat=typeof pt.lat==='function'?pt.lat():+pt.lat;
   const lng=typeof pt.lng==='function'?pt.lng():+pt.lng;
@@ -19,6 +24,20 @@ async function start(destination,destinationName){
   const origin={lat:state.position.lat,lng:state.position.lng};
   state.activeRoute={destination,name:destinationName,coords:[],isDemo:!state.fromGps};
   if(!document.getElementById('map'))showPage('explore');
+  // The demo city centre is beside some landmark pins; asking Google to route
+  // from exactly the same point can return an empty route, not an API error.
+  const straightLine=distanceMeters(origin,destination);
+  if(Number.isFinite(straightLine)&&straightLine<18){
+    state.activeRoute=null;
+    state.map?.clearRoute();
+    routePanel('<div class="route-panel-head"><div><strong>📍 '+escapeHTML(destinationName)+'</strong><p>'+
+      (state.fromGps
+       ? text('Odredište je neposredno uz tvoju trenutnu lokaciju.','The destination is right by your location.')
+       : text('Odredište je već na demonstracionoj polaznoj tački. Uključi GPS ili izaberi udaljenije mesto.','The destination is at the demo starting point. Allow GPS or choose a farther place.'))+
+      '</p></div><button class="route-close" onclick="hideRoutePanel()" aria-label="Sakrij">×</button></div>');
+    updateNavigationHUD();
+    return;
+  }
   updateNavigationHUD();
   routePanel('<div class="route-panel-head"><div><strong>🚶 '+escapeHTML(destinationName)+'</strong><p>'+
     text('Google Maps računa pešačku rutu','Google Maps calculating walking directions')+
@@ -65,9 +84,31 @@ async function start(destination,destinationName){
     if(id!==state.routeRequestSeq)return;
     console.warn('Google walking route unavailable:',error?.message||error);
     state.map?.clearRoute();
-    showRouteError(text('Ruta nije dostupna','Route unavailable'),
-      text('Google nije vratio pešačku putanju. Proveri API dozvole, kvote ili mrežu; nećemo prikazati izmišljenu rutu.',
-           'Google did not return a walking route. Check API access, quotas or network; no fictional route is drawn.'),destination);
+    const code=error?.code||'UNKNOWN';
+    const messages={
+      CONFIG:[
+        text('Navigacija se još podešava','Walking directions not yet configured'),
+        text('Google mapa radi, ali pešačke rute zahtevaju omogućen Routes API i odgovarajuće Google Cloud dozvole.','The map works, but walking directions require an enabled Routes API and correct Google Cloud permissions.')
+      ],
+      QUOTA:[
+        text('Navigacija je trenutno zauzeta','Routing is temporarily unavailable'),
+        text('Google Routes kvota je dostignuta. Pokušaj ponovo kasnije.','Google Routes quota was reached. Please retry later.')
+      ],
+      NETWORK:[
+        text('Problem sa vezom','Connection problem'),
+        text('Trenutno nema odgovora Google servisa. Mapa i znamenitosti ostaju dostupne.','Google is not responding. The map and attractions remain available.')
+      ],
+      NO_ROUTE:[
+        text('Nema pešačke rute','No walking route'),
+        text('Za ove dve lokacije Google nije pronašao pešačku putanju.','Google found no walking path between these locations.')
+      ],
+      UNKNOWN:[
+        text('Ruta trenutno nije dostupna','Route temporarily unavailable'),
+        text('Lokacija je prikazana na mapi. Pokušaj ponovo ili izaberi drugo odredište.','The place is still on the map. Retry or choose another destination.')
+      ]
+    };
+    const [title,reason]=messages[code]||messages.UNKNOWN;
+    showRouteError(title,reason,destination);
   }
 }
 root.NSSG_GoogleWalkingUI=Object.freeze({start});

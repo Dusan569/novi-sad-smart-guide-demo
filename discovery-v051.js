@@ -99,7 +99,8 @@ function refreshCalmMarkers(){
      state.map.setPlaces([]);state.map.setPois([]);
    }else{
      const candidates=filtered();
-     const selected=allPins||state.cat!=='all'?candidates:candidates.slice().sort((a,b)=>distKm(a,state.position)-distKm(b,state.position)).slice(0,5);
+     const markerCenter=state.nearbyOnly?state.position:center;
+     const selected=allPins||state.cat!=='all'?candidates:candidates.slice().sort((a,b)=>distKm(a,markerCenter)-distKm(b,markerCenter)).slice(0,5);
      state.map.setPlaces(selected.map(p=>({lat:p.lat,lng:p.lng,emoji:p.emoji,label:name(p),click:()=>openPlace(p.id)})));
      state.map.setPois(showVenuePins?filteredPois().slice(0,12):[]);
    }
@@ -126,16 +127,30 @@ explore=function(el){
  const filterBar=el.querySelector('.filter-bar');
  if(filterBar){
    const bar=document.createElement('div');bar.className='city-discovery-bar';
-   bar.innerHTML='<span><strong>'+(state.lang==='sr'?'Otkrij Novi Sad':'Discover Novi Sad')+'</strong><small>'+(state.lang==='sr'?'Istraži spomenike, kulturu i šetnje — bez zatrpavanja mape.':'Discover sights, culture and walks, without cluttering the map.')+'</small></span><button type="button" id="citywideToggle">'+(state.lang==='sr'?'Ceo grad':'Whole city')+'</button><button type="button" id="loadVenuesNew">'+(state.lang==='sr'?'☕ Prikaži lokale':'☕ Show venues')+'</button>';
+   bar.innerHTML='<button type="button" id="citywideToggle" aria-pressed="'+String(!state.nearbyOnly)+'">🏙 '+label('Ceo grad','Whole city')+'</button>'+
+     '<button type="button" id="nearbyToggle" aria-pressed="'+String(state.nearbyOnly)+'">⌖ '+label('U blizini','Nearby')+'</button>'+
+     '<button type="button" id="loadVenuesNew">☕ '+label('Lokali','Venues')+'</button>';
    filterBar.insertAdjacentElement('afterend',bar);
+   const syncMode=()=>{
+     for(const [id,active] of [['citywideToggle',!state.nearbyOnly],['nearbyToggle',state.nearbyOnly]]){
+       const button=bar.querySelector('#'+id);if(!button)return;
+       button.setAttribute('aria-pressed',String(active));
+       button.classList.toggle('active',active);
+     }
+   };
+   window.syncNearbyUI=syncMode;
+   syncMode();
    bar.querySelector('#citywideToggle').onclick=()=>{
-      const all=state.radius<10000;state.radius=all?10000:3000;
-      const sel=el.querySelector('.radius-select');if(sel){
-       if(!sel.querySelector('option[value="10000"]'))sel.insertAdjacentHTML('beforeend','<option value="10000">10 km</option>');
-       sel.value=String(state.radius);
-      }
-      bar.querySelector('#citywideToggle').textContent=all?(state.lang==='sr'?'✓ Ceo grad':'✓ Whole city'):(state.lang==='sr'?'Ceo grad':'Whole city');
-      updateResults();
+     setNearbyOnly(false);
+     allPins=false;
+     refreshCalmMarkers();
+     state.map?.fitPoints(places.map(p=>({lat:p.lat,lng:p.lng})),{top:65,right:36,bottom:95,left:36,maxZoom:13.5});
+     syncMode();
+   };
+   bar.querySelector('#nearbyToggle').onclick=()=>{
+     setNearbyOnly(true);
+     if(state.fromGps)state.map?.easeTo({center:[state.position.lng,state.position.lat],zoom:14.5});
+     syncMode();
    };
    bar.querySelector('#loadVenuesNew').onclick=()=>window.toggleCalmVenues();
  }

@@ -126,7 +126,7 @@
  const oldClose=root.closeModal;
  root.closeModal=function(){stopVoice();const m=document.getElementById('modal');if(m)m.classList.remove('guide-modal');oldClose();if(focusBefore?.isConnected&&typeof focusBefore.focus==='function')focusBefore.focus({preventScroll:true});};
  const oldExplore=root.explore;
- root.explore=function(el){oldExplore(el);injectPicks();};
+ root.explore=function(el){oldExplore(el);};
  const oldHome=root.home;
  root.home=function(el){
    oldHome(el);
