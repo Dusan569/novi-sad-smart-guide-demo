@@ -179,13 +179,15 @@
     if(/network|fetch|timeout|offline|failed.to.load|internet/.test(raw))return 'NETWORK';
     return 'UNKNOWN';
   }
-  async function googleWalkingRoute(origin,destination,language='sr'){
+  async function googleWalkingRoute(origin,destination,language='sr',intermediates=[]){
    try{
     if(!valid(origin)||!valid(destination))throw new Error('invalid_coordinate');
+    if(!Array.isArray(intermediates)||intermediates.length>10||!intermediates.every(valid))throw new Error('invalid_intermediates');
     await loadGoogle();
     const {Route}=await google.maps.importLibrary('routes');
     const {routes}=await Route.computeRoutes({
       origin:coordinates(origin),destination:coordinates(destination),
+      ...(intermediates.length?{intermediates:intermediates.map(p=>({location:coordinates(p)}))}:{}),
       travelMode:'WALKING',language:language==='sr'?'sr':'en',
       fields:['path','distanceMeters','durationMillis','legs.steps']
     });
@@ -205,5 +207,11 @@
      throw error;
    }
   }
-  root.NSSG_GOOGLE_ENGINE=Object.freeze({loadGoogle,GoogleTourMap,googleWalkingRoute,classifyRouteError});
+  function googleTourRoute(points,language='sr'){
+    if(!Array.isArray(points)||points.length<2||points.length>12||!points.every(valid)){
+      return Promise.reject(new Error('invalid_tour_stops'));
+    }
+    return googleWalkingRoute(points[0],points[points.length-1],language,points.slice(1,-1));
+  }
+  root.NSSG_GOOGLE_ENGINE=Object.freeze({loadGoogle,GoogleTourMap,googleWalkingRoute,googleTourRoute,classifyRouteError});
 })(window);

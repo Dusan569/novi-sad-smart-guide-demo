@@ -119,3 +119,9 @@
 .city-discovery-bar button{flex:1 1 0;min-width:0;min-height:44px;font-size:12px;padding:9px 7px}
 .city-discovery-bar button[aria-pressed="true"]{background:#14516b;border-color:#14516b;color:#fff}
 @media(max-width:740px){.city-discovery-bar button{flex:1 1 0;font-size:11px}}
+
+/* v0.6.4 complete walking-tour overlay: readable on iPhone and desktop. */
+.calm-map .tour-overview-panel{max-height:min(48vh,370px);overflow-y:auto;overscroll-behavior:contain}
+.tour-overview-top small{line-height:1.45;overflow-wrap:anywhere}
+.tour-overview-actions button:disabled{opacity:.65;cursor:progress}
+@media(max-width:740px){.calm-map .tour-overview-panel{bottom:10px;left:10px;right:10px;padding:11px 12px;max-height:45dvh}.tour-overview-actions{gap:6px;margin-top:9px}.tour-overview-actions button{font-size:11px}}
