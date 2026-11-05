@@ -102,6 +102,10 @@ async function start(destination,destinationName){
         text('Nema pešačke rute','No walking route'),
         text('Za ove dve lokacije Google nije pronašao pešačku putanju.','Google found no walking path between these locations.')
       ],
+      REQUEST:[
+        text('Google ne prihvata parametre rute','Google rejected route parameters'),
+        text('Google je odbio zahtev za rutiranje. Otvori detalje greške ispod.','Google rejected the route request. Expand error details below.')
+      ],
       UNKNOWN:[
         text('Ruta trenutno nije dostupna','Route temporarily unavailable'),
         text('Lokacija je prikazana na mapi. Pokušaj ponovo ili izaberi drugo odredište.','The place is still on the map. Retry or choose another destination.')
@@ -109,6 +113,18 @@ async function start(destination,destinationName){
     };
     const [title,reason]=messages[code]||messages.UNKNOWN;
     showRouteError(title,reason,destination);
+    const diag=error?.diagnostic||root.NSSG_GOOGLE_ENGINE?.diagnoseRouteError?.(error);
+    const panel=document.querySelector('#routePanel');
+    if(panel&&diag){
+      const details=document.createElement('details');
+      details.className='route-diagnostic';
+      const summary=document.createElement('summary');
+      summary.textContent=text('Zašto navigacija ne radi?','Why did directions fail?');
+      const p=document.createElement('p');
+      p.textContent='Google status: '+String(diag.code||'UNKNOWN')+(diag.summary?' · '+diag.summary:'');
+      details.append(summary,p);
+      panel.append(details);
+    }
   }
 }
 root.NSSG_GoogleWalkingUI=Object.freeze({start});

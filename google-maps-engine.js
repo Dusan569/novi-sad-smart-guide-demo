@@ -171,14 +171,31 @@
       this.host.innerHTML='';
     }
   }
-  function classifyRouteError(error){
-    const raw=(String(error?.code||'')+' '+String(error?.message||error||'')).toLowerCase();
-    if(/quota|resource_exhausted|over_query_limit|rate.limit|429/.test(raw))return 'QUOTA';
-    if(/billing|permission|not.enabled|not.authoriz|api.key|referer|referrer|request_denied|403|denied/.test(raw))return 'CONFIG';
-    if(/no_walking_route|zero_results|no.route|empty.route/.test(raw))return 'NO_ROUTE';
-    if(/network|fetch|timeout|offline|failed.to.load|internet/.test(raw))return 'NETWORK';
-    return 'UNKNOWN';
+  function diagnoseRouteError(cause){
+    // Never report key values or URLs. A public client-side Maps key is not a password,
+    // but disclosing an unrestricted key and service request details is unnecessary.
+    const raw=[cause?.code,cause?.status,cause?.statusCode,cause?.name,cause?.message]
+      .filter(v=>v!==undefined&&v!==null).map(String).join(' ');
+    const upper=raw.toUpperCase();
+    let category='UNKNOWN',code='UNKNOWN';
+    if(/RESOURCE_EXHAUSTED|OVER_QUERY_LIMIT|QUOTA|RATE.LIMIT|HTTP.?429/.test(upper)){category='QUOTA';code='RESOURCE_EXHAUSTED';}
+    else if(/PERMISSION_DENIED|REQUEST_DENIED|FORBIDDEN|HTTP.?403|API.TARGET.BLOCKED|NOT.ENABLED|NOT.AUTHORIZ/.test(upper)){category='CONFIG';code='PERMISSION_DENIED';}
+    else if(/BILLING.NOT.ENABLED|BILLING_DISABLED|BILLING/.test(upper)){category='CONFIG';code='BILLING_NOT_ENABLED';}
+    else if(/INVALID_ARGUMENT|INVALID.REQUEST|BAD.REQUEST|HTTP.?400/.test(upper)){category='REQUEST';code='INVALID_ARGUMENT';}
+    else if(/UNAUTHENTICATED|INVALID.API.KEY|API.KEY.INVALID|HTTP.?401/.test(upper)){category='CONFIG';code='INVALID_KEY';}
+    else if(/ZERO_RESULTS|NO_WALKING_ROUTE|NO.ROUTE|EMPTY.ROUTE/.test(upper)){category='NO_ROUTE';code='ZERO_RESULTS';}
+    else if(/NETWORK|TIMEOUT|FETCH|OFFLINE|FAILED.TO.LOAD|INTERNET/.test(upper)){category='NETWORK';code='NETWORK_FAILURE';}
+    else if(/INVALID_INTERMEDIATES|INVALID_COORDINATE|BAD_ROUTE_COORDINATES|INVALID_TOUR_STOPS/.test(upper)){category='REQUEST';code='INVALID_COORDINATES';}
+    // Keep only a safe, compact message for debugging; scrub credentials,
+    // query strings and full URLs, and avoid exposing the whole Google response.
+    let summary=String(cause?.message||cause?.name||'').slice(0,350)
+      .replace(/AIzaSy[A-Za-z0-9_-]{8,}/g,'[redacted]')
+      .replace(/(?:key|api[_-]?key)\s*[=:]\s*[^&\s]+/gi,'key=[redacted]')
+      .replace(/https?:\/\/\S+/gi,'[URL redacted]')
+      .replace(/[\r\n\t]+/g,' ').slice(0,170);
+    return {category,code,summary};
   }
+  function classifyRouteError(error){return diagnoseRouteError(error).category;}
   async function googleWalkingRoute(origin,destination,language='sr',intermediates=[]){
    try{
     if(!valid(origin)||!valid(destination))throw new Error('invalid_coordinate');
@@ -189,7 +206,7 @@
       origin:coordinates(origin),destination:coordinates(destination),
       ...(intermediates.length?{intermediates:intermediates.map(p=>({location:coordinates(p)}))}:{}),
       travelMode:'WALKING',language:language==='sr'?'sr':'en',
-      fields:['path','distanceMeters','durationMillis','legs.steps']
+      fields:['path','distanceMeters','durationMillis','legs']
     });
     const r=routes?.[0];if(!r||!Array.isArray(r.path)||r.path.length<2)throw new Error('no_walking_route');
     const path=r.path.map(p=>[typeof p.lng==='function'?p.lng():p.lng,typeof p.lat==='function'?p.lat():p.lat]);
@@ -201,9 +218,10 @@
     return {coords:path,meters:r.distanceMeters,minutes:Math.ceil((r.durationMillis||0)/60000),
       maneuvers,routesProvider:'Google Maps Routes'};
    }catch(cause){
-     const error=new Error(String(cause?.message||cause||'route_error'));
-     error.code=classifyRouteError(cause);
-     error.cause=cause;
+     const diagnostic=diagnoseRouteError(cause);
+     const error=new Error(diagnostic.code);
+     error.code=diagnostic.category;
+     error.diagnostic=diagnostic;
      throw error;
    }
   }
@@ -213,5 +231,5 @@
     }
     return googleWalkingRoute(points[0],points[points.length-1],language,points.slice(1,-1));
   }
-  root.NSSG_GOOGLE_ENGINE=Object.freeze({loadGoogle,GoogleTourMap,googleWalkingRoute,googleTourRoute,classifyRouteError});
+  root.NSSG_GOOGLE_ENGINE=Object.freeze({loadGoogle,GoogleTourMap,googleWalkingRoute,googleTourRoute,classifyRouteError,diagnoseRouteError});
 })(window);

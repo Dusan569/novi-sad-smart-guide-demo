@@ -37,6 +37,7 @@ function routeErrorCopy(code){
  if(code==='CONFIG')return label('Google ne dozvoljava pešačku rutu ovom API ključu. Proveri Routes API, ograničenja ključa i billing.','Google Routes is not permitted for this API key. Check Routes API, key restrictions and billing.');
  if(code==='QUOTA')return label('Google Routes kvota je dostignuta. Pokušaj kasnije.','Google Routes quota was exceeded. Try again later.');
  if(code==='NO_ROUTE')return label('Google nije našao prohodnu pešačku putanju za sve stanice.','Google found no walkable path through every stop.');
+ if(code==='REQUEST')return label('Google je odbio parametre rute. Otvori „Zašto ruta ne radi?” da vidiš kod greške.','Google rejected route parameters. Open the error details to inspect the status.');
  if(code==='NETWORK')return label('Nema odgovora Google servisa. Proveri internet vezu.','Google did not respond. Check your connection.');
  return label('Google nije uspeo da izračuna celu šetnju. Stanice su ipak prikazane bez izmišljene linije.','Google could not calculate the full walk. Stops remain visible without a made-up line.');
 }
@@ -57,6 +58,7 @@ async function computeFullTour(id,seq){
  const points=tourWaypoints();
  tourPreview.routing='loading';
  tourPreview.message='';
+ tourPreview.diagnostic=null;
  renderTourOverview();
  if(points.length<2){tourPreview.routing='error';tourPreview.message=label('Nema dovoljno različitih stanica.','Not enough distinct stops.');renderTourOverview();return;}
  try{
@@ -101,6 +103,7 @@ async function computeFullTour(id,seq){
    console.warn('Google whole-tour walking route error:',error?.code||error?.message||error);
    tourPreview.routing='error';
    tourPreview.message=routeErrorCopy(error?.code||window.NSSG_GOOGLE_ENGINE?.classifyRouteError?.(error)||'UNKNOWN');
+   tourPreview.diagnostic=error?.diagnostic||window.NSSG_GOOGLE_ENGINE?.diagnoseRouteError?.(error)||{code:'UNKNOWN',summary:''};
    if(state.activeRoute?.isTour)closeRoute();
    refreshCalmMarkers();renderTourOverview();fitTour();
  }
@@ -128,6 +131,11 @@ function renderTourOverview(){
    (next?escapeHTML(next.number+'. '+next.label):'—')+'</strong></div></div>'+
    '<button type="button" id="tourOverviewDetails" aria-label="'+label('Lista stanica','Stop list')+'">'+label('Stanice','Stops')+'</button>'+
    '<button type="button" id="tourOverviewClose" aria-label="'+label('Zatvori obilazak','Close tour')+'">×</button></div>'+
+   (tourPreview.routing==='error'?
+     '<details class="tour-diagnostic"><summary>'+label('Zašto ruta ne radi?','Why did the route fail?')+'</summary>'+
+     '<strong>'+label('Google status:','Google status:')+' '+escapeHTML(tourPreview.diagnostic?.code||'UNKNOWN')+'</strong>'+
+     (tourPreview.diagnostic?.summary?'<p>'+escapeHTML(tourPreview.diagnostic.summary)+'</p>':'')+
+     '<p>'+label('Ovo nije problem sa prikazom mape. Proveri dozvole za Routes API, Google Demo Key i dostupnu kvotu.','The map can render while Google Routes is denied. Check Routes API permissions, Demo Key eligibility and quota.')+'</p></details>':'')+
    '<div class="tour-overview-actions">'+
    '<button type="button" id="tourOverviewFit">▣ '+label('Cela ruta','Full walk')+'</button>'+
    (active?'<button type="button" id="tourOverviewNext">↗ '+label('Uputstva','Directions')+'</button>':

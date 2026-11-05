@@ -125,3 +125,8 @@
 .tour-overview-top small{line-height:1.45;overflow-wrap:anywhere}
 .tour-overview-actions button:disabled{opacity:.65;cursor:progress}
 @media(max-width:740px){.calm-map .tour-overview-panel{bottom:10px;left:10px;right:10px;padding:11px 12px;max-height:45dvh}.tour-overview-actions{gap:6px;margin-top:9px}.tour-overview-actions button{font-size:11px}}
+
+/* v0.6.5: on-map error diagnostics (never display credentials). */
+.tour-diagnostic,.route-diagnostic{margin-top:9px;border-top:1px solid #d9e6e8;padding-top:8px;font-size:11px;line-height:1.5;color:#38556a}
+.tour-diagnostic summary,.route-diagnostic summary{cursor:pointer;color:#145e73;font-weight:800;min-height:29px}
+.tour-diagnostic strong,.tour-diagnostic p,.route-diagnostic p{display:block;overflow-wrap:anywhere;margin:5px 0;color:#49677c}
