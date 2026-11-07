@@ -70,19 +70,20 @@ async function start(destination,destinationName){
     if(Number.isFinite(distance)&&distance>=0)stats+='<span>'+(distance<1000?Math.round(distance)+' m':(distance/1000).toFixed(1)+' km')+'</span>';
     if(Number.isFinite(minutes)&&minutes>0)stats+='<span>~'+Math.ceil(minutes)+' min</span>';
     if(!state.fromGps)stats+='<span>DEMO polazak</span>';
-    const instructions=maneuvers.map(x=>x.instruction).filter(Boolean).slice(0,16);
+    const instructions=maneuvers.map(x=>x.instruction).filter(Boolean);
     const list=instructions.length?'<ol class="route-steps-preview">'+instructions.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ol>':'';
     const external='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(destination.lat+','+destination.lng)+'&travelmode=walking';
     routePanel('<div class="route-panel-head"><div><strong>🚶 '+escapeHTML(destinationName)+'</strong><p>Google Maps · '+
       text('pešačka ruta','walking route')+'</p></div><button class="route-close" onclick="hideRoutePanel()">×</button></div>'+
       '<div class="route-stats">'+stats+'</div>'+list+
+      (data.warnings||[]).map(w=>'<p class="route-panel-foot">'+escapeHTML(w)+'</p>').join('')+
       '<p class="route-panel-foot">'+text('Procena; nema glasovne navigacije ni praćenja u pozadini.','Estimate only, no voice or background navigation.')+'</p>'+
       '<div class="route-panel-actions"><button onclick="hideRoutePanel()">'+text('Sakrij uputstva','Hide directions')+'</button>'+
       '<button class="route-end-btn" onclick="closeRoute()">'+text('Završi rutu','End route')+'</button>'+
       '<a href="'+external+'" target="_blank" rel="noopener noreferrer">Google Maps ↗</a></div>');
   }catch(error){
     if(id!==state.routeRequestSeq)return;
-    console.warn('Google walking route unavailable:',error?.message||error);
+    console.warn('Google walking route unavailable:',root.NSSG_GOOGLE_ENGINE.diagnoseRouteError(error).code);
     state.map?.clearRoute();
     const code=error?.code||'UNKNOWN';
     const messages={
@@ -121,7 +122,7 @@ async function start(destination,destinationName){
       const summary=document.createElement('summary');
       summary.textContent=text('Zašto navigacija ne radi?','Why did directions fail?');
       const p=document.createElement('p');
-      p.textContent='Google status: '+String(diag.code||'UNKNOWN')+(diag.summary?' · '+diag.summary:'');
+      p.textContent='Google status: '+String(diag.code||'UNKNOWN')+(diag.stage?' · '+diag.stage:'')+(diag.httpStatus?' · HTTP '+diag.httpStatus:'')+(diag.summary?' · '+diag.summary:'');
       details.append(summary,p);
       panel.append(details);
     }

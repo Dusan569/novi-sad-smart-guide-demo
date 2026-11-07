@@ -5,7 +5,7 @@
 (function(root){
   'use strict';
   const cfg=()=>root.NSSG_GOOGLE_CONFIG||{};
-  const valid=p=>p&&Number.isFinite(+p.lat)&&Number.isFinite(+p.lng);
+  const valid=p=>p&&typeof p.lat==='number'&&typeof p.lng==='number'&&Number.isFinite(p.lat)&&Number.isFinite(p.lng)&&Math.abs(p.lat)<=90&&Math.abs(p.lng)<=180;
   const coordinates=p=>({lat:+p.lat,lng:+p.lng});
   const toLatLng=p=>({lat:+p[1],lng:+p[0]});
   let loaderPromise=null;
@@ -172,56 +172,69 @@
     }
   }
   function diagnoseRouteError(cause){
+    const previous=cause?.diagnostic;
+    if(previous)cause={code:previous.code,message:previous.summary,status:previous.httpStatus};
     // Never report key values or URLs. A public client-side Maps key is not a password,
     // but disclosing an unrestricted key and service request details is unnecessary.
     const raw=[cause?.code,cause?.status,cause?.statusCode,cause?.name,cause?.message]
       .filter(v=>v!==undefined&&v!==null).map(String).join(' ');
-    const upper=raw.toUpperCase();
+    const httpStatus=[cause?.status,cause?.statusCode,cause?.code].map(Number).find(v=>Number.isInteger(v)&&v>=400&&v<=599)||null;
+    const upper=(raw+' '+(httpStatus?'HTTP '+httpStatus:'')).toUpperCase();
     let category='UNKNOWN',code='UNKNOWN';
     if(/RESOURCE_EXHAUSTED|OVER_QUERY_LIMIT|QUOTA|RATE.LIMIT|HTTP.?429/.test(upper)){category='QUOTA';code='RESOURCE_EXHAUSTED';}
-    else if(/PERMISSION_DENIED|REQUEST_DENIED|FORBIDDEN|HTTP.?403|API.TARGET.BLOCKED|NOT.ENABLED|NOT.AUTHORIZ/.test(upper)){category='CONFIG';code='PERMISSION_DENIED';}
+    else if(/API.KEY.NOT.VALID|INVALID.API.KEY|API.KEY.INVALID|UNAUTHENTICATED|HTTP.?401/.test(upper)){category='CONFIG';code='INVALID_KEY';}
     else if(/BILLING.NOT.ENABLED|BILLING_DISABLED|BILLING/.test(upper)){category='CONFIG';code='BILLING_NOT_ENABLED';}
-    else if(/INVALID_ARGUMENT|INVALID.REQUEST|BAD.REQUEST|HTTP.?400/.test(upper)){category='REQUEST';code='INVALID_ARGUMENT';}
-    else if(/UNAUTHENTICATED|INVALID.API.KEY|API.KEY.INVALID|HTTP.?401/.test(upper)){category='CONFIG';code='INVALID_KEY';}
+    else if(/PERMISSION_DENIED|REQUEST_DENIED|FORBIDDEN|HTTP.?403|API.TARGET.BLOCKED|NOT.ENABLED|NOT.AUTHORIZ/.test(upper)){category='CONFIG';code='PERMISSION_DENIED';}
+    else if(/INVALID_ARGUMENT|INVALID.REQUEST|BAD.REQUEST|INVALIDVALUEERROR|UNKNOWN.FIELD|INVALID.FIELDS|HTTP.?400/.test(upper)){category='REQUEST';code='INVALID_ARGUMENT';}
     else if(/ZERO_RESULTS|NO_WALKING_ROUTE|NO.ROUTE|EMPTY.ROUTE/.test(upper)){category='NO_ROUTE';code='ZERO_RESULTS';}
+    else if(/INCOMPLETE_ROUTE_RESPONSE|BAD_ROUTE_COORDINATES/.test(upper)){category='RESPONSE';code='INCOMPLETE_ROUTE_RESPONSE';}
     else if(/NETWORK|TIMEOUT|FETCH|OFFLINE|FAILED.TO.LOAD|INTERNET/.test(upper)){category='NETWORK';code='NETWORK_FAILURE';}
     else if(/INVALID_INTERMEDIATES|INVALID_COORDINATE|BAD_ROUTE_COORDINATES|INVALID_TOUR_STOPS/.test(upper)){category='REQUEST';code='INVALID_COORDINATES';}
     // Keep only a safe, compact message for debugging; scrub credentials,
     // query strings and full URLs, and avoid exposing the whole Google response.
-    let summary=String(cause?.message||cause?.name||'').slice(0,350)
-      .replace(/AIzaSy[A-Za-z0-9_-]{8,}/g,'[redacted]')
+    let summary=String(cause?.message||cause?.name||'')
+      .split(cfg().browserKey||'\u0000').join('[redacted]')
+      .replace(/AIza[A-Za-z0-9_-]{8,}/g,'[redacted]')
       .replace(/(?:key|api[_-]?key)\s*[=:]\s*[^&\s]+/gi,'key=[redacted]')
       .replace(/https?:\/\/\S+/gi,'[URL redacted]')
       .replace(/[\r\n\t]+/g,' ').slice(0,170);
-    return {category,code,summary};
+    return {category,code,summary,...(httpStatus?{httpStatus}:{}),
+      ...(['validation','sdk-load','routes-library','computeRoutes','response'].includes(previous?.stage)?{stage:previous.stage}:{})};
   }
   function classifyRouteError(error){return diagnoseRouteError(error).category;}
   async function googleWalkingRoute(origin,destination,language='sr',intermediates=[]){
+   let stage='validation';
    try{
     if(!valid(origin)||!valid(destination))throw new Error('invalid_coordinate');
     if(!Array.isArray(intermediates)||intermediates.length>10||!intermediates.every(valid))throw new Error('invalid_intermediates');
+    stage='sdk-load';
     await loadGoogle();
+    stage='routes-library';
     const {Route}=await google.maps.importLibrary('routes');
+    stage='computeRoutes';
     const {routes}=await Route.computeRoutes({
       origin:coordinates(origin),destination:coordinates(destination),
       ...(intermediates.length?{intermediates:intermediates.map(p=>({location:coordinates(p)}))}:{}),
       travelMode:'WALKING',language:language==='sr'?'sr':'en',
-      fields:['path','distanceMeters','durationMillis','legs']
+      fields:['path','distanceMeters','durationMillis','legs','warnings']
     });
+    stage='response';
     const r=routes?.[0];if(!r||!Array.isArray(r.path)||r.path.length<2)throw new Error('no_walking_route');
     const path=r.path.map(p=>[typeof p.lng==='function'?p.lng():p.lng,typeof p.lat==='function'?p.lat():p.lat]);
     if(!path.every(p=>p.every(Number.isFinite)))throw new Error('bad_route_coordinates');
+    if(!Number.isFinite(r.distanceMeters)||r.distanceMeters<0||!Number.isFinite(r.durationMillis)||r.durationMillis<0||
+       !Array.isArray(r.legs)||r.legs.length!==intermediates.length+1)throw new Error('incomplete_route_response');
     const maneuvers=(r.legs||[]).flatMap(l=>l.steps||[]).filter(s=>s.instructions).map(s=>({
       instruction:String(s.instructions).slice(0,240),
       anchor:s.startLocation?.latLng||s.startLocation||null
     }));
-    return {coords:path,meters:r.distanceMeters,minutes:Math.ceil((r.durationMillis||0)/60000),
-      maneuvers,routesProvider:'Google Maps Routes'};
+    return {coords:path,meters:r.distanceMeters,minutes:Math.ceil(r.durationMillis/60000),
+      warnings:(r.warnings||[]).map(String),legs:r.legs.length,maneuvers,routesProvider:'Google Maps Routes'};
    }catch(cause){
      const diagnostic=diagnoseRouteError(cause);
      const error=new Error(diagnostic.code);
      error.code=diagnostic.category;
-     error.diagnostic=diagnostic;
+     error.diagnostic={...diagnostic,stage};
      throw error;
    }
   }

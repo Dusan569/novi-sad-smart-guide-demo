@@ -37,19 +37,19 @@ function routeErrorCopy(code){
  if(code==='CONFIG')return label('Google ne dozvoljava pešačku rutu ovom API ključu. Proveri Routes API, ograničenja ključa i billing.','Google Routes is not permitted for this API key. Check Routes API, key restrictions and billing.');
  if(code==='QUOTA')return label('Google Routes kvota je dostignuta. Pokušaj kasnije.','Google Routes quota was exceeded. Try again later.');
  if(code==='NO_ROUTE')return label('Google nije našao prohodnu pešačku putanju za sve stanice.','Google found no walkable path through every stop.');
+ if(code==='RESPONSE')return label('Google odgovor nema sve segmente ili podatke rute.','The Google response is missing route legs or metrics.');
  if(code==='REQUEST')return label('Google je odbio parametre rute. Otvori „Zašto ruta ne radi?” da vidiš kod greške.','Google rejected route parameters. Open the error details to inspect the status.');
  if(code==='NETWORK')return label('Nema odgovora Google servisa. Proveri internet vezu.','Google did not respond. Check your connection.');
  return label('Google nije uspeo da izračuna celu šetnju. Stanice su ipak prikazane bez izmišljene linije.','Google could not calculate the full walk. Stops remain visible without a made-up line.');
 }
 function tourWaypoints(){
  const stops=currentStops();
- // Very close sights (e.g. Liberty Square and its church) share a walking waypoint
- // while both remain numbered and documented in the tour.
+ // Preserve every distinct landmark in editorial order, including nearby sights.
  const points=[];
  if(tourPreview?.startFromGps&&state.fromGps&&distKm(state.position,stops[0])>.04)points.push({...state.position});
  for(const stop of stops){
    const pt={lat:stop.lat,lng:stop.lng};
-   if(!points.length||distKm(points[points.length-1],pt)>.022)points.push(pt);
+   if(!points.length||points[points.length-1].lat!==pt.lat||points[points.length-1].lng!==pt.lng)points.push(pt);
  }
  return points;
 }
@@ -87,12 +87,13 @@ async function computeFullTour(id,seq){
    tourPreview.minutes=Number(result.minutes);
    state.map?.setRoute(result.coords,dest);
    state.map?.fitRoute(result.coords,{top:68,bottom:180,left:35,right:35,maxZoom:16});
-   const list=steps.slice(0,25).map(step=>'<li>'+escapeHTML(step.instruction)+'</li>').join('');
+   const list=steps.map(step=>'<li>'+escapeHTML(step.instruction)+'</li>').join('');
    const stats=label('Ukupno','Total')+': '+tourMeters(tourPreview.meters)+
      (Number.isFinite(tourPreview.minutes)&&tourPreview.minutes>0?' · ~'+Math.ceil(tourPreview.minutes)+' min':'');
    routePanel('<div class="route-panel-head"><div><strong>🚶 '+escapeHTML(label(tourPreview.titleSr,tourPreview.titleEn))+
      '</strong><p>'+escapeHTML(stats)+'</p></div>'+
      '<button class="route-close" onclick="hideRoutePanel()" aria-label="'+label('Sakrij','Hide')+'">×</button></div>'+
+     (result.warnings||[]).map(w=>'<p class="route-panel-foot">'+escapeHTML(w)+'</p>').join('')+
      (list?'<ol class="route-steps-preview">'+list+'</ol>':'')+
      '<div class="route-panel-actions"><button onclick="hideRoutePanel()">'+label('Sakrij uputstva','Hide directions')+'</button>'+
      '<button onclick="closeRoute()">'+label('Završi navigaciju','End navigation')+'</button></div>');
@@ -100,7 +101,7 @@ async function computeFullTour(id,seq){
    renderTourOverview();
  }catch(error){
    if(seq!==tourRouteSequence||tourPreview?.id!==id||state.page!=='explore')return;
-   console.warn('Google whole-tour walking route error:',error?.code||error?.message||error);
+   console.warn('Google whole-tour walking route error:',window.NSSG_GOOGLE_ENGINE.diagnoseRouteError(error).code);
    tourPreview.routing='error';
    tourPreview.message=routeErrorCopy(error?.code||window.NSSG_GOOGLE_ENGINE?.classifyRouteError?.(error)||'UNKNOWN');
    tourPreview.diagnostic=error?.diagnostic||window.NSSG_GOOGLE_ENGINE?.diagnoseRouteError?.(error)||{code:'UNKNOWN',summary:''};
@@ -134,6 +135,7 @@ function renderTourOverview(){
    (tourPreview.routing==='error'?
      '<details class="tour-diagnostic"><summary>'+label('Zašto ruta ne radi?','Why did the route fail?')+'</summary>'+
      '<strong>'+label('Google status:','Google status:')+' '+escapeHTML(tourPreview.diagnostic?.code||'UNKNOWN')+'</strong>'+
+     '<p>'+escapeHTML([tourPreview.diagnostic?.stage,tourPreview.diagnostic?.httpStatus?'HTTP '+tourPreview.diagnostic.httpStatus:''].filter(Boolean).join(' · '))+'</p>'+
      (tourPreview.diagnostic?.summary?'<p>'+escapeHTML(tourPreview.diagnostic.summary)+'</p>':'')+
      '<p>'+label('Ovo nije problem sa prikazom mape. Proveri dozvole za Routes API, Google Demo Key i dostupnu kvotu.','The map can render while Google Routes is denied. Check Routes API permissions, Demo Key eligibility and quota.')+'</p></details>':'')+
    '<div class="tour-overview-actions">'+
