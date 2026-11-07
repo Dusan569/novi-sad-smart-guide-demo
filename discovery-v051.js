@@ -123,19 +123,99 @@ function tourOnMapReady(){
  renderPersistentTour();
 }
 function tourOnPosition(){
- if(tourPreview){renderTourOverview();renderPersistentTour();}
+ if(!tourPreview)return;
+ const route=state.activeRoute;
+ const good=state.locationAccuracy<=55&&gpsFixUsable();
+ const next=remainingTourStops()[0];
+ const near=!!(next&&good&&distKm(state.position,next)*1000<=55);
+ if(tourPreview.lastNear!==near){
+   tourPreview.lastNear=near;
+   renderTourOverview();
+   renderPersistentTour();
+ }
+ // Once a visitor opts in, recompute real Google walking directions only
+ // after sustained off-route movement; throttle to avoid excessive requests.
+ if(tourPreview.startFromGps&&good&&route?.isTour&&route.coords?.length&&state.navWatchId!==null){
+   const progress=navigationProgress(route,state.position);
+   if(progress&&progress.offRoute>100 && next&&distKm(state.position,next)*1000>75){
+     if(!tourOffRouteSince)tourOffRouteSince=Date.now();
+     if(Date.now()-tourOffRouteSince>=15000&&Date.now()-tourRerouteAt>=120000){
+       tourRerouteAt=Date.now();
+       recalculateGuidedTour();
+     }
+   }else tourOffRouteSince=0;
+ }
 }
 
 function fitTour(){
  if(!tourPreview||!state.map)return;
  const points=currentStops().map(({lat,lng})=>({lat,lng}));
- // Show actual GPS on the overview only if it is reasonably close to the city tour.
- if(state.fromGps&&points.some(p=>distKm(p,state.position)<6))points.push({...state.position});
+ // Keep the visitor and the tour in the same overview when GPS is enabled.
+ if(tourPreview.startFromGps&&gpsFixUsable())points.push({...state.position});
  state.map.setBearing(0);
  state.map.fitPoints(points,{top:72,right:38,bottom:140,left:38,maxZoom:16.6});
 }
 
 let tourRouteSequence=0;
+let tourOffRouteSince=0;
+let tourRerouteAt=0;
+const GPS_MAX_ACCURACY=120;
+const GPS_RECENT_MS=120000;
+const gpsFixUsable=()=>state.fromGps&&Number.isFinite(state.position?.lat)&&Number.isFinite(state.position?.lng)
+  &&Number.isFinite(state.locationAccuracy)&&state.locationAccuracy<=GPS_MAX_ACCURACY
+  &&Date.now()-(state.gpsFixAt||0)<GPS_RECENT_MS;
+function askTourGps(previouslyApproved=false){
+ if(!previouslyApproved&&!window.confirm(label(
+  'Da te vodimo OD TVOJE TRENUTNE LOKACIJE do prve znamenitosti, pa kroz celu šetnju? Uz dozvolu koristićemo GPS i poslati lokaciju Google Routes servisu radi izračunavanja pešačke rute. GPS prati samo dok je aplikacija otvorena.',
+  'Navigate FROM YOUR CURRENT LOCATION to the first landmark and along the entire tour? With consent, GPS location is sent to Google Routes to calculate walking directions. Tracking works only while the app is open.'
+  )))return Promise.resolve(false);
+ if(gpsFixUsable())return Promise.resolve(true);
+ if(!navigator.geolocation||!window.isSecureContext){
+   showToast(label('GPS zahteva HTTPS i dozvolu za lokaciju. Prikazujemo plan od prve stanice.','GPS needs HTTPS and location permission. Showing the plan from the first stop.'));
+   return Promise.resolve(false);
+ }
+ return new Promise(resolve=>navigator.geolocation.getCurrentPosition(
+   pos=>{
+     applyPosition(pos);
+     const good=gpsFixUsable();
+     if(!good)showToast(label('GPS nije dovoljno precizan. Ruta je za sada od prve stanice; probaj ponovo napolju.','GPS is not accurate enough. The route currently begins at the first stop; retry outdoors.'));
+     resolve(good);
+   },
+   err=>{
+     showToast(err?.code===1?label('Lokacija nije dozvoljena. Prikazujemo plan šetnje, ne navigaciju od tebe.','Location was denied. Showing the sightseeing plan, not directions from you.'):
+       label('Lokacija nije dostupna. Plan ostaje vidljiv; pokušaj ponovo.','Location unavailable. The plan remains visible; retry.'));
+     resolve(false);
+   },{enableHighAccuracy:true,maximumAge:0,timeout:16000}
+ ));
+}
+function remainingTourStops(){
+ return currentStops().filter(stop=>!tourPreview?.completed?.includes(stop.id));
+}
+function recalculateGuidedTour(){
+ if(!tourPreview)return;
+ tourOffRouteSince=0;
+ const seq=++tourRouteSequence;
+ if(state.activeRoute?.isTour){
+   state.activeRoute=null;state.map?.clearRoute();
+   document.getElementById('routePanel')?.classList.add('hidden');
+   updateNavigationHUD();
+ }
+ if(!remainingTourStops().length){
+   tourPreview.routing='complete';tourPreview.message='';
+   renderTourOverview();renderPersistentTour();
+   return;
+ }
+ computeFullTour(tourPreview.id,seq);
+}
+async function enableTourGps(){
+ if(!tourPreview)return;
+ const approved=await askTourGps(tourPreview.startFromGps);
+ if(!tourPreview)return;
+ if(!approved){renderTourOverview();renderPersistentTour();return;}
+ tourPreview.startFromGps=true;
+ state.followMode=true;
+ recalculateGuidedTour();
+}
 const tourMeters=v=>Number.isFinite(v)?(v<1000?Math.round(v)+' m':(v/1000).toFixed(1)+' km'):'—';
 function routeErrorCopy(code){
  if(code==='CONFIG')return label('Google ne dozvoljava pešačku rutu ovom API ključu. Proveri Routes API, ograničenja ključa i billing.','Google Routes is not permitted for this API key. Check Routes API, key restrictions and billing.');
@@ -147,13 +227,17 @@ function routeErrorCopy(code){
  return label('Google nije uspeo da izračuna celu šetnju. Stanice su ipak prikazane bez izmišljene linije.','Google could not calculate the full walk. Stops remain visible without a made-up line.');
 }
 function tourWaypoints(){
- const stops=currentStops();
- // Preserve every distinct landmark in editorial order, including nearby sights.
+ const stops=remainingTourStops();
  const points=[];
- if(tourPreview?.startFromGps&&state.fromGps&&distKm(state.position,stops[0])>.04)points.push({...state.position});
+ // Always include the real device origin if consent was given, regardless
+ // of distance to the city (no arbitrary six-kilometre cutoff).
+ if(tourPreview?.startFromGps&&gpsFixUsable()&&stops.length){
+   const pt=stops[0];
+   if(distKm(state.position,pt)>0.015)points.push({...state.position});
+ }
  for(const stop of stops){
    const pt={lat:stop.lat,lng:stop.lng};
-   if(!points.length||points[points.length-1].lat!==pt.lat||points[points.length-1].lng!==pt.lng)points.push(pt);
+   if(!points.length||distKm(points[points.length-1],pt)>0.005)points.push(pt);
  }
  return points;
 }
@@ -161,10 +245,16 @@ async function computeFullTour(id,seq){
  if(!tourPreview||tourPreview.id!==id||seq!==tourRouteSequence)return;
  const points=tourWaypoints();
  tourPreview.routing='loading';
+ // Keep the actual path's origin for UI and regression tests; never save it to storage.
+ tourPreview.routeFromGps=!!(tourPreview.startFromGps&&gpsFixUsable()&&points.length&&distKm(points[0],state.position)<0.001);
  tourPreview.message='';
  tourPreview.diagnostic=null;
  renderTourOverview();
- if(points.length<2){tourPreview.routing='error';tourPreview.message=label('Nema dovoljno različitih stanica.','Not enough distinct stops.');renderTourOverview();return;}
+ if(points.length<2){
+  tourPreview.routing='idle';
+  tourPreview.message=label('Jedna stanica je ostala. Uključi „Vodi me odavde” ili je označi kada je obiđeš.','One stop remains. Choose “Navigate from here” or mark it visited.');
+  renderTourOverview();return;
+ }
  try{
    const provider=window.NSSG_GOOGLE_ENGINE;
    if(!provider?.googleTourRoute)throw new Error('google_tour_provider_missing');
@@ -184,15 +274,21 @@ async function computeFullTour(id,seq){
    const dest=points[points.length-1];
    state.activeRoute={coords:result.coords,provider:'google',isTour:true,tourId:id,
      destination:dest,name:label(tourPreview.titleSr,tourPreview.titleEn),
-     isDemo:!tourPreview.startFromGps,rerouteAt:0,maneuvers,
+     isDemo:!tourPreview.routeFromGps,rerouteAt:0,maneuvers,
      stopIds:tourPreview.ids.slice(),distanceMeters:result.meters,minutes:result.minutes};
    tourPreview.routing='ready';
    tourPreview.meters=Number(result.meters);
    tourPreview.minutes=Number(result.minutes);
    state.map?.setRoute(result.coords,dest);
    state.map?.fitRoute(result.coords,{top:68,bottom:180,left:35,right:35,maxZoom:16});
+   if(tourPreview.routeFromGps&&state.fromGps){
+     state.followMode=true;
+     // One consent at tour start is also the opt-in for foreground GPS tracking.
+     if(state.navWatchId===null)startRouteTracking();
+   }
    const list=steps.map(step=>'<li>'+escapeHTML(step.instruction)+'</li>').join('');
-   const stats=label('Ukupno','Total')+': '+tourMeters(tourPreview.meters)+
+   const stats=(tourPreview.routeFromGps?label('Od tvoje lokacije','From your location'):label('Plan od prve znamenitosti (bez GPS-a)','Plan from first landmark (no GPS)'))+' · '+
+     label('Ukupno','Total')+': '+tourMeters(tourPreview.meters)+
      (Number.isFinite(tourPreview.minutes)&&tourPreview.minutes>0?' · ~'+Math.ceil(tourPreview.minutes)+' min':'');
    routePanel('<div class="route-panel-head"><div><strong>🚶 '+escapeHTML(label(tourPreview.titleSr,tourPreview.titleEn))+
      '</strong><p>'+escapeHTML(stats)+'</p></div>'+
@@ -218,24 +314,32 @@ function renderTourOverview(){
  const panel=panelEl();if(!panel||!state.map)return;
  if(!tourPreview||(state.activeRoute?.coords?.length&&!state.activeRoute.isTour)){panel.classList.add('hidden');return;}
  const stops=currentStops(),active=state.activeRoute?.isTour&&state.activeRoute?.tourId===tourPreview.id;
+ const originIsUser=!!(tourPreview.startFromGps&&gpsFixUsable());
+
  const next=stops.find(x=>!tourPreview.completed.includes(x.id));
- const closeToNext=next&&state.fromGps&&Number(state.locationAccuracy)<=80&&distKm(state.position,next)*1000<=70;
+ const closeToNext=next&&originIsUser&&state.locationAccuracy<=65&&distKm(state.position,next)*1000<=55;
+ const nextDistance=next&&originIsUser?Math.round(distKm(state.position,next)*1000):null;
  const title=label(tourPreview.titleSr,tourPreview.titleEn);
- const status=active?label('GOOGLE · PEŠAČKA RUTA','GOOGLE · WALKING ROUTE'):
+ const status=tourPreview.routing==='complete'?label('SVE STANICE OBIĐENE','ALL STOPS VISITED'):
+   active?label('GOOGLE · PEŠAČKA RUTA','GOOGLE · WALKING ROUTE'):
    tourPreview.routing==='loading'?label('RAČUNAMO PEŠAČKU RUTU','CALCULATING WALKING ROUTE'):
    tourPreview.routing==='error'?label('RUTA NIJE DOBIJENA','ROUTE UNAVAILABLE'):
    label('PREGLED STANICA','STOP OVERVIEW');
- const stats=active?(tourMeters(tourPreview.meters)+
+ const stats=active?((tourPreview.routeFromGps?label('Od tvoje lokacije','From your location'):
+   label('Plan od prve znamenitosti · uključi GPS','Plan from the first landmark · enable GPS'))+' · '+
+   tourMeters(tourPreview.meters)+
    (Number.isFinite(tourPreview.minutes)&&tourPreview.minutes>0?' · ~'+Math.ceil(tourPreview.minutes)+' min':'')+
    ' · '+stops.length+' '+label('stanica','stops')):
-   tourPreview.routing==='loading'?label('Google spaja sve stanice po pešačkim stazama…','Google is connecting all stops using walking paths…'):
+   tourPreview.routing==='loading'?label('Google računa rutu kroz preostale stanice…','Google is routing through the remaining stops…'):
+   tourPreview.routing==='complete'?label('Obilazak je završen. Možeš zatvoriti turu.','Tour complete. You can finish it.'):
    tourPreview.routing==='error'?tourPreview.message:
    label('Prikaz stanica nije pešačka putanja.','Pins alone are not a walking route.');
  panel.classList.remove('hidden');
  panel.innerHTML='<div class="tour-overview-top"><div><span>'+status+'</span><strong>'+
    escapeHTML(title)+'</strong><small>'+escapeHTML(stats)+'</small>'+
    '<div class="tour-overview-next"><span>'+label('SLEDEĆA STANICA','NEXT STOP')+'</span><strong>'+
-   (next?escapeHTML(next.number+'. '+next.label):label('Sve stanice završene','All stops completed'))+'</strong>'+   (closeToNext?'<small>📍 '+label('Blizu si sledeće stanice. Pročitaj priču i označi je kada je obiđeš.','You are near the next stop. Read its story and mark it once visited.')+'</small>':'')+'</div></div>'+
+   (next?escapeHTML(next.number+'. '+next.label):label('Sve stanice završene','All stops completed'))+'</strong>'+
+   (nextDistance!==null?'<small>'+label('Vazdušna udaljenost do stanice','Straight-line distance to stop')+': '+tourMeters(nextDistance)+'</small>':'')+   (closeToNext?'<small>📍 '+label('Blizu si sledeće stanice. Pročitaj priču i označi je kada je obiđeš.','You are near the next stop. Read its story and mark it once visited.')+'</small>':'')+'</div></div>'+
    '<button type="button" id="tourOverviewDetails" aria-label="'+label('Lista stanica','Stop list')+'">'+label('Stanice','Stops')+'</button>'+
    '<button type="button" id="tourOverviewClose" aria-label="'+label('Zatvori obilazak','Close tour')+'">×</button></div>'+
    (tourPreview.routing==='error'?
@@ -246,21 +350,31 @@ function renderTourOverview(){
      '<p>'+label('Ovo nije problem sa prikazom mape. Proveri dozvole za Routes API, Google Demo Key i dostupnu kvotu.','The map can render while Google Routes is denied. Check Routes API permissions, Demo Key eligibility and quota.')+'</p></details>':'')+
    '<div class="tour-overview-actions">'+
    '<button type="button" id="tourOverviewFit">▣ '+label('Cela ruta','Full walk')+'</button>'+
+   (next?'<button type="button" id="tourOverviewFromHere">'+
+      (originIsUser?label('↻ Preračunaj odavde','↻ Reroute from here'):
+       label('⌖ Vodi me od moje lokacije','⌖ Navigate from my location'))+'</button>':'')+
    (active?'<button type="button" id="tourOverviewNext">↗ '+label('Uputstva','Directions')+'</button>':
     tourPreview.routing==='loading'?'<button type="button" disabled>'+label('Računamo…','Calculating…')+'</button>':
     '<button type="button" id="tourOverviewRetry">↻ '+label('Pokušaj ponovo','Retry route')+'</button>')+
    (next?'<button type="button" id="tourOverviewStory">📖 '+label('Priča','Story')+'</button>':'')+
-   (next&&active?'<button type="button" id="tourOverviewVisited">✓ '+label('Obiđeno','Visited')+'</button>':'')+
-   (active?'<button type="button" id="tourOverviewTrack">'+
+   (next?'<button type="button" id="tourOverviewVisited">✓ '+label('Obiđeno','Visited')+'</button>':'')+
+   (active||tourPreview.routing==='complete'?'<button type="button" id="tourOverviewTrack"'+(tourPreview.routing==='complete'?' disabled':'')+'>'+
      (state.navWatchId!==null?label('■ Zaustavi GPS','■ Stop GPS'):label('⌖ Prati me','⌖ Track me'))+'</button>':'')+
    '</div>';
  panel.querySelector('#tourOverviewClose').addEventListener('click',finishTour);
  panel.querySelector('#tourOverviewDetails').addEventListener('click',()=>window.openDiscoveryTour(tourPreview.id));
  panel.querySelector('#tourOverviewFit').addEventListener('click',()=>active?state.map?.fitRoute(state.activeRoute.coords,{top:68,bottom:180,left:35,right:35,maxZoom:16}):fitTour());
  panel.querySelector('#tourOverviewNext')?.addEventListener('click',restoreRoutePanel);
+ panel.querySelector('#tourOverviewFromHere')?.addEventListener('click',()=>{
+   if(tourPreview.startFromGps&&gpsFixUsable()){recalculateGuidedTour();return;}
+   enableTourGps();
+ });
  panel.querySelector('#tourOverviewStory')?.addEventListener('click',()=>{if(next)openPlace(next.id);});
  panel.querySelector('#tourOverviewVisited')?.addEventListener('click',markNextStop);
- panel.querySelector('#tourOverviewTrack')?.addEventListener('click',()=>{toggleRouteTracking();renderTourOverview();});
+ panel.querySelector('#tourOverviewTrack')?.addEventListener('click',()=>{
+   if(!tourPreview.startFromGps){enableTourGps();return;}
+   toggleRouteTracking();renderTourOverview();
+ });
  panel.querySelector('#tourOverviewRetry')?.addEventListener('click',()=>computeFullTour(tourPreview.id,++tourRouteSequence));
 }
 function stopPreview(){
@@ -270,7 +384,7 @@ function stopPreview(){
   if(state.map){state.map.setTourStops([]);refreshCalmMarkers();}
   panelEl()?.classList.add('hidden');renderPersistentTour();
  }
-window.previewDiscoveryTour=function(id){
+window.previewDiscoveryTour=async function(id){
  const w=tourById(id);if(!w)return;
  if(tourPreview?.id===id&&state.activeRoute?.isTour){
    resumeTour();return;
@@ -285,23 +399,25 @@ window.previewDiscoveryTour=function(id){
  ++tourRouteSequence;
  if(state.activeRoute)nativeCloseRoute();
  let stored=null;try{stored=JSON.parse(localStorage.getItem('nssg-discovery-tour')||'null')}catch(_){}
- const first=places.find(p=>p.id===w.ids[0]);
- const gpsNear=!!(state.fromGps&&first&&distKm(state.position,first)<6);
- const useGps=gpsNear&&window.confirm(label(
-    'Da za početak obilaska pošaljemo tvoju trenutnu lokaciju Google Routes servisu?',
-    'Use your current location as the start of this tour and share it with Google Routes?'));
+ // Request foreground location from this actual user click. Never silently use a
+ // demo city-centre point as if it were the visitor's real starting position.
+ const originPromise=askTourGps();
  const resume=readTourSession();
  tourPreview={...w,completed:(resume?.id===w.id?resume.completed:(stored?.id===w.id?stored.completed:[]))||[],
-   startedAt:resume?.id===w.id?resume.startedAt:Date.now(),routing:'loading',startFromGps:useGps};
+   startedAt:resume?.id===w.id?resume.startedAt:Date.now(),routing:'loading',startFromGps:false,routeFromGps:false};
  saveTourSession();
  state.cat='all';state.search='';state.nearbyOnly=false;
  showPage('explore');renderPersistentTour();
  const seq=tourRouteSequence,startedAt=Date.now();
+ const readyFromGps=await originPromise;
+ if(seq!==tourRouteSequence||tourPreview?.id!==w.id)return;
+ tourPreview.startFromGps=readyFromGps;
+ renderTourOverview();
  const showTourAfterGoogleMap=()=>{
    if(seq!==tourRouteSequence||!tourPreview||tourPreview.id!==w.id||state.page!=='explore')return;
    if(state.map){refreshCalmMarkers();renderTourOverview();fitTour();computeFullTour(w.id,seq);}
    else if(Date.now()-startedAt<20000)setTimeout(showTourAfterGoogleMap,180);
-   else{tourPreview.routing='error';tourPreview.message=label('Google mapa nije učitana. Proveri vezu i API ključ.','Google map did not load. Check your connection and API key.');}
+   else{tourPreview.routing='error';tourPreview.message=label('Google mapa nije učitana. Proveri vezu i API ključ.','Google map did not load. Check your connection and API key.');renderPersistentTour();}
  };
  showTourAfterGoogleMap();
 };
@@ -320,9 +436,20 @@ window.openDiscoveryTour=function(id){
 window.navigateTourStop=function(pid){
  if(tourPreview){
    closeModal();
-   const p=places.find(x=>x.id===pid);
+   const next=remainingTourStops()[0];
    if(state.page!=='explore')showPage('explore');
-   if(p&&state.map)state.map.easeTo({center:[p.lng,p.lat],zoom:16,duration:350});
+   if(!tourPreview.startFromGps){enableTourGps();return;}
+   // A guided tour remains ordered. "Navigate" must reveal the actual Google
+   // walking directions to the next stop rather than simply panning the map.
+   if(next&&next.id===pid){
+     if(state.activeRoute?.isTour&&state.activeRoute.coords?.length){
+       if(state.fromGps)recenterDuringRoute();
+       restoreRoutePanel();
+     }else recalculateGuidedTour();
+   }else{
+     showToast(label('Obilazak vodi redom. Sledeća stanica: ','This walk follows the planned order. Next stop: ')+(next?next.label:'—'));
+     if(state.activeRoute?.isTour&&state.activeRoute.coords?.length)restoreRoutePanel();
+   }
    renderTourOverview();renderPersistentTour();return;
  }
  // Standalone navigation does not erase a saved tour.
@@ -440,7 +567,22 @@ closeRoute=function(){
  if(tourPreview){tourPreview.routing='idle';tourPreview.message='';}
  refreshCalmMarkers();renderTourOverview();renderPersistentTour();
 };
-updateNavigationHUD=function(){nativeUpdateNavigationHUD();const nav=document.getElementById('navHud');if(nav)nav.classList.toggle('calm-nav-active',!!state.activeRoute?.coords?.length)};
+updateNavigationHUD=function(){
+ nativeUpdateNavigationHUD();
+ const nav=document.getElementById('navHud');if(nav)nav.classList.toggle('calm-nav-active',!!state.activeRoute?.coords?.length);
+ if(tourPreview&&state.activeRoute?.isTour&&state.fromGps){
+   const next=remainingTourStops()[0],info=document.getElementById('navDetail'),headline=document.getElementById('navHeadline');
+   if(next&&info&&headline){
+     const near=state.locationAccuracy<=65&&distKm(state.position,next)*1000<=55;
+     const distance=tourMeters(distKm(state.position,next)*1000);
+     const stepInfo=info.textContent;
+     info.textContent=label('Sledeća: ','Next stop: ')+next.label+
+       ' · '+label('vazdušno ','straight-line ')+distance+
+       (stepInfo?' · '+stepInfo:'');
+     if(near)headline.textContent=label('📍 Stigao si blizu znamenitosti — otvori priču','📍 Near the landmark — read its story');
+   }
+ }
+};
 applyPosition=function(pos){const firstFix=!state.fromGps;nativeApplyPosition(pos);if(tourPreview){refreshCalmMarkers();if(firstFix)requestAnimationFrame(fitTour);}};
 // Existing routes are never treated as completed merely because the user opened a tour.
 
@@ -465,10 +607,27 @@ window.toggleTourStop=function(wid,pid){
    let saved=null;
    try{saved=JSON.parse(localStorage.getItem('nssg-discovery-tour')||'null');}catch(_){}
    if(saved?.id===wid&&Array.isArray(saved.completed)){
-     tourPreview.completed=saved.completed.filter(id=>tourPreview.ids.includes(id));
-     saveTourSession();renderTourOverview();renderPersistentTour();
+     const updated=saved.completed.filter(id=>tourPreview.ids.includes(id));
+     const changed=JSON.stringify(updated)!==JSON.stringify(tourPreview.completed);
+     tourPreview.completed=updated;
+     saveTourSession();
+     if(changed)recalculateGuidedTour();
+     renderTourOverview();renderPersistentTour();
    }
  }
+};
+const nativeRequestReroute=requestReroute;
+requestReroute=function(){
+ if(tourPreview&&tourPreview.startFromGps){
+   if(!gpsFixUsable()){enableTourGps();return;}
+   recalculateGuidedTour();return;
+ }
+ return nativeRequestReroute();
+};
+const nativeGps=gps;
+gps=function(callback){
+ if(tourPreview&&!tourPreview.startFromGps)return enableTourGps();
+ return nativeGps(callback);
 };
 const nativeOpenDirections=openDirections;
 openDirections=function(id){
@@ -476,10 +635,7 @@ openDirections=function(id){
    const p=places.find(x=>x.id===id);
    if(!p)return;
    closeModal();
-   if(state.page!=='explore')showPage('explore');
-   else if(state.map)state.map.easeTo({center:[p.lng,p.lat],zoom:16});
-   renderPersistentTour();
-   showToast(label('Kompletna šetnja ostaje aktivna. Pogledaj numerisane stanice i vodič.','Your full walking tour stays active. Follow its numbered stops.'));
+   window.navigateTourStop(id);
    return;
  }
  return nativeOpenDirections(id);
