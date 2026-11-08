@@ -665,7 +665,7 @@ function refreshCalmMarkers(){
      const markerCenter=state.nearbyOnly?state.position:center;
      const selected=allPins||state.cat!=='all'?candidates:candidates.slice().sort((a,b)=>distKm(a,markerCenter)-distKm(b,markerCenter)).slice(0,5);
      state.map.setPlaces(selected.map(p=>({lat:p.lat,lng:p.lng,emoji:p.emoji,label:name(p),click:()=>openPlace(p.id)})));
-     state.map.setPois(showVenuePins?filteredPois().slice(0,12):[]);
+     state.map.setPois(showVenuePins||(state.localVenueVisible&&state.cat==='food')?filteredPois().slice(0,12):[]);
    }
  }
  const btn=document.getElementById('calmPinToggle');if(btn){btn.textContent=allPins?label('✓ Sva mesta na mapi','✓ All places on map'):label('○ Prikaži više oznaka','○ Show more markers');btn.setAttribute('aria-pressed',String(allPins));}
