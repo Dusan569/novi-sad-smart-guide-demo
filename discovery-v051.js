@@ -109,6 +109,20 @@ function markNextStop(){
 
 /* v0.6.9: a proper, focused walking experience. Tour preview is planning;
  * pressing Start is an explicit transition to foreground navigation. */
+function ensureMapEmergencyExit(){
+ let btn=document.getElementById('nssgMapEmergencyExit');
+ if(btn)return btn;
+ btn=document.createElement('button');
+ btn.type='button';btn.id='nssgMapEmergencyExit';
+ btn.textContent=label('← Nazad iz mape','← Exit map');
+ btn.setAttribute('aria-label',label('Vrati se iz prikaza mape preko celog ekrana','Exit full-screen map'));
+ btn.addEventListener('click',()=>{
+   pauseGuidedWalk();
+   if(state.page==='explore'&&!state.map)showPage('explore');
+ });
+ document.body.appendChild(btn);
+ return btn;
+}
 function walkHudElements(){
  const wrap=document.querySelector('.discovery-map-wrap.calm-map');
  if(!wrap)return null;
@@ -122,7 +136,7 @@ function walkHudElements(){
    '<div class="nssg-walk-turn"><span class="nssg-walk-arrow" aria-hidden="true">↗</span>'+
    '<div class="nssg-walk-turn-copy"><strong id="walkNextInstruction"></strong>'+
    '<small id="walkInstructionDistance"></small></div></div>'+
-   '<button class="nssg-walk-pause" id="walkPause" type="button">'+label('Pauza','Pause')+'</button></div>'+
+   '<button class="nssg-walk-pause" id="walkPause" type="button">'+label('← Nazad','← Back')+'</button></div>'+
    '<div class="nssg-walk-bottom"><div class="nssg-walk-target">'+
    '<div><span class="nssg-walk-kicker" id="walkStopProgress"></span>'+
    '<strong id="walkStopName"></strong><small id="walkStopDistance"></small>'+
@@ -133,7 +147,10 @@ function walkHudElements(){
    '<button type="button" id="walkVisited">'+label('✓ Obiđeno','✓ Visited')+'</button>'+
    '<button type="button" id="walkStations">'+label('Stanice','Stops')+'</button></div></div>';
  wrap.appendChild(hud);
- hud.querySelector('#walkPause').addEventListener('click',pauseGuidedWalk);
+ hud.querySelector('#walkPause').addEventListener('click',()=>{
+   if(tourPreview?.mapPeekPlaceId){focusGuidedCamera();return;}
+   pauseGuidedWalk();
+ });
  hud.querySelector('#walkRecenter').addEventListener('click',focusGuidedCamera);
  hud.querySelector('#walkStory').addEventListener('click',()=>{
    const stop=remainingTourStops()[0];if(stop)openPlace(stop.id);
@@ -146,6 +163,7 @@ function walkHudElements(){
 }
 function focusGuidedCamera(){
  if(!tourPreview?.guiding||!state.map)return;
+ tourPreview.mapPeekPlaceId=null;
  state.followMode=true;
  if(state.fromGps){
    state.map.easeTo({center:[state.position.lng,state.position.lat],
@@ -154,6 +172,20 @@ function focusGuidedCamera(){
  }else{
    showToast(label('Lokacija nije dostupna — uključi GPS.','Location unavailable — enable GPS.'));
  }
+ updateWalkHud();
+}
+function showTourLandmarkOnMap(id){
+ if(!tourPreview?.guiding||state.page!=='explore'||!state.map)return false;
+ const landmark=places.find(p=>p.id===id);
+ if(!landmark)return false;
+ tourPreview.mapPeekPlaceId=id;
+ state.followMode=false;
+ state.map.easeTo({center:[landmark.lng,landmark.lat],zoom:16.5,duration:350});
+ // No rerender, no modal-overlaid map replacement and no new route request.
+ const hud=walkHudElements();
+ hud?.classList.remove('hidden');
+ updateWalkHud();
+ return true;
 }
 function startGuidedWalk(){
  if(!tourPreview)return;
@@ -168,7 +200,9 @@ function startGuidedWalk(){
  }
  tourPreview.pendingGuidedStart=false;
  tourPreview.guiding=true;
+ tourPreview.mapPeekPlaceId=null;
  state.followMode=true;
+ ensureMapEmergencyExit();
  closeModal();
  hideRoutePanel();
  const hud=walkHudElements();
@@ -182,7 +216,7 @@ function startGuidedWalk(){
  requestAnimationFrame(()=>requestAnimationFrame(focusGuidedCamera));
 }
 function pauseGuidedWalk(){
- if(tourPreview)tourPreview.guiding=false;
+ if(tourPreview){tourPreview.guiding=false;tourPreview.mapPeekPlaceId=null;}
  document.body.classList.remove('nssg-guided-active');
  document.getElementById('nssgWalkHud')?.classList.add('hidden');
  // Pausing leaves the itinerary/progress saved, but stops foreground tracking.
@@ -197,7 +231,12 @@ function updateWalkHud(){
  if(!hud||!tourPreview?.guiding)return;
  const route=state.activeRoute,stop=remainingTourStops()[0];
  const set=(id,value)=>{const n=hud.querySelector('#'+id);if(n)n.textContent=value;};
- if(!route?.isTour||!route.coords?.length){
+ const peek=tourPreview.mapPeekPlaceId&&places.find(p=>p.id===tourPreview.mapPeekPlaceId);
+ set('walkPause',peek?label('← Na rutu','← To route'):label('← Nazad','← Back'));
+ if(peek){
+   set('walkNextInstruction',label('Razgledaš znamenitost','Viewing a landmark'));
+   set('walkInstructionDistance',name(peek)+' · '+label('Dodirni „Na rutu” da nastaviš','Tap “To route” to return'));
+ }else if(!route?.isTour||!route.coords?.length){
    set('walkNextInstruction',label('Preračunavamo putanju…','Recalculating your route…'));
    set('walkInstructionDistance',label('Sačekaj Google pešačku rutu.','Waiting for the Google walking route.'));
  }else{
@@ -245,7 +284,7 @@ function tourOnMapReady(){
    else state.map.fitRoute(state.activeRoute.coords,{top:68,bottom:180,left:35,right:35,maxZoom:16});
  }else fitTour();
  renderTourOverview();
- if(tourPreview.guiding){walkHudElements();updateWalkHud();}
+ if(tourPreview.guiding){walkHudElements()?.classList.remove('hidden');updateWalkHud();}
  renderPersistentTour();
 }
 function tourOnPosition(){
@@ -787,9 +826,29 @@ openDirections=function(id){
  }
  return nativeOpenDirections(id);
 };
+// Defensive cleanup: no page change or content rerender may leave body in
+// full-screen navigation after the map HUD was removed.
+const oldAppShowPage=showPage;
+showPage=function(...args){
+ if(tourPreview?.guiding)pauseGuidedWalk();
+ return oldAppShowPage(...args);
+};
+const oldAppRender=render;
+render=function(...args){
+ if(tourPreview?.guiding)pauseGuidedWalk();
+ return oldAppRender(...args);
+};
+// Escape exits walking mode only if a details modal is not open.
+document.addEventListener('keydown',e=>{
+ if(e.key!=='Escape'||!tourPreview?.guiding)return;
+ const shade=document.getElementById('modalShade');
+ if(shade&&!shade.classList.contains('hidden'))return;
+ e.preventDefault();
+ pauseGuidedWalk();
+},true);
 window.NSSG_TOUR_SESSION=Object.freeze({
  resume:resumeTour,finish:finishTour,markNext:markNextStop,
- begin:startGuidedWalk,pause:pauseGuidedWalk,
+ begin:startGuidedWalk,pause:pauseGuidedWalk,showLandmarkOnMap:showTourLandmarkOnMap,
  onMapReady:tourOnMapReady,onPage:()=>{if(state.page!=='explore'&&tourPreview?.guiding)pauseGuidedWalk();renderPersistentTour();},onGpsPosition:tourOnPosition,
  snapshot:()=>{const d=tourStateForUI();return d?{id:d.walk.id,completed:d.completed.slice(),nextId:d.next?.id||null,active:d.active,guiding:!!tourPreview?.guiding}:null;}
 });

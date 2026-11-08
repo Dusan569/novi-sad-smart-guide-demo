@@ -47,8 +47,12 @@
  }
  function showOnMap(id){
    const p=place(id);if(!p)return;stopVoice();closeModal();
+   // The existing full-screen walking map is already the right destination.
+   // Re-rendering Explore here destroys the HUD but leaves fullscreen CSS active.
+   if(root.NSSG_TOUR_SESSION?.showLandmarkOnMap?.(id))return;
    state.radius=Math.max(state.radius,10000);
-   state.cat='all';state.search='';showPage('explore');
+   state.cat='all';state.search='';
+   if(state.page!=='explore'||!state.map)showPage('explore');
    let attempts=0;
    const centerPlace=()=>{
      if(state.page!=='explore')return;

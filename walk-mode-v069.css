@@ -82,3 +82,17 @@ body.nssg-guided-active .calm-map .nssg-walk-hud:not(.hidden){display:flex}
 .tour-extra-options:not([open]) .tour-overview-actions{display:none}
 .tour-extra-options[open] .tour-overview-actions{display:flex}
 @media(max-width:740px){.calm-map .tour-overview-panel{max-height:min(43dvh,320px)}}
+
+/* v0.6.10: an escape hatch if a third-party redraw unexpectedly removes
+   the navigation card. It is mounted on <body>, not inside the map. */
+#nssgMapEmergencyExit{
+ display:none;position:fixed;z-index:1460;
+ top:calc(18px + env(safe-area-inset-top));left:calc(12px + env(safe-area-inset-left));
+ min-height:48px;padding:10px 15px;border:2px solid #d3e5e7;
+ border-radius:13px;background:#fff;color:#133955;
+ box-shadow:0 8px 30px #17364b55;font-size:14px;font-family:inherit;font-weight:800;line-height:1.2;cursor:pointer;
+}
+body.nssg-guided-active:not(:has(#nssgWalkHud:not(.hidden))) #nssgMapEmergencyExit{
+ display:block;
+}
+#nssgMapEmergencyExit:focus-visible{outline:3px solid #0fa5a0;outline-offset:3px}
