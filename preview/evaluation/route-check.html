@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="sr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Google walking route check · Novi Sad Smart Guide</title>
+<style>body{font:16px system-ui;margin:20px auto;padding:0 16px;max-width:720px;color:#153447}button,select{font:inherit;padding:12px;margin:6px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eef4f7;padding:16px}#map{height:320px}li{margin:8px 0}</style>
+<h1>Provera Google pešačke rute / Walking route check</h1>
+<p>Trg slobode → Dunavska ulica. Samo dve javne turističke tačke, bez GPS-a i međustanica. Ovo poziva stvarni Google servis i koristi njegovu kvotu. / Two public landmarks, no GPS. Uses the real Google service and its quota.</p>
+<label>Jezik / Language <select id="language"><option value="sr">Srpski</option><option value="en">English</option></select></label>
+<button id="check">Proveri dve tačke / Check two points</button>
+<pre id="result" role="status" aria-live="polite">Nije pokrenuto / Not run</pre>
+<div id="map" aria-label="Google route map"></div><ol id="steps"></ol>
+<p><a href="./">Nazad u vodič / Back to guide</a></p>
+<script src="./google-maps-config.js?v=066"></script>
+<script src="./google-maps-engine.js?v=066"></script>
+<script src="./route-check.js?v=066"></script>
+</html>
