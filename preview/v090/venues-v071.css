@@ -1,0 +1,91 @@
+/* Novi Sad Smart Guide v0.6.11 — in-app visitor venue guide */
+.nssg-venue-screen[hidden]{display:none!important}
+.nssg-venue-screen{position:fixed;inset:0;z-index:1700;display:grid;place-items:center;
+ font-family:inherit;color:#153650}
+.venue-backdrop{position:absolute;inset:0;background:rgba(8,20,42,.58)}
+.venue-surface{position:relative;z-index:1;display:flex;flex-direction:column;
+ box-sizing:border-box;width:min(760px,calc(100vw - 28px));max-height:min(89dvh,900px);
+ background:#f8fbfc;border:1px solid #cfebe5;border-radius:23px;
+ box-shadow:0 24px 65px #142f4c66;overflow:hidden}
+.venue-header{padding:20px 22px 12px;display:flex;gap:16px;align-items:flex-start;justify-content:space-between;
+ background:linear-gradient(120deg,#e3f6f2,#f7fafc)}
+.venue-header h2{margin:5px 0 8px;font-size:26px;color:#123554;letter-spacing:-.5px}
+.venue-header p{margin:0;color:#516d7b;line-height:1.4;font-size:14px}
+.venue-kicker{color:#078d83;font-weight:900;letter-spacing:.8px;font-size:10px}
+.venue-close{flex:none;width:45px;height:45px;border:1px solid #c9e0de;border-radius:14px;
+ background:white;color:#153650;font-size:27px;cursor:pointer}
+.venue-switches{display:flex;gap:7px;padding:12px 20px 7px;overflow-x:auto}
+.venue-switches button{background:#fff;border:1px solid #d9e8ea;color:#536e82;padding:10px 14px;
+ min-height:44px;white-space:nowrap;border-radius:24px;font-size:13px;font-weight:750;cursor:pointer}
+.venue-switches button[aria-selected="true"]{background:#123c60;border-color:#123c60;color:#fff}
+.venue-message{min-height:23px;font-size:12px;line-height:1.45;color:#527185;padding:4px 22px 12px}
+.venue-items{padding:0 20px 17px;overflow-y:auto;overscroll-behavior:contain;
+ display:grid;gap:11px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.venue-card{background:white;border:1px solid #e1eaec;border-radius:17px;padding:15px;
+ box-shadow:0 5px 20px #1539540d;display:flex;flex-direction:column;gap:12px;min-width:0}
+.venue-card-top{display:flex;gap:10px;align-items:flex-start}
+.venue-icon{width:46px;height:46px;border-radius:12px;background:#e6f5f0;display:grid;place-items:center;
+ flex:none;font-size:25px}
+.venue-card-body{display:flex;flex-direction:column;gap:5px;min-width:0}
+.venue-card-body strong{font-size:15px;color:#102f50}
+.venue-card-body small{font-size:12px;color:#58748b;line-height:1.35}
+.venue-card-body p{font-size:12px;line-height:1.5;color:#365968;margin:2px 0 0}
+.venue-card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.venue-card-actions button{border-radius:11px;min-height:44px;padding:9px 11px;font-size:12px;font-family:inherit;font-weight:800;line-height:1.2;
+ cursor:pointer;border:1px solid #d0e4e5;background:#f0f8f7;color:#246576}
+.venue-card-actions .venue-card-primary{background:#133c60;border-color:#133c60;color:#fff}
+.venue-load{grid-column:1/-1;border-radius:12px;min-height:48px;background:#143e60;color:#fff;
+ border:0;cursor:pointer;font-size:13px;font-family:inherit;font-weight:800;line-height:1.2;padding:11px}
+.venue-load:disabled{opacity:.65}
+.venue-empty{grid-column:1/-1;padding:18px;text-align:center;color:#61778c}
+.venue-footer{font-size:11px;line-height:1.5;padding:11px 21px;border-top:1px solid #e1eaec;color:#68808e;
+ background:#f4faf9}
+.nssg-venue-screen button:focus-visible{outline:3px solid #08ad9c;outline-offset:2px}
+@media(max-width:650px){
+ .venue-surface{width:100%;max-height:96dvh;height:min(94dvh,940px);border-radius:22px 22px 0 0;
+ align-self:end;border-bottom:0}
+ .venue-header{padding:16px 16px 10px}
+ .venue-header h2{font-size:23px}
+ .venue-header p{font-size:13px}
+ .venue-switches{padding:10px 12px 6px}
+ .venue-switches button{font-size:12px;padding:9px 11px}
+ .venue-message{padding:4px 16px 10px}
+ .venue-items{display:flex;flex-direction:column;padding:0 13px 15px;gap:10px}
+ .venue-card{padding:13px}
+ .venue-card-actions button{flex:1 1 40%}
+ .venue-footer{padding:10px 15px}
+}
+
+/* v0.7.5 iPhone: scroll only venue cards, never shrink the filters into the list. */
+.venue-surface{height:min(89dvh,900px);min-height:0;min-width:0}
+.venue-header,.venue-switches,.venue-message,.venue-search-shortcut,.venue-footer{flex:0 0 auto}
+.venue-header>div{min-width:0;flex:1}
+.venue-switches{position:relative;z-index:2;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.venue-switches::-webkit-scrollbar{display:none}
+.venue-switches button{flex:0 0 auto}
+.venue-message{max-height:76px;overflow-y:auto;overflow-wrap:anywhere}
+.venue-search-shortcut{display:block;margin:9px 20px 3px;min-height:48px;border:0;
+ border-radius:13px;background:#123c60;color:#fff;font-family:inherit;font-size:14px;font-weight:800;line-height:1.35;cursor:pointer;
+ padding:11px 16px;text-align:center}
+.venue-items{flex:1 1 auto;min-height:0;min-width:0;align-content:start;overflow-y:auto;
+ -webkit-overflow-scrolling:touch;overflow-x:hidden}
+.venue-card{overflow-wrap:anywhere}
+.venue-card-body{overflow-wrap:anywhere}
+@media(max-width:650px){
+ .nssg-venue-screen{height:100dvh}
+ .venue-surface{height:calc(100dvh - max(16px,env(safe-area-inset-top)));
+  max-height:none;width:100%;border-radius:20px 20px 0 0;align-self:end;
+  padding-bottom:env(safe-area-inset-bottom)}
+ .venue-search-shortcut{margin:8px 13px 2px;min-height:48px}
+ .venue-header{padding:13px 14px 8px}
+ .venue-header h2{font-size:23px;margin:3px 0 4px}
+ .venue-header p{font-size:12px;line-height:1.35}
+ .venue-switches{padding:8px 13px 5px}
+ .venue-message{padding:4px 13px 7px;max-height:66px}
+ .venue-items{padding:0 12px 12px;gap:10px}
+ .venue-card{flex:0 0 auto;padding:12px;gap:10px}
+ .venue-footer{padding:7px 13px;font-size:10px;line-height:1.35}
+}
+
+/* v0.7.6 single search action */
+.venue-search-shortcut:disabled{opacity:.7;cursor:wait}
