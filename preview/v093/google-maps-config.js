@@ -9,21 +9,25 @@
   const persistentStore='nssg_google_maps_browser_key_local_v063';
   const valid=x=>typeof x==='string'&&/^[A-Za-z0-9_-]{20,}$/.test(x);
   let browserKey='';
-  // Controlled evaluation invitation: the browser consumes the URL fragment.
-  // It is never included in HTTP requests to the hosting server or committed here.
+  // Owner-authorized evaluation links must survive copying into a fresh browser.
+  // Fragments stay client-side; never bake the actual invitation key into Git.
   const evaluationStore='nssg_google_evaluation_key_v079';
+  const validInvitation=x=>typeof x==='string'&&/^AIza[A-Za-z0-9_-]{35}$/.test(x);
+  let evaluationKey=false;
   try {
-    const hash=new URLSearchParams(root.location.hash.slice(1));
-    const invited=hash.get('demoKey')||'';
-    if(/^AIza[A-Za-z0-9_-]{35}$/.test(invited)){
-      browserKey=invited;
-      try {
-        root.sessionStorage.setItem(evaluationStore,invited);
-        root.history.replaceState(null,'',root.location.pathname+root.location.search);
-      } catch (_) {}
-    } else {
-      const saved=root.sessionStorage?.getItem(evaluationStore)||'';
-      if(/^AIza[A-Za-z0-9_-]{35}$/.test(saved))browserKey=saved;
+    const fragment=new URLSearchParams((root.location.hash||'').slice(1));
+    const invited=fragment.get('demoKey')||'';
+    let saved='';
+    try {saved=root.sessionStorage?.getItem(evaluationStore)||'';} catch (_) {}
+    const key=validInvitation(invited)?invited:validInvitation(saved)?saved:'';
+    if(key){
+      browserKey=key;evaluationKey=true;
+      try {root.sessionStorage?.setItem(evaluationStore,key);} catch (_) {}
+      if(!validInvitation(invited)){
+        fragment.set('demoKey',key);
+        try {root.history.replaceState(null,'',root.location.pathname+root.location.search+'#'+fragment.toString());} catch (_) {}
+      }
+      // Keep demoKey in the address: iOS Copy/Open in Safari must carry it along.
     }
   } catch (_) {}
   // Browser-only prototype persistence: never commit a key, and never treat localStorage as a vault.
@@ -37,7 +41,7 @@
       if(valid(session))browserKey=session;
     } catch (_) {}
   }
-  // Evaluation invitation keys remain session-scoped; do not persist them to localStorage.
+  if(browserKey&&!evaluationKey){try{root.localStorage?.setItem(persistentStore,browserKey);}catch(_){}}
 
   root.NSSG_GOOGLE_CONFIG=Object.freeze({
     browserKey,
