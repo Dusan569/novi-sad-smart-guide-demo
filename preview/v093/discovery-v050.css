@@ -1,0 +1,180 @@
+/* City discovery redesign v0.5: content first, map controls only on demand */
+.discovery-overline{font-size:10px;letter-spacing:2.2px;color:#078f89;font-weight:900}.discovery-hero{min-height:370px;border-radius:26px;overflow:hidden;position:relative;background:#092846;color:#fff;box-shadow:0 20px 48px #102c4a24}.discovery-hero-photo{position:absolute;inset:0;background:linear-gradient(90deg,#07172edb 2%,#0d2e4cb0 56%,#1237593a),url('https://upload.wikimedia.org/wikipedia/commons/7/7a/Panorama_of_Novi_Sad.jpg') center 50%/cover}.discovery-hero-shade{position:absolute;inset:0;background:linear-gradient(0deg,#081c39ca,transparent 56%)}.discovery-hero-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;min-height:370px;padding:34px 38px}.discovery-kicker{font-size:11px;letter-spacing:2px;color:#aaf9df;font-weight:900}.discovery-hero h1{font-family:Manrope,sans-serif;letter-spacing:-2px;font-weight:850;font-size:clamp(29px,3.7vw,51px);line-height:1.13;margin:21px 0 13px}.discovery-hero h1 em{font-style:normal;color:#85ede2}.discovery-hero p{max-width:560px;color:#e9f4f9;line-height:1.65;font-size:13px}.discovery-hero-count{display:flex;gap:9px;align-items:center;margin-top:auto;padding-top:22px;color:#d0e4ef;font-size:11px}.discovery-hero-count strong{font-size:23px;color:#fff}.count-divider{height:23px;width:1px;background:#ffffff68;margin:0 10px}.discovery-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:34px 0 16px}.discovery-intro h2{font:850 23px Manrope,sans-serif;letter-spacing:-.7px;margin:7px 0 3px}.discovery-intro p{font-size:12px;color:#7a899a}.text-link{border:0;color:#087f7d;background:none;white-space:nowrap;font-size:12px;font-weight:850;padding:8px}.discover-tour-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.discover-tour-card{border:1px solid #e3eaf1;background:#fff;border-radius:21px;overflow:hidden;min-width:0;box-shadow:0 12px 32px #1a405010}.tour-art{height:116px;display:flex;align-items:center;justify-content:center;position:relative;background:linear-gradient(135deg,#daf5eb,#98d9cf)}.tour-lilac .tour-art,.tour-detail-hero.tour-lilac{background:linear-gradient(130deg,#dedbf4,#b7b6e8)}.tour-amber .tour-art,.tour-detail-hero.tour-amber{background:linear-gradient(130deg,#faecd3,#f0c996)}.tour-blue .tour-art,.tour-detail-hero.tour-blue{background:linear-gradient(130deg,#d5e9f9,#9fc5ef)}.tour-rose .tour-art,.tour-detail-hero.tour-rose{background:linear-gradient(130deg,#f8e2df,#f8c7b3)}.tour-glyph{font-size:55px;filter:drop-shadow(0 8px 9px #2e455f28)}.tour-art-tag{position:absolute;bottom:11px;left:13px;background:#fffdfcdb;border:1px solid #ffffffad;padding:6px 9px;border-radius:100px;font-size:9px;color:#31536b;letter-spacing:1px;font-weight:900}.tour-card-content{padding:17px 17px 19px}.tour-eyebrow{font-size:10px;color:#168985;font-weight:850;letter-spacing:.1px}.tour-card-content h3{font:850 16px Manrope,sans-serif;letter-spacing:-.4px;margin:9px 0 7px;line-height:1.3}.tour-card-content p{font-size:11px;line-height:1.5;color:#6f8192;min-height:50px}.tour-card-actions{margin-top:15px;display:flex;justify-content:space-between;align-items:center;gap:7px}.tour-pace{font-size:10px;color:#698092}.discover-button{background:#15304e;color:#fff;border:0;border-radius:11px;padding:10px 12px;font-size:10px;font-weight:850;white-space:nowrap}.discover-button:hover,.discover-button:focus-visible{background:#0b7577}.spot-scroll{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.spot-card{border-radius:19px;background:#fff;border:1px solid #e5ecf1;overflow:hidden;box-shadow:0 7px 28px #0b243911}.spot-open{border:0;background:transparent;display:flex;flex-direction:column;text-align:left;padding:0;width:100%;height:100%;color:inherit}.spot-visual{position:relative;display:grid;place-items:center;width:100%;height:108px;background:linear-gradient(135deg,#e0f5ee,#bfdee1)}.spot-style-1{background:linear-gradient(135deg,#d3e4f7,#9abada)}.spot-style-2{background:linear-gradient(135deg,#e9e5f9,#c5badd)}.spot-style-3{background:linear-gradient(135deg,#f7ecd9,#f1d2b1)}.spot-visual>span{font-size:43px}.spot-visual small{position:absolute;right:13px;top:10px;font-size:12px;font-weight:900;color:#163b4c75}.spot-content{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:15px;min-height:160px;width:100%}.spot-eyebrow{font-size:10px;font-weight:800;color:#0b9188}.spot-content strong{font-size:13px;font-weight:850}.spot-description{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:10px;color:#72859b;line-height:1.6}.spot-cta{color:#0b8982;font-weight:850;font-size:11px;margin-top:auto;padding-top:6px}.discovery-next{margin-top:26px;background:#0d2949;color:#fff;border-radius:20px;display:flex;align-items:center;gap:17px;padding:22px}.discovery-next-icon{height:47px;width:47px;border-radius:14px;background:#1e6179;display:grid;place-items:center;font-size:23px;flex:none}.discovery-next>div:nth-child(2){flex:1}.discovery-next strong{font:850 15px Manrope,sans-serif}.discovery-next p{font-size:11px;color:#c2d5df;margin-top:5px;line-height:1.5}.discovery-next button{border:0;border-radius:10px;background:#73e1d1;color:#073c43;padding:11px 14px;font-weight:900;font-size:11px}.discovery-trust{margin:20px 0;color:#7890a2;line-height:1.6;font-size:10px}.tours-page-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.tours-page-grid .tour-art{height:138px}.discovery-header{margin:0 0 22px}.discovery-header .desktop-page-title{margin-top:11px}.discovery-place-story{border-top:1px solid #e7eef1;border-bottom:1px solid #e7eef1;padding:18px 0;margin:18px 0}.discovery-place-story h3{font:850 17px Manrope,sans-serif;line-height:1.3;margin:13px 0 7px}.discovery-place-story p{font-size:12px!important;line-height:1.8!important;color:#506d80}.discovery-place-badges{display:flex;gap:7px;flex-wrap:wrap}.discovery-place-badges span{background:#e8f7f2;color:#0b8079;padding:7px 9px;border-radius:100px;font-size:10px;font-weight:800}.discovery-local-tip{background:#f7f4e9;border-radius:12px;padding:11px;display:flex;gap:9px;margin-top:13px;color:#5a5845;font-size:11px;line-height:1.6}.discovery-source{display:inline-block;margin-top:12px;color:#057f8b;font-size:11px;font-weight:850}.tour-detail-hero{position:relative;display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#ddf3ed,#b7e6da);padding:21px 45px 19px 20px}.tour-detail-icon{font-size:47px}.tour-detail-hero h2{font:850 20px Manrope,sans-serif;margin:6px 0;line-height:1.2}.tour-detail-hero p{font-size:11px;line-height:1.5;color:#456371}.tour-detail-close{position:absolute;right:11px;top:11px;background:#ffffffaf;border:0;width:32px;height:32px;border-radius:10px;font-size:22px}.tour-detail-body{padding:19px 21px;max-height:62vh;overflow:auto}.tour-detail-meta{display:flex;gap:7px;flex-wrap:wrap}.tour-detail-meta span{border:1px solid #dcebe8;border-radius:9px;padding:7px;background:#f1faf7;color:#2d5d66;font-size:10px;font-weight:800}.tour-time-note{font-size:10px!important;line-height:1.6;color:#8c9bae;margin:12px 0 16px}.tour-detail-stops{border-left:2px dashed #c4dcd9;margin:9px 0 0 14px}.tour-detail-stop{display:flex;gap:12px;margin:0 0 18px -16px}.tour-step-check{width:31px;height:31px;flex:none;border-radius:50%;border:2px solid #bed7d6;background:#fff;color:#285f64;font-size:12px;font-weight:900}.tour-step-check.done{border-color:#0e9e8c;background:#12a999;color:#fff}.tour-stop-body{flex:1;border:1px solid #e9eef2;background:#fff;border-radius:12px;padding:11px 12px}.tour-stop-body strong{font-size:12px;display:block}.tour-stop-body small{font-size:10px;display:block;color:#7b8899;line-height:1.5;margin:5px 0}.tour-stop-actions{display:flex;gap:8px}.tour-stop-actions button{border:0;background:#eaf5f2;color:#0b6d6b;padding:8px 11px;border-radius:9px;font-size:10px;font-weight:850}.tour-detail-footer{display:flex;gap:8px;justify-content:space-between;margin-top:13px}.discovery-map-wrap .discovery-map-quick{position:absolute;z-index:530;right:10px;top:10px;display:flex;gap:7px}.discovery-map-quick button{border:1px solid #dbe9ee;border-radius:13px;background:#fff;padding:11px 13px;color:#173956;box-shadow:0 7px 20px #173b522e;font-weight:850;min-height:43px}.discovery-map-tray{position:absolute;z-index:540;top:65px;right:10px;width:min(300px,calc(100% - 20px));max-height:70%;overflow:auto;background:#fffffff7;border:1px solid #dbe8ed;padding:14px;border-radius:18px;box-shadow:0 13px 40px #18364f40;display:flex;flex-direction:column;align-items:stretch;gap:12px;backdrop-filter:blur(9px)}.discovery-map-tray .map-style-control,.discovery-map-tray .map-poi-toggle,.discovery-map-tray .map-actions,.discovery-map-tray .heading-controls{position:static!important;display:flex!important;transform:none!important;box-shadow:none!important;width:100%;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;max-width:none}.discovery-map-tray .map-poi-toggle{padding:12px;justify-content:center;border:1px solid #dae9e9}.discovery-map-tray .map-actions .btn{flex:1;font-size:11px;padding:10px}.discovery-map-tray .map-actions .radius-select{flex:1;margin:0}.discovery-map-tray .heading-controls button{flex:1}.discovery-map-wrap .heading-status{top:64px;right:10px;font-size:9px;max-width:180px;padding:6px 9px}.discovery-map-wrap .heading-status:not(.active){display:none}.discovery-map-hint{position:absolute;z-index:8;pointer-events:none;left:12px;bottom:58px;background:#ffffffe5;border-radius:9px;padding:6px 8px;color:#436177;font-size:9px}.discover-results-toggle{border:0;background:#eff7f4;color:#0b7974;border-radius:10px;padding:9px;font-size:10px;font-weight:850}.discover-results-compact #results .place:nth-child(n+4){display:none}.discover-results-compact .notice-orange,.discover-results-compact>.btn{display:none}.discovery-map-wrap .map-badge{top:12px;left:12px;max-width:calc(100% - 145px);font-size:10px;padding:10px}.discovery-map-wrap .map-poi-status{left:10px;right:10px;top:auto;bottom:84px;max-width:none;z-index:550}.discovery-map-wrap #routeRestore{bottom:75px}.discovery-map-wrap #navHud{bottom:83px}.discovery-map-wrap #navLiveControls{bottom:158px}.discovery-map-wrap #mapFallback{z-index:50}
+@media(max-width:1050px){.discover-tour-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.spot-scroll{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:740px){.discovery-hero,.discovery-hero-content{min-height:370px}.discovery-hero-content{padding:27px 22px}.discovery-hero h1{font-size:34px;letter-spacing:-1.3px}.discovery-hero p{font-size:12px}.discovery-hero .hero-bottom{gap:8px}.discovery-hero .hero-bottom .btn{font-size:11px;padding:11px 12px}.discovery-hero-count{flex-wrap:wrap;font-size:10px;gap:5px}.discovery-intro{margin:29px 0 15px}.discovery-intro h2{font-size:20px}.discover-tour-grid,.tours-page-grid{grid-template-columns:none;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 15px;gap:12px;margin-right:-15px;padding:0 15px 8px 0}.discover-tour-card{flex:0 0 min(78vw,320px);scroll-snap-align:start}.tours-page-grid{flex-wrap:wrap;overflow:visible;margin:0;padding:0}.tours-page-grid .discover-tour-card{flex:1 0 100%}.tours-page-grid .tour-art{height:92px}.spot-scroll{grid-template-columns:none;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin-right:-15px;gap:11px;padding:0 15px 6px 0}.spot-card{flex:0 0 min(56vw,230px);scroll-snap-align:start}.spot-visual{height:100px}.spot-content{min-height:165px}.discovery-next{padding:16px;gap:11px;flex-wrap:wrap}.discovery-next button{margin-left:auto}.discovery-next-icon{width:38px;height:38px;font-size:19px}.discovery-next strong{font-size:13px}.discovery-map-wrap.map-wrap{height:min(57vh,535px);min-height:370px;border-radius:23px}.discovery-map-wrap .raster-zoom{top:71px;right:10px}.discovery-map-hint{display:none}.discovery-map-wrap #navHud{bottom:26px;left:8px;right:8px}.discovery-map-wrap #navLiveControls{bottom:97px}.discovery-map-wrap #routeRestore{bottom:100px}.discovery-map-wrap #routePanel{top:66px;max-height:64%;overflow:auto}.discovery-map-wrap .map-badge{top:13px;left:10px;max-width:calc(100% - 153px);font-size:9px}.discovery-map-wrap .heading-status{top:69px;right:10px}.map-layout .results-panel{position:relative;z-index:5;margin-top:-20px;border-radius:23px;max-height:none;padding:17px}.discover-results-compact #results .place:nth-child(n+3){display:none}.filter-bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:17px 0 12px;padding-bottom:4px}.filter-bar::-webkit-scrollbar{display:none}.filter-bar .chip{white-space:nowrap;flex:none}.tour-detail-body{max-height:55vh;padding:15px}.tour-detail-hero{padding:18px 38px 16px 15px}.tour-detail-hero h2{font-size:17px}.tour-detail-icon{font-size:35px}}
+@media(prefers-reduced-motion:reduce){.discover-tour-card,.spot-card{scroll-snap-type:none}.btn{transition:none}}
+
+.raster-cluster{position:absolute;z-index:5;transform:translate(-50%,-60%);border:3px solid #fff;background:#0c8786;color:#fff;font-size:13px;font-weight:900;border-radius:50%;width:39px;height:39px;box-shadow:0 0 0 5px #0c918643,0 5px 16px #17435663;pointer-events:auto;cursor:pointer}.raster-cluster-menu{position:absolute;z-index:25;display:flex;flex-direction:column;gap:4px;max-height:185px;overflow:auto;width:196px;background:#fff;padding:9px;border-radius:13px;border:1px solid #dce9e8;box-shadow:0 13px 32px #1b395750;pointer-events:auto}.raster-cluster-menu strong{font-size:11px;margin:2px 5px 5px;color:#25455b}.raster-cluster-menu button{font-size:11px;text-align:left;border:0;background:#f0f6f5;padding:7px;border-radius:7px;color:#25455b;font-weight:700}.raster-cluster-menu button:hover{background:#d8eee8}
+/* v0.9 editorial city guide — mobile-first, existing navigation actions unchanged. */
+.editorial-home{--ink:#102c3c;--muted:#526975;--teal:#087f79;--paper:#fafaf6;color:var(--ink)}
+.editorial-hero{border-radius:30px;min-height:480px;box-shadow:0 16px 44px #173c4420;background:#153a48}
+.editorial-hero .discovery-hero-photo{background:linear-gradient(110deg,#102c3c38,#102c3c0a),url('https://upload.wikimedia.org/wikipedia/commons/7/7a/Panorama_of_Novi_Sad.jpg') center 48%/cover,#184c5a}
+.editorial-hero .discovery-hero-shade{background:linear-gradient(0deg,#071d2ded 0%,#0c293edb 38%,#102c3c2b 78%,#0c293e55 100%)}
+.editorial-hero .discovery-hero-content{min-height:480px;padding:30px 36px;justify-content:space-between;gap:30px}
+.editorial-hero-top{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.editorial-hero .discovery-kicker{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:1.6px;color:white;background:#102c3c9c;border:1px solid #ffffff40;padding:9px 12px;border-radius:99px}
+.editorial-hero .discovery-kicker i{width:7px;height:7px;border-radius:50%;background:#9bf3d2}
+.editorial-location{font-size:11px;font-weight:700;letter-spacing:.4px;color:#fff;background:#102c3c9c;border:1px solid #ffffff40;padding:9px 12px;border-radius:99px}
+.editorial-hero-copy{margin-top:auto;max-width:660px}
+.editorial-region{color:#bceadf;font-size:11px;letter-spacing:2px;font-weight:850}
+.editorial-hero h1{font-size:clamp(46px,6vw,78px);line-height:1.01;letter-spacing:-.055em;margin:12px 0 16px;font-weight:850}
+.editorial-hero h1 em{color:#c5f0de}
+.editorial-hero p{font-size:15px;line-height:1.6;max-width:470px;color:#f0f7f5}
+.editorial-hero .hero-bottom{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.editorial-hero .hero-bottom .btn{font-size:13px;min-height:48px;border-radius:15px;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:800}
+.editorial-hero .hero-bottom .btn-primary{background:#d2f1df;color:#123d3b;border:1px solid #d2f1df;box-shadow:none}
+.editorial-hero .hero-bottom .btn-ghost{background:#ffffff13;border:1px solid #ffffff80;color:white}
+.editorial-hero .discovery-hero-count{padding-top:0;margin-top:0;font-size:12px;gap:8px}
+.editorial-hero .discovery-hero-count strong{font-size:20px}
+.editorial-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.editorial-shortcut{display:flex;align-items:center;gap:11px;text-align:left;background:white;border:1px solid #e0e9e6;border-radius:19px;padding:14px;color:var(--ink);min-width:0;min-height:82px;box-shadow:0 5px 18px #173c4408}
+.editorial-shortcut>span:nth-child(2){min-width:0;flex:1}
+.editorial-shortcut strong,.editorial-shortcut small{display:block}
+.editorial-shortcut strong{font-size:14px;font-weight:850}
+.editorial-shortcut small{margin-top:4px;font-size:11px;color:var(--muted);line-height:1.4}
+.editorial-shortcut-icon{width:44px;height:44px;display:grid;place-items:center;flex:none;border-radius:14px;background:#e2f3ec;color:#087b72}
+.editorial-shortcut-icon svg,.discovery-next-icon svg{width:23px;height:23px}
+.editorial-icon-venues{background:#f5ead8;color:#925a27}.editorial-icon-walks{background:#e5ecf8;color:#315d95}
+.editorial-arrow{font-size:17px;color:#087b72;font-weight:800}
+.editorial-home .discovery-intro{margin:34px 0 15px;align-items:flex-end}
+.editorial-home .discovery-intro h2{font-size:clamp(23px,3vw,31px);line-height:1.17;letter-spacing:-.8px}
+.editorial-home .discovery-intro p{font-size:13px;color:var(--muted);line-height:1.5}
+.editorial-home .discovery-overline{font-size:10px;letter-spacing:1.6px}
+.editorial-home .text-link{font-size:12px;min-height:44px;padding:8px 0 8px 6px}
+.editorial-home .discover-tour-card,.editorial-home .spot-card{border-radius:23px;border-color:#e2e9e5;box-shadow:0 6px 24px #193f4210}
+.editorial-home .tour-art{height:160px;overflow:hidden}
+.editorial-home .tour-art:before{content:"";position:absolute;width:150px;height:150px;border:1px solid #ffffffaa;right:-35px;top:-56px;border-radius:50%;box-shadow:0 0 0 23px #ffffff38,0 0 0 46px #ffffff20}
+.editorial-home .tour-glyph{font-size:62px;position:relative;filter:none}
+.editorial-home .tour-art-tag{font-size:10px;color:#243e42;background:#fff}
+.editorial-home .tour-card-content{padding:18px}
+.editorial-home .tour-card-content h3{font-size:18px;line-height:1.25;margin:9px 0}
+.editorial-home .tour-card-content p{font-size:13px;line-height:1.55;color:var(--muted);min-height:60px}
+.editorial-home .tour-card-actions{align-items:center;flex-wrap:wrap}
+.editorial-home .tour-pace{font-size:11px}
+.editorial-home .discover-button{min-height:44px;font-size:12px;border-radius:13px;background:#173c49;white-space:normal}
+.editorial-home .spot-visual{height:132px}
+.editorial-home .spot-content{padding:15px;min-height:152px;gap:8px}
+.editorial-home .spot-content strong{font-size:16px;line-height:1.25}
+.editorial-home .spot-description{font-size:12px;color:var(--muted)}
+.editorial-home .spot-eyebrow{font-size:11px}
+.editorial-home .spot-cta{font-size:12px}
+.editorial-home .discovery-next{border-radius:23px;background:#153e48}
+.editorial-home .discovery-next button{min-height:44px;background:#d2f1df;color:#173c49;font-size:12px}
+.editorial-home .discovery-next p{font-size:12px}
+.editorial-home .discovery-trust{font-size:11px;color:#566d78}.editorial-home .discovery-trust a{color:#087f79}
+.editorial-home button:focus-visible{outline:3px solid #b17c35;outline-offset:3px}
+@media(max-width:740px){
+ .editorial-hero{border-radius:25px;min-height:460px}
+ .editorial-hero .discovery-hero-content{min-height:460px;padding:19px 19px 23px;gap:24px}
+ .editorial-hero .discovery-hero-photo{background-position:center 40%}
+ .editorial-hero h1{font-size:clamp(43px,12vw,62px)}
+ .editorial-hero p{font-size:14px;line-height:1.55}
+ .editorial-hero .hero-bottom{display:grid;grid-template-columns:1fr;gap:8px}
+ .editorial-hero .hero-bottom .btn{width:100%;font-size:13px}
+ .editorial-hero .discovery-hero-count{font-size:10px;gap:5px}
+ .editorial-hero .count-divider{margin:0 5px}
+ .editorial-hero .discovery-kicker,.editorial-location{font-size:9px;padding:7px 8px;letter-spacing:.5px}
+ .editorial-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+ .editorial-shortcut{min-height:100px;flex-direction:column;align-items:flex-start;padding:11px 9px;gap:8px;border-radius:16px}
+ .editorial-shortcut>span:nth-child(2){flex:none}.editorial-shortcut strong{font-size:12px;line-height:1.3}
+ .editorial-shortcut small,.editorial-arrow{display:none}
+ .editorial-shortcut-icon{width:36px;height:36px;border-radius:11px}
+ .editorial-home .discovery-intro{margin-top:28px;gap:8px}
+ .editorial-home .discovery-intro h2{font-size:23px}
+ .editorial-home .discover-tour-grid .discover-tour-card{flex-basis:min(83vw,326px)}
+ .editorial-home .spot-card{flex-basis:min(68vw,265px)}
+ .editorial-home .discovery-intro p{font-size:12px}
+ .editorial-home .text-link{white-space:normal;text-align:right;flex:0 0 76px}
+}
+@media(prefers-reduced-motion:no-preference){.editorial-home button{transition:background .18s ease,box-shadow .18s ease}.editorial-shortcut:hover{box-shadow:0 8px 24px #173c441b}}
+
+/* v0.9.1: photo-led travel editorial. A failed image leaves a decorative fallback. */
+.editorial-photo,.editorial-hero-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.editorial-photo[hidden],.editorial-hero-image[hidden]{display:none!important}
+.editorial-hero .discovery-hero-photo{background:#315f6b}
+.editorial-hero .editorial-hero-image{object-position:center 40%}
+.editorial-hero .discovery-hero-shade{background:linear-gradient(0deg,#092533f5 0%,#092533e0 36%,#09253375 62%,#09253310 92%)}
+.editorial-hero .discovery-hero-content{min-height:470px;gap:20px}
+.editorial-hero .editorial-hero-copy{margin-top:82px}
+.editorial-hero .hero-bottom .btn{box-shadow:none}
+.editorial-hero .hero-bottom .btn-primary{background:#e2f6e9;color:#123b37}
+.editorial-home .tour-art,.tours-page-grid .tour-art{height:185px}
+.tour-art-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#10283266,transparent 60%);pointer-events:none}
+.tour-art-photo .tour-art-tag{z-index:2;background:#fff;color:#23433f}
+.editorial-home .spot-visual{height:165px}
+.spot-visual small{z-index:2;background:#ffffffed;color:#193c45;border-radius:99px;padding:5px 8px}
+.spot-open:focus-visible,.discover-button:focus-visible{outline:3px solid #0b9188;outline-offset:-3px}
+.editorial-home .spot-content{min-height:145px}
+.editorial-home .discovery-intro{align-items:flex-start}
+.editorial-home .text-link{align-self:center}
+.editorial-home .discovery-next{margin-top:20px}
+.editorial-credits{margin:14px 0 22px;color:#526975;font-size:11px;line-height:1.65}
+.editorial-credits summary{cursor:pointer;color:#176a67;font-weight:750;padding:10px 0;min-height:35px}
+.editorial-credits ul{padding-left:18px}.editorial-credits a{color:#176a67;text-decoration:underline}
+.tours-page-grid .discover-tour-card{border-radius:23px;border-color:#e2e9e5}
+.tours-page-grid .tour-card-content{padding:18px}
+.tours-page-grid .tour-card-content h3{font-size:19px}
+.tours-page-grid .tour-card-content p{font-size:13px;min-height:0}
+.tours-page-grid .discover-button{min-height:44px;font-size:12px;white-space:normal;border-radius:13px;background:#173c49}
+@media(max-width:740px){
+ .editorial-hero .discovery-hero-content{min-height:444px;gap:18px}
+ .editorial-hero .editorial-hero-copy{margin-top:54px}
+ .editorial-hero .editorial-hero-image{object-position:48% 32%}
+ .editorial-home .tour-art,.tours-page-grid .tour-art{height:170px}
+ .editorial-home .spot-visual{height:155px}
+ .editorial-home .discovery-intro h2{font-size:22px}
+ .editorial-home .text-link{font-size:11px;flex-basis:70px}
+ .editorial-shortcut{min-height:85px}
+}
+
+/* v0.9.2 — complete editorial visual system */
+.editorial-page-head{padding:24px 22px;background:#e9f2eb;border:1px solid #e0e9e2;border-radius:23px;margin:0 0 18px}
+.editorial-page-head h1{font-size:clamp(27px,4vw,39px);line-height:1.1;letter-spacing:-1px;color:#153b44;margin:8px 0}
+.editorial-page-head p{color:#526975;line-height:1.55;font-size:14px;margin:0}
+.tour-selection-note{margin:0 0 12px;font-size:12px;font-weight:750;color:#52736c}
+.tour-preview-button{border:1px solid #dce8e3;border-radius:12px;background:#f1f7f2;color:#23665f;font-size:12px;font-weight:750;min-height:44px;padding:9px 12px}
+.tour-card-actions{flex-wrap:wrap}.tour-card-actions .tour-pace{flex:1 1 100%}
+.tour-card-actions .discover-button{flex:1;white-space:normal}
+.tour-editorial-cover{min-height:190px;overflow:hidden;background:#17424a!important;align-items:flex-end}
+.tour-editorial-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#092b38ee,#092b3830);pointer-events:none}
+.tour-editorial-copy{position:relative;z-index:1;color:white;max-width:90%}
+.tour-editorial-copy .tour-eyebrow,.tour-editorial-copy p{color:#e0f4eb}
+.tour-editorial-copy h2{font-size:25px}
+.tour-editorial-cover .tour-detail-close{z-index:2;background:white;width:44px;height:44px}
+.tour-info-body .tour-static-step{display:grid;place-items:center}
+.tour-info-body .tour-stop-body{border-radius:15px;padding:14px}
+.tour-info-body .tour-stop-body strong{font-size:14px}
+.tour-info-body .tour-stop-body small{font-size:12px}
+.tour-info-body .tour-detail-footer .btn{width:100%;min-height:48px}
+.saved-editorial-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.saved-editorial-card{position:relative;border:1px solid #dfe8e3;background:white;border-radius:21px;overflow:hidden;min-width:0;box-shadow:0 6px 24px #153b4410}
+.saved-editorial-open{display:block;width:100%;border:0;background:none;text-align:left;color:#153b44;padding:0}
+.saved-editorial-visual{height:145px;display:grid;place-items:center;position:relative;background:#dfefe6;font-size:42px}
+.saved-editorial-copy{display:grid;gap:8px;padding:16px;min-height:116px}
+.saved-editorial-copy small{color:#187f74;font-size:11px;font-weight:750}
+.saved-editorial-copy strong{font-size:17px;line-height:1.25}
+.saved-editorial-copy>span{font-size:12px;color:#187f74;font-weight:750}
+.saved-remove{position:absolute;right:10px;top:10px;width:44px;height:44px;border:0;border-radius:50%;background:white;color:#a64952;font-size:22px;box-shadow:0 4px 12px #123b4433}
+.saved-empty{text-align:center;background:white;border:1px solid #e0e8e3;border-radius:24px;padding:38px 24px;color:#153b44}
+.saved-heart{display:grid;place-items:center;width:68px;height:68px;margin:0 auto 18px;background:#e4f2e9;border-radius:23px;color:#187f74;font-size:42px}
+.saved-empty h2{font-size:23px;letter-spacing:-.5px}.saved-empty p{margin:12px auto 20px;max-width:340px;font-size:14px;line-height:1.55;color:#526975}
+.saved-empty .btn{min-height:48px;background:#173c49;color:white}
+@media(max-width:740px){.saved-editorial-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.saved-editorial-visual{height:112px}.saved-editorial-copy{padding:12px;min-height:120px}.saved-editorial-copy strong{font-size:14px}.editorial-page-head{padding:19px 16px}.tour-editorial-cover{min-height:165px}.tour-editorial-copy h2{font-size:20px}}
+@media(prefers-reduced-motion:no-preference){.saved-editorial-card,.tour-preview-button,.discover-button{transition:box-shadow .18s ease,background .18s ease}.saved-editorial-card:hover{box-shadow:0 10px 26px #153b4420}}
+
+.about-editorial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.about-editorial-card,.about-disclosure{background:white;border:1px solid #dfe9e3;border-radius:22px;padding:22px;color:#173c49}.about-editorial-card h2,.about-disclosure h2{font-size:20px;letter-spacing:-.5px;margin:12px 0}.about-editorial-card p,.about-disclosure p{font-size:13px;line-height:1.6;color:#526975;margin:9px 0 16px}.about-editorial-icon{width:48px;height:48px;background:#e4f2e9;display:grid;place-items:center;color:#176a67;border-radius:14px}.about-editorial-icon svg{width:24px;height:24px}.about-editorial-card .btn{min-height:44px;border:1px solid #dce9e3}.about-disclosure{margin:16px 0}.about-disclosure a{color:#176a67;text-decoration:underline}@media(max-width:740px){.about-editorial-grid{grid-template-columns:1fr}}
+
+.ns-icon{display:inline-block;width:22px;height:22px;flex:none;vertical-align:middle}
+.tour-glyph .ns-icon,.spot-visual>span .ns-icon{width:52px;height:52px;color:#176a67}
+@keyframes ns-enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:no-preference){
+ .editorial-home .editorial-hero{animation:ns-enter .48s cubic-bezier(.2,.75,.25,1) both}
+ .editorial-home .editorial-hero-copy{animation:ns-enter .52s .08s cubic-bezier(.2,.75,.25,1) both}
+ .editorial-home .editorial-shortcut{animation:ns-enter .4s .10s both}
+ .editorial-home .editorial-shortcut:nth-child(2){animation-delay:.17s}
+ .editorial-home .editorial-shortcut:nth-child(3){animation-delay:.24s}
+ .page-head,.editorial-page-head{animation:ns-enter .28s both}
+ .saved-editorial-grid,.saved-empty,.tours-page-grid,.about-editorial-grid{animation:ns-enter .35s .05s both}
+ .editorial-shortcut:active,.discover-button:active,.tour-preview-button:active{transform:scale(.98)}
+}
+@media(prefers-reduced-motion:reduce){.editorial-home *{animation:none!important;transition:none!important}}
