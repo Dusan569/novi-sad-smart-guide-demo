@@ -1,0 +1,39 @@
+/* v0.6 Google Map UI. Rendering and touch gestures belong to Google's map SDK. */
+.google-guide-map{position:relative;overflow:hidden;touch-action:none;overscroll-behavior:contain}
+.google-guide-map .gm-style{touch-action:none}
+.google-guide-marker{display:flex;align-items:center;gap:4px;border:0;border-radius:16px;background:rgba(255,255,255,.98);
+ box-shadow:0 4px 15px #1836503e;font:700 11px/1.2 system-ui,sans-serif;max-width:165px;padding:4px 8px 4px 4px;
+ cursor:pointer;color:#183650;min-height:35px;white-space:nowrap;pointer-events:auto}
+.google-guide-marker-icon{display:grid;place-items:center;min-width:28px;height:28px;background:#107f88;
+ border-radius:50%;color:#fff;font-size:14px}
+.google-guide-marker-label{display:block;max-width:115px;overflow:hidden;text-overflow:ellipsis}
+.google-user-dot{display:block;width:22px;height:22px;border:4px solid white;border-radius:50%;
+ background:#1486ed;box-shadow:0 1px 13px #173c5678;position:relative}
+.google-user-dot.has-heading:before{content:'▲';position:absolute;left:1px;top:-20px;color:#1486ed;font-size:16px;
+ transform:rotate(var(--heading));transform-origin:center 25px}
+.google-guide-map + .map-style-control,.discovery-map-tray .map-style-control{display:none!important}
+.google-guide-map .raster-zoom,.google-guide-map .raster-overlay{display:none!important}
+@media(max-width:740px){
+ .google-guide-marker{font-size:11px;max-width:145px}
+ .google-guide-marker-label{max-width:92px}
+}
+
+/* Remove controls inherited from the experimental raster UI when Google is active. */
+.google-map-active .map-style-control{display:none!important}
+.google-map-active .heading-controls{top:12px;right:12px;left:auto;display:flex;flex-direction:column;max-width:54px}
+.google-map-active .heading-status{pointer-events:none;max-width:52%;font-size:10px;top:auto;bottom:12px}
+.google-map-active .gm-bundled-control{z-index:2}
+@media(max-width:740px){
+ .google-map-active .heading-controls{top:66px;right:10px}
+ .google-map-active .map-badge{max-width:calc(100% - 125px)}
+}
+
+/* v0.7.9 compact map pins: labels live in the place detail/list, not over streets. */
+.google-guide-marker-place,.google-guide-marker-poi,.google-guide-marker-tour,.google-guide-marker-cluster{
+ width:36px;height:36px;min-height:36px;max-width:36px;padding:3px;box-sizing:border-box;border-radius:50%;justify-content:center;gap:0;
+}
+.google-guide-marker-place .google-guide-marker-label,.google-guide-marker-poi .google-guide-marker-label,.google-guide-marker-tour .google-guide-marker-label,.google-guide-marker-cluster .google-guide-marker-label{display:none}
+.google-guide-marker-place .google-guide-marker-icon,.google-guide-marker-poi .google-guide-marker-icon,.google-guide-marker-tour .google-guide-marker-icon,.google-guide-marker-cluster .google-guide-marker-icon{width:30px;min-width:30px;height:30px;font-size:15px}
+.google-guide-marker-tour .google-guide-marker-icon{background:#173d62;font-size:13px}
+.google-guide-marker-cluster{width:42px;height:42px;min-height:42px;max-width:42px}
+.google-guide-marker-cluster .google-guide-marker-icon{width:36px;min-width:36px;height:36px;background:#175b71;font-size:15px}
