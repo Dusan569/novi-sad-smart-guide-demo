@@ -1200,8 +1200,8 @@ setCat=function(cat){
  if(state.page!=='explore')showPage('explore');
  show();
 };
-root.toggleCalmVenues=()=>show();
+// Keep the sheet entry separate from the map marker toggle.
 root.NSSG_VENUES=Object.freeze({open:show,close,load,origin,matchEditorial,findLive,
- nearbySnapshot:()=>fallbackFor(origin().point,state.radius),
+ nearbySnapshot:(radius=state.radius)=>fallbackFor(origin().point,radius),
  snapshot:()=>({open,currentTab,lookupStatus,searchBusy,count:(state.poiList||[]).filter(p=>p.category?.cat==='food').length})});
 })(window);

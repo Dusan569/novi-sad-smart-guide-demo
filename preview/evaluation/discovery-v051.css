@@ -141,3 +141,7 @@
 
 /* v0.7.8 Nearby: visible result count and GPS/area label above the map. */
 .nearby-discovery-status{margin:7px 0 12px;padding:9px 12px;border-radius:12px;background:#e9f5f2;color:#295465;font-size:12px;line-height:1.45;overflow-wrap:anywhere}.nearby-discovery-status[hidden]{display:none}
+
+/* Noninteractive notices must never intercept the venue route button. */
+.calm-map .map-poi-status,.calm-map .gps-inline-status{pointer-events:none}
+.calm-map:has(#poiPopup:not(.hidden)) #poiLoadInfo{visibility:hidden}

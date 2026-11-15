@@ -16,7 +16,9 @@ const distKm=(a,b)=>{
  const s=Math.sin(dlat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dlng/2)**2;
  return 12742*Math.atan2(Math.sqrt(s),Math.sqrt(Math.max(0,1-s)));
 };
-let tourPreview=null,allPins=false,showVenuePins=false;
+let tourPreview=null,allPins=false,venuePinOverride=null;
+const venuePinsEnabled=()=>venuePinOverride??!!((state.nearbyOnly&&state.nearbyDiscovery)||(state.localVenueVisible&&state.cat==='food'));
+function mapVenueItems(){return window.NSSG_VENUES?.nearbySnapshot(3000)||[];}
 const currentStops=()=>tourPreview?.ids.map((id,i)=>{
  const p=places.find(x=>x.id===id);
  return p&&{lat:p.lat,lng:p.lng,label:name(p),number:i+1,id:p.id,click:()=>openPlace(p.id)};
@@ -678,26 +680,26 @@ function refreshCalmMarkers(){
      const selected=state.nearbyOnly&&state.nearbyDiscovery?candidates.slice(0,5):(allPins||state.cat!=='all'?candidates:candidates.slice().sort((a,b)=>distKm(a,markerCenter)-distKm(b,markerCenter)).slice(0,5));
      const clusterNearby=!!(state.nearbyOnly&&state.nearbyDiscovery);
      state.map.setPlaces(selected.map(p=>({lat:p.lat,lng:p.lng,emoji:p.emoji,label:name(p),clusterNearby,click:()=>openPlace(p.id)})));
-     state.map.setPois(clusterNearby?filteredPois().slice(0,6).map(p=>({...p,clusterNearby})):(showVenuePins||(state.localVenueVisible&&state.cat==='food')?filteredPois().slice(0,12):[]));
+     const venueItems=venuePinOverride===true?mapVenueItems().slice(0,12):
+       (clusterNearby?filteredPois().slice(0,6):filteredPois().slice(0,12));
+     state.map.setPois(venuePinsEnabled()?venueItems.map(p=>({...p,clusterNearby:true})):[]);
    }
  }
  const btn=document.getElementById('calmPinToggle');if(btn){btn.textContent=allPins?label('✓ Sva mesta na mapi','✓ All places on map'):label('○ Prikaži više oznaka','○ Show more markers');btn.setAttribute('aria-pressed',String(allPins));}
+ const venueBtn=document.getElementById('calmVenuePinToggle');if(venueBtn){const blocked=!!(tourPreview||state.activeRoute);const visible=!blocked&&venuePinsEnabled();venueBtn.setAttribute('aria-pressed',String(visible));venueBtn.textContent=visible?label('☕ Sakrij oznake lokala','☕ Hide venue markers'):label('☕ Prikaži oznake lokala','☕ Show venue markers');}
 }
 updateMarkers=function(){nativeUpdateMarkers();refreshCalmMarkers()};
 window.toggleCalmPins=function(){allPins=!allPins;refreshCalmMarkers()};
-window.toggleCalmVenues=async function(){
- if(state.activeRoute){showToast(state.lang==='sr'?'Završi rutu pre prikaza lokala.':'Finish navigation before showing venues.');return;}
- if(showVenuePins){showVenuePins=false;refreshCalmMarkers();showToast(state.lang==='sr'?'Lokali sakriveni.':'Venue pins hidden.');return;}
- if(!state.poiList.length||!filteredPois().length)await loadNearbyPois();
- if(state.poiList.length && !filteredPois().length && state.map){
-   state.radius=10000;updateResults();
- }
- if(!state.poiList.length){
-   showToast(state.lang==='sr'?'Javni servis nije vratio lokale; pokušaj kasnije.':'Venue service returned no places; try again later.');return;
- }
- showVenuePins=true;refreshCalmMarkers();
- showToast(state.lang==='sr'?'U listi '+filteredPois().length+' OSM mesta; na mapi najviše 12, da ne bude gužve.':'List: '+filteredPois().length+' OSM places; up to 12 map pins for clarity.');
+window.toggleCalmVenuePins=function(){
+ if(tourPreview||state.activeRoute){showToast(label('Zatvori obilazak ili završi rutu pre prikaza lokala.','Close the tour or finish navigation before showing venues.'));return;}
+ venuePinOverride=!venuePinsEnabled();
+ document.getElementById('poiLoadInfo')?.classList.add('hidden');
+ if(!venuePinOverride)closePoiPopup();
+ refreshCalmMarkers();
+ const count=mapVenueItems().length;
+ showToast(venuePinOverride?(count?label('Lokali iz sačuvanog kataloga prikazani na mapi.','Saved directory venues shown on map.'):label('Nema mapiranih lokala u ovom delu grada.','No mapped venues in this area.')):label('Lokali sakriveni.','Venue pins hidden.'));
 };
+window.NSSG_MAP_VENUES=Object.freeze({items:mapVenueItems});
 explore=function(el){
  nativeExplore(el);
  const filterBar=el.querySelector('.filter-bar');
@@ -721,21 +723,21 @@ explore=function(el){
    syncMode();
    bar.querySelector('#citywideToggle').onclick=()=>{
      setNearbyOnly(false);
-     allPins=false;
+     allPins=false;venuePinOverride=null;
      refreshCalmMarkers();
      state.map?.fitPoints(places.map(p=>({lat:p.lat,lng:p.lng})),{top:65,right:36,bottom:95,left:36,maxZoom:13.5});
      syncMode();
    };
    bar.querySelector('#nearbyToggle').onclick=()=>{
      if(tourPreview||state.activeRoute){showToast(label('Završi obilazak ili rutu pre istraživanja okoline.','Finish the tour or route before exploring nearby.'));return;}
-     state.cat='all';state.search='';state.radius=3000;state.nearbyDiscovery=true;allPins=false;showVenuePins=false;
+     state.cat='all';state.search='';state.radius=3000;state.nearbyDiscovery=true;allPins=false;venuePinOverride=null;
      const search=document.getElementById('placeSearch');if(search)search.value='';
      const radius=document.querySelector('.radius-select');if(radius)radius.value='3000';
      setNearbyOnly(true);syncCategories();syncMode();
      const selected=window.NSSG_VENUES?.origin();if(selected)state.map?.easeTo({center:[selected.point.lng,selected.point.lat],zoom:14.5});
      if(selected?.kind!=='gps')gps(()=>{if(state.nearbyDiscovery&&state.nearbyOnly){updateResults();const fresh=window.NSSG_VENUES?.origin();if(fresh?.kind==='gps')state.map?.easeTo({center:[fresh.point.lng,fresh.point.lat],zoom:14.5});}});
    };
-   bar.querySelector('#loadVenuesNew').onclick=()=>window.toggleCalmVenues();
+   bar.querySelector('#loadVenuesNew').onclick=()=>window.NSSG_VENUES?.open();
  }
 
  const wrap=el.querySelector('.discovery-map-wrap');if(!wrap)return;
@@ -745,7 +747,8 @@ explore=function(el){
  const badge=wrap.querySelector('.map-badge');if(badge){badge.setAttribute('aria-live','polite');badge.title=label('Lokacija zahteva dozvolu uređaja','Location requires device permission');}
  const tray=wrap.querySelector('#discoveryMapTray');
  if(tray){
-   tray.insertAdjacentHTML('afterbegin',`<div class="calm-tray-head"><strong>${label('Opcije mape','Map options')}</strong><button type="button" aria-label="${label('Zatvori','Close')}" onclick="toggleDiscoveryMapTray(false)">×</button></div><button type="button" id="calmPinToggle" class="calm-tool" aria-pressed="false" onclick="toggleCalmPins()"></button><button type="button" class="calm-tool" onclick="toggleCalmVenues()">☕ ${label('Prikaži/sakrij oznake lokala','Show/hide venue markers')}</button>`);
+   tray.insertAdjacentHTML('afterbegin',`<div class="calm-tray-head"><strong>${label('Opcije mape','Map options')}</strong><button type="button" aria-label="${label('Zatvori','Close')}" onclick="toggleDiscoveryMapTray(false)">×</button></div><button type="button" id="calmPinToggle" class="calm-tool" aria-pressed="false" onclick="toggleCalmPins()"></button><button type="button" id="calmVenuePinToggle" class="calm-tool" aria-pressed="false" onclick="toggleCalmVenuePins()">☕ ${label('Prikaži oznake lokala','Show venue markers')}</button>`);
+   const legacy=wrap.querySelector('#poiToggle');if(legacy){legacy.remove();}
    const tracking=wrap.querySelector('#navLiveControls');if(tracking){tracking.classList.add('calm-nav-tools');tray.appendChild(tracking);}
    const zoom=wrap.querySelector('.raster-zoom');if(zoom){zoom.classList.add('calm-zoom-tools');tray.appendChild(zoom);}
  }
