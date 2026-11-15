@@ -20,6 +20,7 @@ function geoDist(pt,coords){
 }
 async function start(destination,destinationName){
   if(!destination||!Number.isFinite(+destination.lat)||!Number.isFinite(+destination.lng))return;
+  const service=root.NSSG_KEYLESS_MAP?'routing.openstreetmap.de':'Google Maps';
   const id=++state.routeRequestSeq;
   const origin={lat:state.position.lat,lng:state.position.lng};
   state.activeRoute={destination,name:destinationName,coords:[],isDemo:!state.fromGps};
@@ -40,16 +41,16 @@ async function start(destination,destinationName){
   }
   updateNavigationHUD();
   routePanel('<div class="route-panel-head"><div><strong>🚶 '+escapeHTML(destinationName)+'</strong><p>'+
-    text('Google Maps računa pešačku rutu','Google Maps calculating walking directions')+
+    text('Računamo pešačku rutu','Calculating walking directions')+
     (state.fromGps?'':' · DEMO polazak')+'…</p></div><button class="route-close" onclick="hideRoutePanel()">×</button></div>');
   state.map?.clearRoute();
   if(state.fromGps&&!window.confirm(text(
-    'Da izračunamo rutu, tvoju GPS poziciju i odredište šaljemo servisu Google Maps. Nastaviti?',
-    'Your GPS location and destination will be sent to Google Maps for walking directions. Continue?'))){
+    'Da izračunamo rutu, tvoju GPS poziciju i odredište šaljemo servisu '+service+'. Nastaviti?',
+    'Your GPS location and destination will be sent to '+service+' for walking directions. Continue?'))){
     closeRoute();return;
   }
   try{
-    const data=await root.NSSG_GOOGLE_ENGINE.googleWalkingRoute(origin,destination,state.lang);
+    const data=root.NSSG_KEYLESS_MAP?await root.NSSG_VISITOR_ROUTES.route([origin,destination]):await root.NSSG_GOOGLE_ENGINE.googleWalkingRoute(origin,destination,state.lang);
     if(id!==state.routeRequestSeq)return;
     const coords=data.coords;if(!Array.isArray(coords)||coords.length<2)throw Error('empty-route');
     const maneuvers=(data.maneuvers||[]).map(step=>{
@@ -59,7 +60,7 @@ async function start(destination,destinationName){
     });
     state.activeRoute={destination,name:destinationName,coords,
       maneuvers:maneuvers.filter(x=>Number.isInteger(x.index)),
-      isDemo:!state.fromGps,rerouteAt:0,provider:'google'};
+      isDemo:!state.fromGps,rerouteAt:0,provider:root.NSSG_KEYLESS_MAP?'osm':'google'};
     state.map?.setRoute(coords,destination);
     // One clear initial camera: show the entire real walking route, GPS included,
     // with enough space for the phone's bottom navigation sheet.
@@ -73,7 +74,7 @@ async function start(destination,destinationName){
     const instructions=maneuvers.map(x=>x.instruction).filter(Boolean);
     const list=instructions.length?'<ol class="route-steps-preview">'+instructions.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ol>':'';
     const external='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(destination.lat+','+destination.lng)+'&travelmode=walking';
-    routePanel('<div class="route-panel-head"><div><strong>🚶 '+escapeHTML(destinationName)+'</strong><p>Google Maps · '+
+    routePanel('<div class="route-panel-head"><div><strong>🚶 '+escapeHTML(destinationName)+ '</strong><p>'+service+' · '+
       text('pešačka ruta','walking route')+'</p></div><button class="route-close" onclick="hideRoutePanel()">×</button></div>'+
       '<div class="route-stats">'+stats+'</div>'+list+
       (data.warnings||[]).map(w=>'<p class="route-panel-foot">'+escapeHTML(w)+'</p>').join('')+
@@ -85,6 +86,7 @@ async function start(destination,destinationName){
     if(id!==state.routeRequestSeq)return;
     console.warn('Google walking route unavailable:',root.NSSG_GOOGLE_ENGINE.diagnoseRouteError(error).code);
     state.map?.clearRoute();
+    if(root.NSSG_KEYLESS_MAP){showRouteError(text('Ruta trenutno nije dostupna','Walking route unavailable'),text('Mapa i stanice su i dalje dostupne.','The map and stops are still available.'),destination);return;}
     const code=error?.code||'UNKNOWN';
     const messages={
       CONFIG:[
@@ -130,3 +132,4 @@ async function start(destination,destinationName){
 }
 root.NSSG_GoogleWalkingUI=Object.freeze({start});
 })(window);
+

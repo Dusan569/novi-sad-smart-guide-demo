@@ -43,6 +43,10 @@
   }
   if(browserKey&&!evaluationKey){try{root.localStorage?.setItem(persistentStore,browserKey);}catch(_){}}
 
+  // Presentation entry works on first visit, including browsers that deny location.
+  root.NSSG_VISITOR_VIEW=root.location?.pathname?.includes('/preview/v093/') ||
+    /(?:^|[?&])poseta(?:=1)?(?:&|$)/.test(root.location?.search||'');
+  root.NSSG_KEYLESS_MAP=!!(root.NSSG_VISITOR_VIEW && !browserKey);
   root.NSSG_GOOGLE_CONFIG=Object.freeze({
     browserKey,
     mapId:'DEMO_MAP_ID',
@@ -50,7 +54,7 @@
     enablePlacesSearch:false
   });
   function showKeySetup(){
-    if(browserKey||!root.document?.body||root.document.getElementById('nssg-demo-key-ui'))return;
+    if(root.NSSG_KEYLESS_MAP||browserKey||!root.document?.body||root.document.getElementById('nssg-demo-key-ui'))return;
     const ui=root.document.createElement('section');
     ui.id='nssg-demo-key-ui';
     ui.innerHTML='<style>'+
@@ -92,3 +96,4 @@
   if(root.document?.readyState==='loading')root.document.addEventListener('DOMContentLoaded',showKeySetup,{once:true});
   else showKeySetup();
 })(window);
+
