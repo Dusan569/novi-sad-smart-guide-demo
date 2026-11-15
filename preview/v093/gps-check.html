@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="sr-Latn"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Provera lokacije · Novi Sad vodič</title>
+<style>
+*{box-sizing:border-box}body{font:18px/1.5 system-ui,sans-serif;background:#f5f7f5;color:#15263a;margin:0}
+main{max-width:34rem;margin:auto;padding:3rem 1.25rem}h1{line-height:1.15}button{font:inherit;color:white;background:#164858;border:0;border-radius:.8rem;padding:.85rem 1.15rem}button:disabled{opacity:.65}
+output{display:block;white-space:pre-line;margin:1.25rem 0;padding:1rem;background:white;border-radius:.8rem}small{display:block}
+</style><main><h1>Provera lokacije</h1><p>Proveri da li ovaj pregledač može da dobije tvoju lokaciju na domenu vodiča. Koordinate se ne prikazuju, ne čuvaju i ne šalju vodiču.</p>
+<button id="check">Proveri moju lokaciju</button><output id="result" aria-live="polite">Spremno za proveru.</output><small id="details"></small></main>
+<script>
+const button=document.querySelector('#check'),result=document.querySelector('#result'),details=document.querySelector('#details');
+let attempt=0;
+button.onclick=()=>{
+ const id=++attempt;
+ const policy=document.permissionsPolicy||document.featurePolicy;
+ const blocked=policy?.allowsFeature?.('geolocation')===false;
+ const context=window.top===window.self?'Samostalna stranica':'Stranica u okviru';
+ details.textContent=context;
+ if(!window.isSecureContext||blocked||!navigator.geolocation){
+   result.textContent=blocked?'Ograničenje stranice blokira lokaciju.':!window.isSecureContext?'Pregledač ne smatra ovu stranicu bezbednom.':'Pregledač nema dostupnu funkciju za lokaciju.';
+   return;
+ }
+ result.textContent='Čekam odgovor telefona…';
+ const finish=message=>{if(id===attempt){result.textContent=message;button.disabled=false;clearTimeout(timer);}};
+ const timer=setTimeout(()=>finish('Pregledač još nije odgovorio. Proveru možeš ponoviti.'),22000);
+ button.disabled=true;
+ try{
+   navigator.geolocation.getCurrentPosition(
+    pos=>finish('Lokacija radi. Procenjena preciznost: '+Math.round(pos.coords.accuracy)+' m.'),
+    err=>finish(({1:'Pristup odbijen',2:'Položaj trenutno nedostupan',3:'Isteklo vreme čekanja'})[err.code]+' (kod '+err.code+'). '+(err.message||'')),
+    {enableHighAccuracy:true,maximumAge:0,timeout:16000});
+ }catch{finish('Pregledač je zaustavio zahtev pre očitavanja lokacije.');}
+ if(navigator.permissions?.query)navigator.permissions.query({name:'geolocation'}).then(p=>{
+   const show=()=>{if(id===attempt)details.textContent=context+' · Dozvola koju prijavljuje pregledač: '+p.state;};
+   show();p.onchange=show;
+ }).catch(()=>{});
+};
+</script></html>
