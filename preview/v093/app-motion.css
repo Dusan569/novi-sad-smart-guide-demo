@@ -1,0 +1,12 @@
+/* Scripted reveals work in WebKit and Chromium, with visible content as the fallback. */
+.ns-motion-item{animation:none!important}
+@media(prefers-reduced-motion:no-preference){
+ #page .btn,#page .discover-button,#page .tour-preview-button,
+ #modal .btn,.venue-surface button{
+  transition:transform .16s ease,background .16s ease,box-shadow .16s ease;
+ }
+ #page .btn:active,#page .discover-button:active,#page .tour-preview-button:active,
+ #modal .btn:active,.venue-surface button:active{transform:scale(.975)}
+ .mobile-nav button .ns-icon{transition:transform .2s ease}
+ .mobile-nav button:active .ns-icon{transform:scale(.9)}
+}
