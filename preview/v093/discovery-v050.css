@@ -178,3 +178,40 @@
  .editorial-shortcut:active,.discover-button:active,.tour-preview-button:active{transform:scale(.98)}
 }
 @media(prefers-reduced-motion:reduce){.editorial-home *{animation:none!important;transition:none!important}}
+
+/* Home entrance and tactile controls. Content stays visible without animation support. */
+@keyframes ns-home-photo {
+ from { transform:scale(1.045); }
+ to { transform:scale(1); }
+}
+@media(prefers-reduced-motion:no-preference){
+ .editorial-home .editorial-hero-copy{animation:none}
+ .editorial-home .editorial-hero-top{animation:ns-enter .45s .05s both}
+ .editorial-home .editorial-region{display:inline-block;animation:ns-enter .45s .10s both}
+ .editorial-home .editorial-hero h1{animation:ns-enter .60s .16s cubic-bezier(.2,.75,.25,1) both}
+ .editorial-home .editorial-hero-copy>p{animation:ns-enter .55s .25s both}
+ .editorial-home .hero-bottom{animation:ns-enter .50s .34s both}
+ .editorial-home .discovery-hero-count{animation:ns-enter .45s .42s both}
+ .editorial-home .editorial-hero-image{animation:ns-home-photo 1.8s cubic-bezier(.2,.75,.25,1) both}
+ .editorial-home .editorial-shortcut{animation-delay:.42s;animation-fill-mode:backwards}
+ .editorial-home .editorial-shortcut:nth-child(2){animation-delay:.49s}
+ .editorial-home .editorial-shortcut:nth-child(3){animation-delay:.56s}
+ .editorial-home .btn,.editorial-home .editorial-shortcut,
+ .editorial-home .discover-button,.editorial-home .spot-open{
+   transition:transform .18s ease,background .18s ease,box-shadow .18s ease;
+ }
+ .editorial-home .btn:active,.editorial-home .editorial-shortcut:active,
+ .editorial-home .discover-button:active,.editorial-home .spot-open:active{transform:scale(.975)}
+ @supports(animation-timeline:view()){
+   .editorial-home .discover-tour-card,.editorial-home .spot-card,
+   .editorial-home .discovery-next{
+     animation:ns-enter linear both;
+     animation-timeline:view();
+     animation-range:entry 0% entry 65%;
+   }
+ }
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ .editorial-home .editorial-shortcut:hover{transform:translateY(-3px);box-shadow:0 10px 25px #173c4420}
+ .editorial-home .btn:hover{transform:translateY(-2px)}
+}
