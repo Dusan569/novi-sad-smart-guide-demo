@@ -10,3 +10,24 @@
  .mobile-nav button .ns-icon{transition:transform .2s ease}
  .mobile-nav button:active .ns-icon{transform:scale(.9)}
 }
+
+/* Consistent feedback for filters, favorite controls and detail actions. */
+#page button:focus-visible,#modal button:focus-visible,.venue-surface button:focus-visible{
+ outline:3px solid #0b8278;outline-offset:3px;
+}
+@media(prefers-reduced-motion:no-preference){
+ .city-discovery-bar button,.filter-bar .chip,.place-fav,.saved-remove,
+ .guide-actions button,.tour-stop-actions button,.tour-overview-actions button,
+ .mobile-nav button svg,.text-link{
+  transition:transform .16s ease,background .16s ease,color .16s ease,border-color .16s ease;
+ }
+ .city-discovery-bar button:active,.filter-bar .chip:active,.place-fav:active,
+ .saved-remove:active,.guide-actions button:active,.tour-stop-actions button:active,
+ .tour-overview-actions button:active,.text-link:active{transform:scale(.96)}
+ .mobile-nav button:active svg{transform:scale(.9)}
+}
+@media(prefers-reduced-motion:reduce){
+ .city-discovery-bar button,.filter-bar .chip,.place-fav,.saved-remove,
+ .guide-actions button,.tour-stop-actions button,.tour-overview-actions button,
+ .mobile-nav button svg,.text-link{transition:none}
+}

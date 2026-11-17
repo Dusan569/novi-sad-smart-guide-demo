@@ -32,8 +32,8 @@
  function fail(error){
   pending=false;
   status(error?.code===1?
-   text('Pregledač je blokirao lokaciju. Dozvoli lokaciju ovom sajtu u meniju pregledača.','Your browser blocked location. Allow location for this site in the browser menu.'):
-   text('Telefon još nije pronašao lokaciju. Proveri da li je lokacija uključena i pokušaj ponovo.','Your phone has not found its location. Check that location is enabled and retry.'),true);
+   text('Lokacija je blokirana. Dozvoli je u meniju pregledača.','Location blocked. Allow it in the browser menu.'):
+   text('Telefon još traži lokaciju. Pokušaj ponovo.','Location not found yet. Please retry.'),true);
  }
  function locate(highAccuracy){
   try{
@@ -54,7 +54,7 @@
    return;
   }
   pending=true;
-  status(text('Tražimo tvoju lokaciju. Ako telefon pita za pristup, izaberi Dozvoli.','Finding your location. If your phone asks for access, choose Allow.'));
+  status(text('Tražimo lokaciju… Ako telefon pita, izaberi Dozvoli.','Finding location… Choose Allow if asked.'));
   // A Permissions API query can disagree with the native prompt or never resolve.
   // Ask geolocation directly and use its actual response.
   locate(true);

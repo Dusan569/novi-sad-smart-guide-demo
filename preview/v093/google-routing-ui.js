@@ -45,8 +45,8 @@ async function start(destination,destinationName){
     (state.fromGps?'':' · DEMO polazak')+'…</p></div><button class="route-close" onclick="hideRoutePanel()">×</button></div>');
   state.map?.clearRoute();
   if(state.fromGps&&!window.confirm(text(
-    'Da izračunamo rutu, tvoju GPS poziciju i odredište šaljemo servisu '+service+'. Nastaviti?',
-    'Your GPS location and destination will be sent to '+service+' for walking directions. Continue?'))){
+    'Poslati tvoju lokaciju servisu '+service+' za pešačku rutu?',
+    'Send your location to '+service+' for walking directions?'))){
     closeRoute();return;
   }
   try{

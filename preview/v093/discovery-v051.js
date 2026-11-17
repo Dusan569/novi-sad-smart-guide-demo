@@ -285,9 +285,9 @@ function updateWalkHud(){
 
 function finishTour(){
  const data=tourStateForUI();if(!data)return;
- if(!window.confirm(label('Završiti ovaj obilazak? Ruta i aktivni vodič će biti zatvoreni, a sačuvana omiljena mesta ostaju.','Finish this tour? The route and active guide will close. Your favourite places stay saved.')))return;
+ if(!window.confirm(label('Završiti obilazak?','Finish this walk?')))return;
  stopPreview();
- showToast(label('Obilazak je završen. Možeš započeti novu šetnju.','Tour finished. You can start another walk.'));
+ showToast(label('Obilazak je završen.','Walk finished.'));
 }
 function tourOnMapReady(){
  if(!tourPreview||!state.map){renderPersistentTour();return;}
@@ -347,8 +347,8 @@ const gpsFixUsable=()=>state.fromGps&&Number.isFinite(state.position?.lat)&&Numb
 function askTourGps(previouslyApproved=false){
  const service=window.NSSG_KEYLESS_MAP?'routing.openstreetmap.de':'Google Routes';
  if(!previouslyApproved&&!window.confirm(label(
-  'Da te vodimo OD TVOJE TRENUTNE LOKACIJE do prve znamenitosti, pa kroz celu šetnju? Uz dozvolu koristićemo GPS i poslati lokaciju servisu '+service+' radi izračunavanja pešačke rute. GPS prati samo dok je aplikacija otvorena.',
-  'Navigate FROM YOUR CURRENT LOCATION to the first landmark and along the entire tour? With consent, GPS location is sent to '+service+' to calculate walking directions. Tracking works only while the app is open.'
+  'Dozvoljavaš GPS i slanje lokacije servisu '+service+' za ovu šetnju?',
+  'Allow GPS and send your location to '+service+' for this walk?'
   )))return Promise.resolve(false);
  if(gpsFixUsable())return Promise.resolve(true);
  if(!navigator.geolocation||!window.isSecureContext){
