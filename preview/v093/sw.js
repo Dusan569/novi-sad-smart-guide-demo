@@ -1,9 +1,9 @@
 // One complete, immutable app shell per release. Google responses/keys are never cached.
-const RELEASE = '0936';
+const RELEASE = '0937';
 // Scope separation keeps a preview from changing the public root's offline shell.
 const CACHE_PREFIX = 'nssg-shell:'+new URL('./',self.location.href).pathname+':';
-const CACHE = CACHE_PREFIX+'v0.9.3.6';
-const VERSIONED = ['app-motion.js','app-motion.css','visitor-routes.js','map-engine.js','walk-paths.json','google-maps-engine.js','google-maps-config.js','google-routing-ui.js',
+const CACHE = CACHE_PREFIX+'v0.9.3.7';
+const VERSIONED = ['location-startup.js','location-startup.css','app-motion.js','app-motion.css','visitor-routes.js','map-engine.js','walk-paths.json','google-maps-engine.js','google-maps-config.js','google-routing-ui.js',
   'google-places-ui.js','google-maps.css','attractions-guide-v062.js','attractions-guide-v062.css',
   'discovery-v050.js','discovery-v050.css','discovery-v051.js','discovery-v051.css','tour-session-v067.css','walk-mode-v069.css','venues-v071.js','venues-v071.css'];
 const ASSETS = ['./index.html', ...VERSIONED.map(file=>'./'+file+'?v='+RELEASE),
