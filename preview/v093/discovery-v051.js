@@ -58,7 +58,7 @@ function renderPersistentTour(){
  let bar=document.getElementById('nssgPersistentTour');
  if(!bar){bar=document.createElement('aside');bar.id='nssgPersistentTour';bar.setAttribute('aria-label',label('Tvoj aktivni obilazak','Your active tour'));document.body.appendChild(bar);}
  const info=tourStateForUI();
- if(!info){bar.hidden=true;return;}
+ if(!info||state.page==='home'){bar.hidden=true;return;}
  // On the map, the numbered stops and bottom tour overview are the primary controls.
  const mapOverview=state.page==='explore'&&!!tourPreview&&!!panelEl();
  if(mapOverview){bar.hidden=true;return;}
