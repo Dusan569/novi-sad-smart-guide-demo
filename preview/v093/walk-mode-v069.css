@@ -96,3 +96,96 @@ body.nssg-guided-active:not(:has(#nssgWalkHud:not(.hidden))) #nssgMapEmergencyEx
  display:block;
 }
 #nssgMapEmergencyExit:focus-visible{outline:3px solid #0fa5a0;outline-offset:3px}
+
+/* List shared by the tour preview and the active walk. */
+#modal .walk-stops-header {
+  padding: 20px 60px 20px 18px;
+  color: #173c49;
+  background: #eaf4ee;
+}
+#modal .walk-stops-header h2 { overflow-wrap: anywhere; }
+#modal .walk-stops-header .tour-detail-close { width: 44px; height: 44px; }
+#modal .walk-stops-body { background: #f7f9f7; }
+.walk-stops-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  flex-wrap: wrap;
+  color: #274b53;
+  font-size: 13px;
+}
+.walk-stops-summary span { color: #45616a; }
+.walk-stops-progress {
+  display: block;
+  width: 100%;
+  height: 7px;
+  margin: 9px 0 14px;
+  border: 0;
+  border-radius: 99px;
+  overflow: hidden;
+  background: #e2ebe6;
+  accent-color: #087f79;
+  appearance: none;
+}
+.walk-stops-progress::-webkit-progress-bar { background: #e2ebe6; }
+.walk-stops-progress::-webkit-progress-value { background: #087f79; }
+.walk-stops-progress::-moz-progress-bar { background: #087f79; }
+#modal .walk-stop-list {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+}
+#modal .walk-stop-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 3px 7px;
+  border: 1px solid #dfe8e4;
+  border-radius: 13px;
+  background: #fff;
+}
+#modal .walk-stop-next { border-color: #a3cec2; background: #e6f4ee; }
+.walk-stop-marker,.walk-stop-story {
+  min-height: 44px;
+  min-width: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #173c49;
+  font: inherit;
+}
+.walk-stop-marker {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 850;
+  background: #edf3f0;
+}
+.walk-stop-next .walk-stop-marker { background: #17675e; color: #fff; }
+.walk-stop-marker[aria-pressed="true"] { background: #e2f1e8; color: #17675e; }
+.walk-stop-story {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+.walk-stop-story strong { display: block; font-size: 14px; line-height: 1.32; }
+.walk-stop-story small { display: block; margin-top: 3px; font-size: 11px; color: #226457; }
+.walk-stop-chevron { color: #317168; font-size: 20px; }
+#modal .walk-stops-action { grid-template-columns: minmax(0, 1fr); }
+#modal .walk-stops-action .btn { min-height: 46px; }
+@media (prefers-reduced-motion: no-preference) {
+  .walk-stop-story,.walk-stop-marker { transition: background-color .16s ease; }
+  .walk-stop-story:active,button.walk-stop-marker:active { background-color: #d2ebe0; color: #173c49; }
+}

@@ -78,10 +78,37 @@ function discoverHome(el){
  <section class="discovery-next"><div class="discovery-next-icon">${editorialIcon('nearby')}</div><div><strong>${L('Šta ti je najbliže?','What is closest to you?')}</strong><p>${state.fromGps?L('Istraži mesta oko svoje lokacije.','Explore places near your location.'):L('Dozvoli lokaciju ili istraži izabrani deo grada.','Allow location or explore a selected area.')}</p></div><button type="button" onclick="openDiscoveryHomeNearby()">${L('Istraži','Explore')} ↗︎</button></section>
  <div class="discovery-trust">${L('Udaljenosti bez GPS-a su demonstracione. Proveri radno vreme, cene i pristup pre posete. Nezvanični razvojni demo.','Distances without GPS are illustrative. Verify hours, prices and access before visiting. Unofficial development demo.')} </div>${photoCredits()}</div>`;
 }
+function renderWalkStops(w,visited=null){
+ const next=visited&&w.ids.find(id=>!visited.has(id));
+ return '<ol class="tour-detail-stops walk-stop-list" role="list">'+w.ids.map((id,index)=>{
+   const place=byId(id),name=P(place);
+   const done=visited?.has(id),upNext=id===next;
+   const status=done?L('Obiđeno','Visited'):upNext?L('Sledeća stanica','Next stop'):'';
+   const badge=done?'✓':index+1;
+   return `<li class="tour-detail-stop walk-stop-row${upNext?' walk-stop-next':''}">
+    ${visited?`<button class="walk-stop-marker" type="button" aria-label="${L('Označi kao obiđeno','Mark visited')} · ${name}" aria-pressed="${done}" data-stop-id="${id}" onclick="toggleTourStop('${w.id}','${id}')">${badge}</button>`:
+      `<span class="walk-stop-marker" aria-hidden="true">${badge}</span>`}
+    <button class="walk-stop-story" type="button" onclick="closeModal();openPlace('${id}')" aria-label="${L('Priča','Story')} · ${name}">
+     <span><strong>${name}</strong>${status?`<small>${status}</small>`:''}</span>
+     <span aria-hidden="true" class="walk-stop-chevron">›</span>
+    </button>
+   </li>`;
+ }).join('')+'</ol>';
+}
+
+function walkStartAction(id){
+ return `<div class="tour-detail-footer walk-stops-action"><button class="btn btn-primary" type="button" onclick="previewDiscoveryTour('${id}')">${L('Kreni u obilazak','Start walking tour')} ↗</button></div>`;
+}
+
 window.showDiscoveryWalkInfo=function(id){
  const w=walksV05.find(x=>x.id===id);if(!w)return;
  const modal=document.getElementById('modal');
- modal.innerHTML='<div class="tour-detail-hero tour-editorial-cover">'+photoMarkup(tourPhotos[w.id])+'<div class="tour-editorial-copy"><span class="tour-eyebrow">'+L(w.tagSr,w.tagEn)+'</span><h2 id="modalTitle">'+L(w.titleSr,w.titleEn)+'</h2><p>'+L(w.summarySr,w.summaryEn)+'</p></div><button class="tour-detail-close" type="button" onclick="closeModal()" aria-label="'+L('Zatvori','Close')+'">×</button></div><div class="tour-detail-body tour-info-body"><div class="tour-detail-meta"><span>'+w.ids.length+' '+L('stanica','stops')+'</span><span>'+w.estimated+'</span><span>'+L(w.paceSr,w.paceEn)+'</span></div><p class="tour-time-note">'+estimatedLabel()+'</p><div class="tour-detail-stops">'+w.ids.map((pid,k)=>'<div class="tour-detail-stop"><span class="tour-step-check tour-static-step">'+(k+1)+'</span><div class="tour-stop-body"><strong>'+P(byId(pid))+'</strong><small>'+escapeHTML(L(curated[pid]?.tipSr||byId(pid).descriptionSr,curated[pid]?.tipEn||byId(pid).descriptionEn))+'</small></div></div>').join('')+'</div><div class="tour-detail-footer"><button class="btn btn-primary" onclick="closeModal();previewDiscoveryTour(\''+w.id+'\')">'+L('Kreni u obilazak','Start walking tour')+' ↗︎</button></div></div>';
+ modal.innerHTML=`<div class="tour-detail-hero tour-editorial-cover">${photoMarkup(tourPhotos[w.id])}<div class="tour-editorial-copy"><h2 id="modalTitle">${L(w.titleSr,w.titleEn)}</h2><p>${L(w.summarySr,w.summaryEn)}</p></div><button class="tour-detail-close" type="button" onclick="closeModal()" aria-label="${L('Zatvori','Close')}">×</button></div>
+  <div class="tour-detail-body tour-info-body walk-stops-body">
+   <div class="walk-stops-summary"><strong>${w.ids.length} ${L('stanica','stops')}</strong><span>${w.estimated} · ${L('procena','estimated')}</span></div>
+   ${renderWalkStops(w)}
+   ${walkStartAction(w.id)}
+  </div>`;
  document.getElementById('modalShade').classList.remove('hidden');modal.scrollTop=0;
 };
 function discoverTours(el){
@@ -90,12 +117,35 @@ function discoverTours(el){
 window.openDiscoveryTour=function(id){
  const w=walksV05.find(x=>x.id===id);if(!w)return;
  if(!activeDiscoveryTour||activeDiscoveryTour.id!==id){activeDiscoveryTour={id,completed:[]};persistTour();}
- const done=new Set(activeDiscoveryTour.completed||[]);
- const root=document.getElementById('modal');
- root.innerHTML=`<div class="tour-detail-hero tour-${w.color}"><div class="tour-detail-icon">${w.emoji}</div><div><span class="tour-eyebrow">${L(w.tagSr,w.tagEn)}</span><h2 id="modalTitle">${L(w.titleSr,w.titleEn)}</h2><p>${L(w.summarySr,w.summaryEn)}</p></div><button class="tour-detail-close" type="button" onclick="closeModal()" aria-label="${L('Zatvori','Close')}">×</button></div><div class="tour-detail-body"><div class="tour-detail-meta"><span>🚶 ${w.ids.length} ${L('stanica','stops')}</span><span>⏱ ${w.estimated}</span><span>✓ ${done.size}/${w.ids.length}</span></div><p class="tour-time-note">${estimatedLabel()}</p><div class="tour-detail-stops">${w.ids.map((pid,k)=>{const p=byId(pid);const complete=done.has(pid);return `<div class="tour-detail-stop"><button class="tour-step-check ${complete?'done':''}" type="button" aria-label="${L('Označi stanicu','Mark stop')} ${k+1}" aria-pressed="${complete}" onclick="toggleTourStop('${w.id}','${pid}')">${complete?'✓':k+1}</button><div class="tour-stop-body"><strong>${P(p)}</strong><small>${escapeHTML(L(curated[pid]?.tipSr||p.descriptionSr,curated[pid]?.tipEn||p.descriptionEn))}</small><div class="tour-stop-actions"><button type="button" onclick="closeModal();openPlace('${pid}')">${L('Detalji','Details')}</button><button type="button" onclick="navigateTourStop('${pid}')">↗︎ ${L('Vodi me','Navigate')}</button></div></div></div>`}).join('')}</div><div class="tour-detail-footer"><button class="btn btn-white" onclick="closeModal()">${L('Zatvori','Close')}</button><button class="btn btn-primary" onclick="navigateTourStop('${w.ids.find(id=>!done.has(id))||w.ids[0]}')">${done.size>=w.ids.length?L('Ponovi obilazak','Walk again'):L('Naredna stanica','Next stop')} ↗︎</button></div><p class="discovery-trust">${L('Cela pešačka putanja kroz sve stanice prikazuje se samo ako je Google izračuna. Ako servis ne dozvoli rutu, sve stanice i dalje ostaju dostupne.','The full walking path across all stops appears only when Google calculates it. If routing is unavailable, all stops remain accessible.')}</p></div>`;
+ const visited=new Set(w.ids.filter(stop=>activeDiscoveryTour.completed?.includes(stop)));
+ const modal=document.getElementById('modal');
+ modal.innerHTML=`<div class="tour-detail-hero walk-stops-header"><h2 id="modalTitle">${L(w.titleSr,w.titleEn)}</h2><button class="tour-detail-close" type="button" onclick="closeModal()" aria-label="${L('Zatvori','Close')}">×</button></div>
+  <div class="tour-detail-body walk-stops-body">
+   <div class="walk-stops-summary"><strong>${L('Napredak','Progress')}</strong><span>${visited.size}/${w.ids.length} ${L('obiđeno','visited')}</span></div>
+   <progress class="walk-stops-progress" max="${w.ids.length}" value="${visited.size}" aria-label="${L('Napredak obilaska','Walk progress')}"></progress>
+   ${renderWalkStops(w,visited)}
+   ${walkStartAction(w.id)}
+  </div>`;
  document.getElementById('modalShade').classList.remove('hidden');
+ modal.scrollTop=0;
 };
-window.toggleTourStop=function(wid,pid){if(!activeDiscoveryTour||activeDiscoveryTour.id!==wid)return;let done=new Set(activeDiscoveryTour.completed||[]);if(done.has(pid))done.delete(pid);else done.add(pid);activeDiscoveryTour.completed=[...done];persistTour();window.openDiscoveryTour(wid)};
+window.toggleTourStop=function(wid,pid){
+ if(!activeDiscoveryTour||activeDiscoveryTour.id!==wid)return;
+ const done=new Set(activeDiscoveryTour.completed||[]);
+ if(done.has(pid))done.delete(pid);else done.add(pid);
+ activeDiscoveryTour.completed=[...done];
+ persistTour();
+ const modal=document.getElementById('modal');
+ const button=modal.querySelector(`[data-stop-id="${pid}"]`);
+ const restoreFocus=button&&document.activeElement===button;
+ const body=modal.querySelector('.walk-stops-body');
+ const bodyScroll=body?.scrollTop||0,modalScroll=modal.scrollTop;
+ window.openDiscoveryTour(wid);
+ modal.scrollTop=modalScroll;
+ const newBody=modal.querySelector('.walk-stops-body');
+ if(newBody)newBody.scrollTop=bodyScroll;
+ if(restoreFocus)modal.querySelector(`[data-stop-id="${pid}"]`)?.focus({preventScroll:true});
+};
 window.navigateTourStop=function(pid){closeModal();state.cat='all';showPage('explore');requestAnimationFrame(()=>{const p=byId(pid);if(p&&state.map){state.map.easeTo({center:[p.lng,p.lat],zoom:15,duration:350});openDirections(pid);}})};
 // Keep existing route implementation and GPS logic unchanged; only the map UI is reorganized.
 const existingExplore=explore;

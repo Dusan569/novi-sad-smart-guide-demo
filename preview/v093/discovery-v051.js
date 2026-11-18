@@ -627,11 +627,12 @@ window.openDiscoveryTour=function(id){
    return;
  }
  nativeOpenDiscoveryTour(id);
- const footer=document.querySelector('#modal .tour-detail-footer');if(!footer)return;
- const btn=document.createElement('button');btn.type='button';btn.className='btn btn-white tour-preview-link';
- btn.textContent=label('🚶 Pokreni celu pešačku rutu','🚶 Start full walking route');
- btn.addEventListener('click',()=>window.previewDiscoveryTour(id));
- footer.prepend(btn);
+ if(tourPreview){
+   const action=document.querySelector('#modal .walk-stops-action button');
+   if(!action)return;
+   action.textContent=label('Nazad na mapu','Back to map');
+   action.onclick=state.page==='explore'?closeModal:resumeTour;
+ }
 };
 window.navigateTourStop=function(pid){
  if(tourPreview){
