@@ -31,15 +31,17 @@
  }
  function fail(error){
   pending=false;
+  // A denial may represent an explicit user choice. Retry only on request.
+  if(error?.code===1)retryOnTouch=false;
   status(error?.code===1?
-   text('Lokacija je blokirana. Dozvoli je u meniju pregledača.','Location blocked. Allow it in the browser menu.'):
-   text('Telefon još traži lokaciju. Pokušaj ponovo.','Location not found yet. Please retry.'),true);
+   text('Lokacija je blokirana u pregledaču.','Location blocked in the browser.'):
+   text('Lokacija nije pronađena.','Location not found.'),true);
  }
  function locate(highAccuracy){
   try{
    navigator.geolocation.getCurrentPosition(finish,error=>{
     if(highAccuracy&&(error?.code===2||error?.code===3)){
-     status(text('Pokušavamo ponovo da pronađemo lokaciju…','Trying again to find your location…'));
+     status(text('Tražimo lokaciju…','Finding location…'));
      locate(false);
     }else fail(error);
    },{enableHighAccuracy:highAccuracy,maximumAge:highAccuracy?30000:0,timeout:highAccuracy?18000:12000});
@@ -50,11 +52,11 @@
   if(document.hidden){waitingForVisible=true;return;}
   waitingForVisible=false;
   if(!root.isSecureContext||!navigator.geolocation){
-   status(text('Lokacija nije dostupna u ovom pregledaču. Otvori HTTPS link u Safariju ili Chrome-u.','Location is unavailable in this browser. Open the HTTPS link in Safari or Chrome.'));
+   status(text('Lokacija nije dostupna u ovom pregledaču.','Location unavailable in this browser.'));
    return;
   }
   pending=true;
-  status(text('Tražimo lokaciju… Ako telefon pita, izaberi Dozvoli.','Finding location… Choose Allow if asked.'));
+  status(text('Tražimo lokaciju…','Finding location…'));
   // A Permissions API query can disagree with the native prompt or never resolve.
   // Ask geolocation directly and use its actual response.
   locate(true);

@@ -45,8 +45,8 @@ async function nearby(){
    return;
  }
  if(!root.confirm(localized(
-   'Za Google Places pretragu šaljemo približan centar mape Google-u. Ova pretraga može da se naplati na Google Cloud nalogu. Nastaviti?',
-   'Searching Google Places sends the map center to Google and may incur Google Cloud charges. Continue?')))return;
+   'Poslati centar mape u Google Places? Pretraga može da se naplati.',
+   'Send the map center to Google Places? Search may incur charges.')))return;
  state.googlePlacesLastRequest=now;state.poiLoading=true;
  const button=document.getElementById('poiToggle');
  if(button){button.disabled=true;button.textContent=localized('Učitavanje…','Loading…');}

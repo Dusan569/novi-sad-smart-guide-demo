@@ -45,8 +45,8 @@ async function start(destination,destinationName){
     (state.fromGps?'':' · DEMO polazak')+'…</p></div><button class="route-close" onclick="hideRoutePanel()">×</button></div>');
   state.map?.clearRoute();
   if(state.fromGps&&!window.confirm(text(
-    'Poslati tvoju lokaciju servisu '+service+' za pešačku rutu?',
-    'Send your location to '+service+' for walking directions?'))){
+    'Podeliti tvoju lokaciju sa '+service+'?',
+    'Share your location with '+service+'?'))){
     closeRoute();return;
   }
   try{

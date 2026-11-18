@@ -347,24 +347,24 @@ const gpsFixUsable=()=>state.fromGps&&Number.isFinite(state.position?.lat)&&Numb
 function askTourGps(previouslyApproved=false){
  const service=window.NSSG_KEYLESS_MAP?'routing.openstreetmap.de':'Google Routes';
  if(!previouslyApproved&&!window.confirm(label(
-  'Dozvoljavaš GPS i slanje lokacije servisu '+service+' za ovu šetnju?',
-  'Allow GPS and send your location to '+service+' for this walk?'
+  'Podeliti tvoju lokaciju sa '+service+'?',
+  'Share your location with '+service+'?'
   )))return Promise.resolve(false);
  if(gpsFixUsable())return Promise.resolve(true);
  if(!navigator.geolocation||!window.isSecureContext){
-   showToast(label('GPS zahteva HTTPS i dozvolu za lokaciju. Prikazujemo plan od prve stanice.','GPS needs HTTPS and location permission. Showing the plan from the first stop.'));
+   showToast(label('GPS nije dostupan. Ruta kreće od prve stanice.','GPS unavailable. The walk starts at the first stop.'));
    return Promise.resolve(false);
  }
  return new Promise(resolve=>navigator.geolocation.getCurrentPosition(
    pos=>{
      applyPosition(pos);
      const good=gpsFixUsable();
-     if(!good)showToast(label('GPS nije dovoljno precizan. Ruta je za sada od prve stanice; probaj ponovo napolju.','GPS is not accurate enough. The route currently begins at the first stop; retry outdoors.'));
+     if(!good)showToast(label('Slab GPS signal. Ruta kreće od prve stanice.','Weak GPS signal. The walk starts at the first stop.'));
      resolve(good);
    },
    err=>{
-     showToast(err?.code===1?label('Lokacija nije dozvoljena. Prikazujemo plan šetnje, ne navigaciju od tebe.','Location was denied. Showing the sightseeing plan, not directions from you.'):
-       label('Lokacija nije dostupna. Plan ostaje vidljiv; pokušaj ponovo.','Location unavailable. The plan remains visible; retry.'));
+     showToast(err?.code===1?label('Lokacija odbijena. Ruta kreće od prve stanice.','Location denied. The walk starts at the first stop.'):
+       label('GPS nije dostupan. Ruta kreće od prve stanice.','GPS unavailable. The walk starts at the first stop.'));
      resolve(false);
    },{enableHighAccuracy:true,maximumAge:0,timeout:16000}
  ));
