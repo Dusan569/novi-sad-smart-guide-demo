@@ -52,10 +52,12 @@
       this.positionMarker=null;this.accuracyCircle=null;this.areaCircle=null;this.routeLine=null;
       this.markers=[];this.poiMarkers=[];this.stopMarkers=[];this.heading=null;
       this.placeItems=[];this.poiItems=[];
+      const mapId=cfg().mapId||'DEMO_MAP_ID';
       this.map=new google.maps.Map(host,{
         center:{lat:+options.lat||45.25565,lng:+options.lng||19.84563},
         zoom:Number.isFinite(options.zoom)?options.zoom:14,
-        mapId:cfg().mapId||'DEMO_MAP_ID',
+        mapId,
+        ...(mapId==='DEMO_MAP_ID'?{colorScheme:'FOLLOW_SYSTEM'}:{}),
         // Heading gestures/buttons require vector rendering; raster maps ignore rotation.
         renderingType:google.maps.RenderingType?.VECTOR||'VECTOR',
         gestureHandling:'greedy', // one finger pans map instead of entire page

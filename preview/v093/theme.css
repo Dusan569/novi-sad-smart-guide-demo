@@ -1,0 +1,249 @@
+/* System-driven dark palette for the guide. Map tiles and overlays are styled independently. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #101b21;
+    --night-ink: #eff6f4;
+    --night-muted: #b1c4c8;
+    --ink: var(--night-ink);
+    --muted: var(--night-muted);
+    --line: #38515a;
+    --night-surface: #182a32;
+    --night-raised: #20353d;
+    --night-hover: #2b4750;
+    --night-accent: #8ce4d2;
+    --night-accent-hover: #b4f2e5;
+    --night-on-accent: #102f32;
+    --night-warm: #f6cc90;
+    --shadow: 0 14px 45px #0006;
+  }
+
+  html, body { background: var(--bg); color: var(--ink); }
+  .editorial-home {
+    --ink: var(--night-ink);
+    --muted: var(--night-muted);
+    --teal: var(--night-accent);
+    --paper: var(--night-surface);
+  }
+  :focus-visible,
+  #page button:focus-visible, #modal button:focus-visible, .venue-surface button:focus-visible {
+    outline-color: var(--night-accent);
+  }
+
+  /* Navigation, buttons and other shared controls. */
+  .top .eyebrow, .eyebrow, .discovery-overline, .section-title .link, .text-link,
+  .editorial-arrow, .detail-tag, .spot-eyebrow, .spot-cta, .tour-eyebrow {
+    color: var(--night-accent);
+  }
+  .footnote, .prototype-note, .feature small, .info-banner p, .empty { color: var(--muted); }
+  .mobile-nav {
+    background: var(--night-surface);
+    border-color: var(--line);
+    box-shadow: 0 -8px 26px #0005;
+  }
+  .mobile-nav button { color: var(--muted); }
+  .mobile-nav button.active, .mobile-nav button.active svg { color: var(--night-accent); }
+  .mobile-nav button[aria-current=page] svg {
+    background: var(--night-hover);
+    box-shadow: 0 0 0 5px var(--night-hover);
+  }
+  .main .top #langBtn, .pill, .btn-white, .map-actions .btn-white, .filter-bar .chip, .radius-select,
+  .calm-map .calm-tool, .calm-map .discovery-map-quick button, .calm-map .calm-zoom-tools button, .discover-results-toggle,
+  .city-discovery-bar button, #locationStatus button, .venue-close {
+    background: var(--night-raised);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .pill.soft, .counter, .num, .tour-detail-meta span, .guide-meta span {
+    background: var(--night-raised);
+    color: var(--night-accent);
+    border-color: var(--line);
+  }
+  .pill.click:hover, .btn-white:hover, .filter-bar .chip:hover { background: var(--night-hover); }
+  .btn-primary, .btn-primary:hover, .map-actions .btn-primary,
+  .editorial-hero .hero-bottom .btn-primary, .editorial-home .discovery-next button,
+  .editorial-home .discover-button, .tours-page-grid .discover-button, .saved-empty .btn,
+  .guide-actions .btn-primary, .guide-actions .btn-primary:hover:not(:disabled), #guideSpeakButton,
+  .tour-start-button, .tour-overview-actions button:last-child,
+  .nssg-walk-buttons .nssg-walk-primary, .tour-sticky-actions button[data-tour-action="resume"],
+  .venue-load, .venue-search-shortcut, .venue-card-actions .venue-card-primary,
+  .filter-bar .chip.active, .city-discovery-bar button[aria-pressed=true],
+  .city-discovery-bar button.active, .venue-switches button[aria-selected=true] {
+    background: var(--night-accent);
+    color: var(--night-on-accent);
+    border-color: var(--night-accent);
+  }
+  .btn-primary:hover, .editorial-home .discover-button:hover, .tours-page-grid .discover-button:hover,
+  .guide-actions .btn-primary:hover:not(:disabled) { background: var(--night-accent-hover); }
+  .filter-bar .chip.active:hover { background: var(--night-accent-hover); }
+
+  /* Home, place cards, favourites, walks and information pages. */
+  .editorial-shortcut, .discover-tour-card, .spot-card, .feature, .info-banner, .saved-empty,
+  .saved-editorial-card, .about-editorial-card, .about-disclosure, .route-steps, .walk-card,
+  .tour-stop-body, .guide-pick, .guide-nearby, .nearby-place,
+  .editorial-home .discover-tour-card, .editorial-home .spot-card, .tours-page-grid .discover-tour-card {
+    background: var(--night-surface);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .editorial-page-head, .city-discovery-bar, .discovery-local-tip, .nearby-discovery-status,
+  #locationStatus, .guide-tip, .guide-fact, .guide-notes, .guide-audio, .guide-pick-emoji {
+    background: var(--night-raised);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .editorial-page-head h1, .saved-editorial-open, .guide-picks-heading strong,
+  .guide-content h2, .guide-feature h3, .guide-near-title, .guide-audio-copy strong {
+    color: var(--ink);
+  }
+  .editorial-page-head p, .tour-selection-note, .tour-card-content p, .tour-pace, .spot-description,
+  .editorial-home .discovery-trust, .editorial-credits, .saved-empty p, .about-editorial-card p,
+  .about-disclosure p, .tour-time-note, .tour-stop-body small, .step p {
+    color: var(--muted);
+  }
+  .editorial-home .discovery-trust a, .editorial-credits summary, .editorial-credits a,
+  .about-disclosure a, .saved-editorial-copy small, .saved-editorial-copy>span, .place-source a,
+  .discovery-source, .place:hover .place-name { color: var(--night-accent); }
+  .editorial-shortcut-icon, .info-banner .bubble, .about-editorial-icon, .saved-heart,
+  .guide-near-icon, .guide-audio-icon, .venue-icon {
+    background: var(--night-hover);
+    color: var(--night-accent);
+  }
+  .editorial-icon-venues { color: var(--night-warm); }
+  .editorial-icon-walks { color: #bcdbfa; }
+  .saved-remove { background: var(--night-raised); color: #ffb4ba; }
+
+  /* Details and dialogs. */
+  .modal { background: var(--night-surface); color: var(--ink); box-shadow: 0 16px 60px #0009; }
+  .modal-shade { background: #030a0ed1; }
+  .modal-close, .guide-x, #modal .tour-detail-close, .guide-hero-note,
+  #guideAudioStop, .tour-step-check, .walk-stop-marker, button.walk-stop-marker[aria-pressed=true] {
+    background: var(--night-raised);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .guide-nearby:hover, .guide-nearby:focus-visible { background: var(--night-hover); border-color: var(--night-accent); }
+  .guide-content .guide-lead { color: var(--muted)!important; }
+  .guide-picks-heading small, .guide-pick small, .guide-feature p, .guide-tip p, .guide-fact p,
+  .guide-notes p, .guide-nearby small, .guide-source, .guide-photo-credit, .guide-audio-copy small,
+  .modal-body p, .detail-facts span, .nearby-place small { color: var(--muted); }
+  .guide-source, .detail-facts span, .guide-tip, .guide-notes { border-color: var(--line); }
+  .guide-kicker, .guide-fact strong, .guide-tip strong, .guide-source a, .guide-source summary,
+  .guide-photo-credit a, .guide-pick-emoji .ns-icon, .guide-notes .ns-icon, .guide-tip .ns-icon,
+  .guide-fact .ns-icon { color: var(--night-accent); }
+  .guide-actions [aria-pressed=true], .tour-step-check.done {
+    background: var(--night-hover);
+    color: var(--night-accent);
+    border-color: var(--night-accent);
+  }
+  .guide-actions [data-guide-save][aria-pressed=true] .ns-icon { fill: currentColor; }
+  .guide-actions .btn:disabled { background: #273840; color: var(--muted); border-color: var(--line); }
+  .notice-orange, .detail-disclaimer, .map-poi-status, .gps-inline-status.error {
+    background: #382d21;
+    color: var(--night-warm);
+    border-color: #6b5439;
+  }
+
+  /* Map background and guide controls. Route and location overlays are rendered separately. */
+  #map, .map-wrap, .map-cover, .tour-raster, #mapFallback {
+    background: var(--night-raised);
+    border-color: var(--line);
+  }
+  .map-cover .roads { opacity: .15; }
+  .map-cover .river { background: #1d5268; }
+  .raster-tiles.raster-modern, .raster-tiles.raster-soft {
+    filter: invert(.9) hue-rotate(180deg) saturate(.7) brightness(.93);
+  }
+  .results-panel, .map-badge, .map-cover p, .map-style-control, .map-poi-toggle,
+  #mapFallback .map-error-content, .calm-map .discovery-map-tray, .calm-map .tour-overview-panel,
+  .gps-inline-status:not(.error), .heading-status, #routePanel, .route-restore,
+  .raster-tour-menu, .raster-cluster-menu, .poi-popup, #nssgMapEmergencyExit,
+  #nssgPersistentTour, .nssg-walk-top, .nssg-walk-bottom {
+    background: var(--night-surface);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .calm-map .map-badge, .map-layout .results-panel, .raster-zoom, .place,
+  .venue-surface .venue-card, .venue-footer { border-color: var(--line); }
+  .search { background: var(--bg); color: var(--ink); border-color: var(--line); }
+  .search::placeholder { color: var(--muted); opacity: 1; }
+  .place-icon, .place-icon.park, .place-icon.culture, .saved-editorial-visual { background: var(--night-hover); }
+  .place-sub, .map-error-content p, .poi-popup p, .route-panel-head p, .route-panel-foot,
+  .route-steps-preview, .tour-overview-top small, .tour-preview-loading, .tour-diagnostic,
+  .route-diagnostic, .tour-diagnostic strong, .tour-diagnostic p, .route-diagnostic p,
+  .tour-sticky-copy small, .nssg-walk-turn-copy small, .nssg-walk-target small, .nssg-walk-target p {
+    color: var(--muted);
+  }
+  .tour-diagnostic summary, .route-diagnostic summary, .tour-overview-top span, .nssg-walk-kicker,
+  .tour-sticky-eyebrow, .route-restore .route-rest-arrow, .poi-popup-label { color: var(--night-accent); }
+  .calm-tray-head, .tour-overview-top strong, .raster-cluster-menu strong, .raster-tour-menu strong,
+  .poi-popup strong, .nssg-walk-target strong, .nssg-walk-turn-copy strong, .tour-sticky-copy strong {
+    color: var(--ink);
+  }
+  .raster-attribution { background: var(--night-surface); color: var(--ink); }
+  .raster-zoom button + button { border-color: var(--line); }
+  .step:not(:last-child):before { background: var(--line); }
+  .raster-zoom button, .map-style-control button, .calm-tray-head button, .heading-controls button,
+  .nav-live-controls button, .route-close, .route-stats span, .route-panel-actions a,
+  .raster-cluster-menu button, .raster-tour-menu button, .poi-popup-x, .poi-popup-actions a,
+  #mapFallback .map-error-buttons a, .tour-overview-top button, .tour-overview-top #tourOverviewDetails,
+  .tour-overview-actions button:not(:last-child), .tour-extra-options summary, .nssg-walk-pause,
+  .nssg-walk-buttons button:not(.nssg-walk-primary), .tour-sticky-actions button:not([data-tour-action="resume"]),
+  .tour-preview-button, .tour-stop-actions button, .step button {
+    background: var(--night-raised);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .tour-sticky-actions .tour-sticky-finish, .route-end-btn {
+    background: var(--night-raised)!important;
+    color: var(--ink)!important;
+    border-color: var(--line);
+  }
+  .map-style-control button.active, .heading-controls button.active, .nav-live-controls button.active,
+  .raster-cluster-menu button:hover, .route-close:hover { background: var(--night-hover); color: var(--ink); }
+  #modal .walk-stops-header, #modal .walk-stops-body, #modal .walk-stop-next {
+    background: var(--night-raised);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  #modal .walk-stop-row { background: var(--night-surface); border-color: var(--line); }
+  #modal .walk-stop-next { background: var(--night-hover); border-color: var(--night-accent); }
+  .walk-stop-story, .walk-stops-summary { color: var(--ink); }
+  .walk-stops-summary span { color: var(--muted); }
+  .walk-stop-story small, .walk-stop-chevron { color: var(--night-accent); }
+  .walk-stop-next .walk-stop-marker { background: var(--night-accent); color: var(--night-on-accent); }
+  .walk-stop-story:active, button.walk-stop-marker:active {
+    background: var(--night-accent);
+    color: var(--night-on-accent);
+  }
+  .walk-stop-story:active small, .walk-stop-story:active .walk-stop-chevron { color: inherit; }
+  .walk-stops-progress { background: var(--line); accent-color: var(--night-accent); }
+  .walk-stops-progress::-webkit-progress-bar { background: var(--line); }
+  .walk-stops-progress::-webkit-progress-value { background: var(--night-accent); }
+  .walk-stops-progress::-moz-progress-bar { background: var(--night-accent); }
+
+  /* Venue cards and the optional map setup panel. */
+  .nssg-venue-screen, .venue-header h2, .venue-card-body strong { color: var(--ink); }
+  .venue-surface, .venue-card {
+    background: var(--night-surface);
+    border-color: var(--line);
+  }
+  .venue-header, .venue-footer, .venue-switches button:not([aria-selected=true]),
+  .venue-card-actions button:not(.venue-card-primary) {
+    background: var(--night-raised);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .venue-header p, .venue-card-body p, .venue-card-body small,
+  .venue-footer, .venue-message, .venue-empty { color: var(--muted); }
+  .venue-kicker, .venue-icon .ns-icon { color: var(--night-accent); }
+
+  html #nssg-demo-key-ui .panel { background: var(--night-surface); color: var(--ink); }
+  html #nssg-demo-key-ui p { color: var(--muted); }
+  html #nssg-demo-key-ui a { color: var(--night-accent); }
+  html #nssg-demo-key-ui input, html #nssg-demo-key-ui [data-skip] {
+    background: var(--night-raised);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  html #nssg-demo-key-ui [role=alert] { color: #ffb4ba; }
+}
