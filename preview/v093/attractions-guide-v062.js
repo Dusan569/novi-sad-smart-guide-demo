@@ -89,8 +89,12 @@
  }
  function saveHere(id){
    toggleFav(id);
-   const b=document.getElementById('guideSaveButton');
-   if(b){const yes=state.favorites.has(id);b.setAttribute('aria-pressed',String(yes));b.innerHTML=root.NSSG_ICON('heart')+' '+(yes?tr('Sačuvano','Saved'):tr('Sačuvaj','Save'));}
+   const button=document.getElementById('guideSaveButton');
+   if(!button)return;
+   const saved=state.favorites.has(id);
+   button.setAttribute('aria-pressed',String(saved));
+   button.querySelector('.guide-save-label').textContent=saved?tr('Sačuvano','Saved'):tr('Sačuvaj','Save');
+   button.querySelector('.ns-icon')?.classList.toggle('guide-heart-feedback',saved);
  }
  function renderDetail(id){
   const p=place(id);if(!p)return;
@@ -119,7 +123,7 @@
    sourceHTML(p,d)+(root.NSSG_EDITORIAL_PHOTOS?.has(id)?'<p class="guide-photo-credit">'+tr('Fotografija: ','Photo: ')+root.NSSG_EDITORIAL_PHOTOS.credit(id)+'</p>':'')+
    '<div class="guide-actions"><button type="button" class="btn btn-primary" data-guide-route '+(p.approximate?'disabled title="'+tr('Ulaz još nije potvrđen','Entrance not verified')+'"':'')+'>'+root.NSSG_ICON('walk')+' '+tr('Vodi me peške','Walk there')+'</button>'+
    '<button type="button" class="btn btn-white" data-guide-map>'+root.NSSG_ICON('map')+' '+tr('Na mapi','On the map')+'</button>'+
-   '<button type="button" id="guideSaveButton" aria-pressed="'+save+'" class="btn btn-white" data-guide-save>'+root.NSSG_ICON('heart')+' '+(save?tr('Sačuvano','Saved'):tr('Sačuvaj','Save'))+'</button>'+
+   '<button type="button" id="guideSaveButton" aria-pressed="'+save+'" class="btn btn-white" data-guide-save>'+root.NSSG_ICON('heart')+' <span class="guide-save-label">'+(save?tr('Sačuvano','Saved'):tr('Sačuvaj','Save'))+'</span></button>'+
    '</div>'+
    '</article>';
   const bind=(sel,fn)=>modal.querySelector(sel)?.addEventListener('click',fn);
@@ -164,3 +168,4 @@
  if(state.page==='home'){const initial=document.getElementById('page');if(initial)root.home(initial);}
  root.NSSG_ATTRACTIONS_GUIDE=Object.freeze({stories:STORIES,open:renderDetail,stopVoice});
 })(window);
+

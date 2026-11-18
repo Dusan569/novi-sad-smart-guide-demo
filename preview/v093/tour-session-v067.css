@@ -9,7 +9,7 @@
   font-family:inherit;max-height:42vh;overflow:auto
 }
 .tour-sticky-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
-.tour-sticky-eyebrow{font-size:10px;font-weight:900;letter-spacing:.25px;color:#078a78}
+.tour-sticky-eyebrow{font-size:10px;font-weight:900;letter-spacing:.25px;color:#176a67}
 .tour-sticky-copy strong{font-size:15px;font-weight:850;line-height:1.25;color:#102f50}
 .tour-sticky-copy small{font-size:12px;line-height:1.45;color:#587284;overflow-wrap:anywhere}
 .tour-sticky-actions{display:flex;align-items:center;flex-wrap:wrap;gap:7px}

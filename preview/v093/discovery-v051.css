@@ -29,9 +29,9 @@
 .calm-map .tour-overview-panel.hidden{display:none}
 .tour-overview-top{display:flex;justify-content:space-between;gap:9px;align-items:flex-start}
 .tour-overview-top>div{display:flex;flex-direction:column;gap:3px;min-width:0}
-.tour-overview-top span{font-size:9px;color:#0d8b80;font-weight:900;letter-spacing:.35px}
+.tour-overview-top span{font-size:9px;color:#176a67;font-weight:900;letter-spacing:.35px}
 .tour-overview-top strong{font-size:15px;color:#102d48;line-height:1.25}
-.tour-overview-top small{font-size:10px;color:#698091}
+.tour-overview-top small{font-size:10px;color:#536779}
 .tour-overview-top button{width:30px;height:30px;flex:none;border:0;border-radius:8px;background:#e9f2f2;color:#143b52;font-size:19px}
 .tour-overview-actions{display:flex;gap:9px;margin-top:12px}
 .tour-overview-actions button{flex:1;background:#e8f3f1;border:0;border-radius:10px;min-height:42px;padding:9px 8px;font-size:11px;color:#085e64;font-weight:850}
@@ -109,7 +109,7 @@
 
 /* Walk preview: numbers on the map are supplemented by a readable name and explicit stop-list control. */
 .tour-overview-top .tour-overview-next{display:flex;flex-direction:column;gap:2px;padding-top:7px;min-width:0}
-.tour-overview-next span{font-size:9px;letter-spacing:.5px;color:#0d8b80;font-weight:850}
+.tour-overview-next span{font-size:9px;letter-spacing:.5px;color:#176a67;font-weight:850}
 .tour-overview-next strong{font-size:12px;line-height:1.35;overflow-wrap:anywhere}
 .tour-overview-top #tourOverviewDetails{width:auto;min-width:67px;max-width:89px;min-height:40px;
   padding:7px;font-size:11px;line-height:1.2;white-space:normal}
@@ -152,8 +152,9 @@ body{background:#f7f8f5}
 .main .top .eyebrow{letter-spacing:1.25px;font-size:10px}
 .main .top #langBtn{background:#fff;border:1px solid #dfe8e4;color:#193b49;border-radius:99px;min-height:44px}
 .mobile-nav{border-top-color:#dfe8e4;background:#ffffff;box-shadow:0 -8px 30px #123d4910}
-.mobile-nav button.active{color:#087e76}
-.mobile-nav button.active svg{color:#087e76}
+.mobile-nav button{color:#566b7e}
+.mobile-nav button.active{color:#086e67}
+.mobile-nav button.active svg{color:#086e67}
 .sidebar .nav button.active{color:#b5f0dd}
 .filter-bar .chip{border-radius:999px;min-height:44px}
 .calm-map .discovery-map-quick button{border-radius:15px;border-color:#dde9e6;box-shadow:0 5px 17px #102d3820}

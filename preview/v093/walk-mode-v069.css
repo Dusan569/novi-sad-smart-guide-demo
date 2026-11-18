@@ -25,9 +25,9 @@
 .nssg-walk-bottom{padding:13px;display:flex;flex-direction:column;gap:12px}
 .nssg-walk-target{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .nssg-walk-target>div{min-width:0;display:flex;flex-direction:column;gap:4px}
-.nssg-walk-kicker{font-weight:850;color:#008b7f;font-size:10px;letter-spacing:.45px}
+.nssg-walk-kicker{font-weight:850;color:#176a67;font-size:10px;letter-spacing:.45px}
 .nssg-walk-target strong{font-size:16px;line-height:1.25;color:#102f50;overflow-wrap:anywhere}
-.nssg-walk-target small{font-size:11px;color:#5c7888}
+.nssg-walk-target small{font-size:11px;color:#536779}
 .nssg-walk-target p{margin:5px 0 0;color:#324d65;font-size:12px;line-height:1.45}
 .nssg-walk-target p.hidden{display:none}
 .nssg-walk-recenter{flex:none;min-width:45px;padding:9px;font-size:24px;color:#fff;background:#143b61}

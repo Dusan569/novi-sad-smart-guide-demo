@@ -11,7 +11,7 @@
  background:linear-gradient(120deg,#e3f6f2,#f7fafc)}
 .venue-header h2{margin:5px 0 8px;font-size:26px;color:#123554;letter-spacing:-.5px}
 .venue-header p{margin:0;color:#516d7b;line-height:1.4;font-size:14px}
-.venue-kicker{color:#078d83;font-weight:900;letter-spacing:.8px;font-size:10px}
+.venue-kicker{color:#176a67;font-weight:900;letter-spacing:.8px;font-size:10px}
 .venue-close{flex:none;width:45px;height:45px;border:1px solid #c9e0de;border-radius:14px;
  background:white;color:#153650;font-size:27px;cursor:pointer}
 .venue-switches{display:flex;gap:7px;padding:12px 20px 7px;overflow-x:auto}
@@ -38,7 +38,7 @@
  border:0;cursor:pointer;font-size:13px;font-family:inherit;font-weight:800;line-height:1.2;padding:11px}
 .venue-load:disabled{opacity:.65}
 .venue-empty{grid-column:1/-1;padding:18px;text-align:center;color:#61778c}
-.venue-footer{font-size:11px;line-height:1.5;padding:11px 21px;border-top:1px solid #e1eaec;color:#68808e;
+.venue-footer{font-size:11px;line-height:1.5;padding:11px 21px;border-top:1px solid #e1eaec;color:#536779;
  background:#f4faf9}
 .nssg-venue-screen button:focus-visible{outline:3px solid #08ad9c;outline-offset:2px}
 @media(max-width:650px){

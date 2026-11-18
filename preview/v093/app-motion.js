@@ -8,7 +8,8 @@
   '.discover-tour-card','.spot-card','.discovery-next',
   '.saved-editorial-card','.saved-empty','.about-editorial-card','.about-disclosure',
   '.city-discovery-bar','.results-panel .place',
-  '.guide-kicker','.guide-lead','.guide-meta','.guide-feature','.guide-fact','.guide-tip','.guide-notes','.guide-nearby','.guide-actions',
+  '.guide-kicker','.guide-lead','.guide-meta','.guide-audio','.guide-feature','.guide-fact','.guide-tip','.guide-notes',
+  '.guide-nearby','.guide-source','.guide-photo-credit','.guide-actions',
   '.tour-detail-meta','.tour-detail-stop','.tour-detail-footer',
   '.venue-surface','.venue-card','.venue-switches',
   '.tour-selection-note','.guide-picks-heading','.guide-pick','.editorial-credits'
