@@ -45,7 +45,45 @@
   .theme-switch:active { transform: scale(.97); }
 }
 
-.main .top-left { min-width: 0; overflow-wrap: anywhere; }
+.brand-symbols { position: absolute; pointer-events: none; }
+.header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+.clock-logo {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border: 1px solid #47707a;
+  border-radius: 13px;
+  background: linear-gradient(150deg,#254b55,#0c2934);
+}
+.clock-logo svg { display: block; width: 20px; height: 33px; }
+.header-wordmark {
+  display: grid;
+  gap: 2px;
+  font-family: Manrope, "DM Sans", sans-serif;
+  line-height: 1.08;
+  white-space: nowrap;
+}
+.header-wordmark strong { font-size: 17px; font-weight: 800; letter-spacing: -.035em; }
+.header-wordmark small {
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.header-brand:focus-visible { outline: 3px solid #087b72; outline-offset: 3px; border-radius: 12px; }
+.footnote { display: grid; gap: 2px; }
+.footer-version { font-weight: 800; }
+:where(html[data-theme="dark"]) .header-brand:focus-visible { outline-color: var(--night-accent); }
 @media (max-width: 400px) {
   .main .top { gap: 7px; }
   .top-right { gap: 6px; }
@@ -84,7 +122,7 @@ html[data-theme="dark"], :where(html[data-theme="dark"]) body { background: var(
 }
 
 /* Navigation, buttons and other shared controls. */
-:where(html[data-theme="dark"]) .top .eyebrow, :where(html[data-theme="dark"]) .eyebrow, :where(html[data-theme="dark"]) .discovery-overline, :where(html[data-theme="dark"]) .section-title .link, :where(html[data-theme="dark"]) .text-link,
+:where(html[data-theme="dark"]) .eyebrow, :where(html[data-theme="dark"]) .discovery-overline, :where(html[data-theme="dark"]) .section-title .link, :where(html[data-theme="dark"]) .text-link,
 :where(html[data-theme="dark"]) .editorial-arrow, :where(html[data-theme="dark"]) .detail-tag, :where(html[data-theme="dark"]) .spot-eyebrow, :where(html[data-theme="dark"]) .spot-cta, :where(html[data-theme="dark"]) .tour-eyebrow {
   color: var(--night-accent);
 }
