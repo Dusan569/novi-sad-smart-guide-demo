@@ -1,5 +1,9 @@
 /* Appearance is chosen with the light/dark switch and saved on the device. */
-:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="light"] {
+  color-scheme: light;
+  /* Keep the selected light palette when the browser otherwise darkens websites. */
+  color-scheme: only light;
+}
 
 .top-right { display: flex; align-items: center; gap: 8px; }
 .theme-switch {
