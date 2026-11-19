@@ -45,3 +45,9 @@
  from{opacity:0;transform:translateY(-4px)}
  to{opacity:1;transform:translateY(0)}
 }
+
+/* The hero surface fades with the page; its text and shortcuts follow it. */
+@media(prefers-reduced-motion:no-preference){
+ #page.ns-page-entering .editorial-hero :is(.editorial-hero-top,.editorial-region,h1,p,.hero-bottom,.discovery-hero-count),
+ #page.ns-page-entering .editorial-shortcut{animation-play-state:paused}
+}

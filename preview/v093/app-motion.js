@@ -14,6 +14,26 @@
   '.venue-surface','.venue-card','.venue-switches',
   '.tour-selection-note','.guide-picks-heading','.guide-pick','.editorial-credits'
  ].join(',');
+ const page=document.getElementById('page');
+ const fadeDuration=200;
+ let pageAnimation=null;
+
+ function enterPage(){
+  pageAnimation?.cancel();
+  if(preference.matches||!page)return;
+  page.classList.add('ns-page-entering');
+  const animation=page.animate([{opacity:.36},{opacity:1}],{
+   duration:fadeDuration,easing:'ease-out'
+  });
+  pageAnimation=animation;
+  animation.finished.catch(()=>{}).finally(()=>{
+   if(pageAnimation!==animation)return;
+   pageAnimation=null;
+   page.classList.remove('ns-page-entering');
+  });
+ }
+ window.NSSG_PAGE_MOTION=Object.freeze({enter:enterPage});
+
  const seen=new WeakSet();
  const active=new Set();
  function eligible(element){
@@ -27,10 +47,13 @@
    observer.unobserve(element);
    if(preference.matches||!element.isConnected)continue;
    element.classList.add('ns-motion-item');
+   // Keep the initial reveal pose during the page fade, then stagger visible items.
+   const fadeRemaining=pageAnimation&&page.contains(element)
+    ?Math.max(0,fadeDuration-(pageAnimation.currentTime??0)):0;
    const animation=element.animate([
     {opacity:.12,transform:'translateY(16px)'},
     {opacity:1,transform:'translateY(0)'}
-   ],{duration:420,delay:Math.min(order++,4)*45,easing:'cubic-bezier(.2,.75,.25,1)',fill:'backwards'});
+   ],{duration:420,delay:fadeRemaining+Math.min(order++,4)*45,easing:'cubic-bezier(.2,.75,.25,1)',fill:'backwards'});
    active.add(animation);
    animation.finished.catch(()=>{}).finally(()=>active.delete(animation));
   }
@@ -44,7 +67,7 @@
    observer.observe(element);
   }
  }
- register(document.getElementById('page'));
+ register(page);
  const mutations=new MutationObserver(records=>{
   for(const record of records){
    if(record.type==='attributes'){
@@ -67,6 +90,8 @@
  });
  mutations.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
  preference.addEventListener('change',()=>{
-  if(preference.matches)for(const animation of active)animation.cancel();
+  if(!preference.matches)return;
+  pageAnimation?.cancel();
+  for(const animation of active)animation.cancel();
  });
 })();
