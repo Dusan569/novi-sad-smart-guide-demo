@@ -15,18 +15,23 @@
   '.tour-selection-note','.guide-picks-heading','.guide-pick','.editorial-credits'
  ].join(',');
  const page=document.getElementById('page');
- const fadeDuration=200;
+ const fadeDuration=480;
+ const revealDelay=180;
  let pageAnimation=null;
 
  function enterPage(){
   pageAnimation?.cancel();
   if(preference.matches||!page)return;
   page.classList.add('ns-page-entering');
-  const animation=page.animate([{opacity:.36},{opacity:1}],{
-   duration:fadeDuration,easing:'ease-out'
+  const animation=page.animate([{opacity:.16},{opacity:1}],{
+   duration:fadeDuration,easing:'cubic-bezier(.32,.12,.45,1)'
   });
   pageAnimation=animation;
+  const revealTimer=setTimeout(()=>{
+   if(pageAnimation===animation)page.classList.remove('ns-page-entering');
+  },revealDelay);
   animation.finished.catch(()=>{}).finally(()=>{
+   clearTimeout(revealTimer);
    if(pageAnimation!==animation)return;
    pageAnimation=null;
    page.classList.remove('ns-page-entering');
@@ -47,13 +52,13 @@
    observer.unobserve(element);
    if(preference.matches||!element.isConnected)continue;
    element.classList.add('ns-motion-item');
-   // Keep the initial reveal pose during the page fade, then stagger visible items.
-   const fadeRemaining=pageAnimation&&page.contains(element)
-    ?Math.max(0,fadeDuration-(pageAnimation.currentTime??0)):0;
+   // Bring the items in while the screen is still fading so the reveal is visible.
+   const revealWait=pageAnimation&&page.contains(element)
+    ?Math.max(0,revealDelay-(pageAnimation.currentTime??0)):0;
    const animation=element.animate([
     {opacity:.12,transform:'translateY(16px)'},
     {opacity:1,transform:'translateY(0)'}
-   ],{duration:420,delay:fadeRemaining+Math.min(order++,4)*45,easing:'cubic-bezier(.2,.75,.25,1)',fill:'backwards'});
+   ],{duration:420,delay:revealWait+Math.min(order++,4)*45,easing:'cubic-bezier(.2,.75,.25,1)',fill:'backwards'});
    active.add(animation);
    animation.finished.catch(()=>{}).finally(()=>active.delete(animation));
   }
