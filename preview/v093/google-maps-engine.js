@@ -53,8 +53,7 @@
       this.markers=[];this.poiMarkers=[];this.stopMarkers=[];this.heading=null;
       this.placeItems=[];this.poiItems=[];
       const mapId=cfg().mapId||'DEMO_MAP_ID';
-      const themeMode=document.documentElement?.dataset?.themeMode;
-      const colorScheme=themeMode==='dark'?'DARK':themeMode==='light'?'LIGHT':'FOLLOW_SYSTEM';
+      const colorScheme=document.documentElement?.dataset?.theme==='dark'?'DARK':'LIGHT';
       this.map=new google.maps.Map(host,{
         center:{lat:+options.lat||45.25565,lng:+options.lng||19.84563},
         zoom:Number.isFinite(options.zoom)?options.zoom:14,
