@@ -1,249 +1,281 @@
-/* System-driven dark palette for the guide. Map tiles and overlays are styled independently. */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #101b21;
-    --night-ink: #eff6f4;
-    --night-muted: #b1c4c8;
-    --ink: var(--night-ink);
-    --muted: var(--night-muted);
-    --line: #38515a;
-    --night-surface: #182a32;
-    --night-raised: #20353d;
-    --night-hover: #2b4750;
-    --night-accent: #8ce4d2;
-    --night-accent-hover: #b4f2e5;
-    --night-on-accent: #102f32;
-    --night-warm: #f6cc90;
-    --shadow: 0 14px 45px #0006;
-  }
+/* Appearance set by the device preference or a stored override. */
+:root[data-theme="light"] { color-scheme: light; }
 
-  html, body { background: var(--bg); color: var(--ink); }
-  .editorial-home {
-    --ink: var(--night-ink);
-    --muted: var(--night-muted);
-    --teal: var(--night-accent);
-    --paper: var(--night-surface);
-  }
-  :focus-visible,
-  #page button:focus-visible, #modal button:focus-visible, .venue-surface button:focus-visible {
-    outline-color: var(--night-accent);
-  }
-
-  /* Navigation, buttons and other shared controls. */
-  .top .eyebrow, .eyebrow, .discovery-overline, .section-title .link, .text-link,
-  .editorial-arrow, .detail-tag, .spot-eyebrow, .spot-cta, .tour-eyebrow {
-    color: var(--night-accent);
-  }
-  .footnote, .prototype-note, .feature small, .info-banner p, .empty { color: var(--muted); }
-  .mobile-nav {
-    background: var(--night-surface);
-    border-color: var(--line);
-    box-shadow: 0 -8px 26px #0005;
-  }
-  .mobile-nav button { color: var(--muted); }
-  .mobile-nav button.active, .mobile-nav button.active svg { color: var(--night-accent); }
-  .mobile-nav button[aria-current=page] svg {
-    background: var(--night-hover);
-    box-shadow: 0 0 0 5px var(--night-hover);
-  }
-  .main .top #langBtn, .pill, .btn-white, .map-actions .btn-white, .filter-bar .chip, .radius-select,
-  .calm-map .calm-tool, .calm-map .discovery-map-quick button, .calm-map .calm-zoom-tools button, .discover-results-toggle,
-  .city-discovery-bar button, #locationStatus button, .venue-close {
-    background: var(--night-raised);
-    color: var(--ink);
-    border-color: var(--line);
-  }
-  .pill.soft, .counter, .num, .tour-detail-meta span, .guide-meta span {
-    background: var(--night-raised);
-    color: var(--night-accent);
-    border-color: var(--line);
-  }
-  .pill.click:hover, .btn-white:hover, .filter-bar .chip:hover { background: var(--night-hover); }
-  .btn-primary, .btn-primary:hover, .map-actions .btn-primary,
-  .editorial-hero .hero-bottom .btn-primary, .editorial-home .discovery-next button,
-  .editorial-home .discover-button, .tours-page-grid .discover-button, .saved-empty .btn,
-  .guide-actions .btn-primary, .guide-actions .btn-primary:hover:not(:disabled), #guideSpeakButton,
-  .tour-start-button, .tour-overview-actions button:last-child,
-  .nssg-walk-buttons .nssg-walk-primary, .tour-sticky-actions button[data-tour-action="resume"],
-  .venue-load, .venue-search-shortcut, .venue-card-actions .venue-card-primary,
-  .filter-bar .chip.active, .city-discovery-bar button[aria-pressed=true],
-  .city-discovery-bar button.active, .venue-switches button[aria-selected=true] {
-    background: var(--night-accent);
-    color: var(--night-on-accent);
-    border-color: var(--night-accent);
-  }
-  .btn-primary:hover, .editorial-home .discover-button:hover, .tours-page-grid .discover-button:hover,
-  .guide-actions .btn-primary:hover:not(:disabled) { background: var(--night-accent-hover); }
-  .filter-bar .chip.active:hover { background: var(--night-accent-hover); }
-
-  /* Home, place cards, favourites, walks and information pages. */
-  .editorial-shortcut, .discover-tour-card, .spot-card, .feature, .info-banner, .saved-empty,
-  .saved-editorial-card, .about-editorial-card, .about-disclosure, .route-steps, .walk-card,
-  .tour-stop-body, .guide-pick, .guide-nearby, .nearby-place,
-  .editorial-home .discover-tour-card, .editorial-home .spot-card, .tours-page-grid .discover-tour-card {
-    background: var(--night-surface);
-    border-color: var(--line);
-    color: var(--ink);
-  }
-  .editorial-page-head, .city-discovery-bar, .discovery-local-tip, .nearby-discovery-status,
-  #locationStatus, .guide-tip, .guide-fact, .guide-notes, .guide-audio, .guide-pick-emoji {
-    background: var(--night-raised);
-    border-color: var(--line);
-    color: var(--ink);
-  }
-  .editorial-page-head h1, .saved-editorial-open, .guide-picks-heading strong,
-  .guide-content h2, .guide-feature h3, .guide-near-title, .guide-audio-copy strong {
-    color: var(--ink);
-  }
-  .editorial-page-head p, .tour-selection-note, .tour-card-content p, .tour-pace, .spot-description,
-  .editorial-home .discovery-trust, .editorial-credits, .saved-empty p, .about-editorial-card p,
-  .about-disclosure p, .tour-time-note, .tour-stop-body small, .step p {
-    color: var(--muted);
-  }
-  .editorial-home .discovery-trust a, .editorial-credits summary, .editorial-credits a,
-  .about-disclosure a, .saved-editorial-copy small, .saved-editorial-copy>span, .place-source a,
-  .discovery-source, .place:hover .place-name { color: var(--night-accent); }
-  .editorial-shortcut-icon, .info-banner .bubble, .about-editorial-icon, .saved-heart,
-  .guide-near-icon, .guide-audio-icon, .venue-icon {
-    background: var(--night-hover);
-    color: var(--night-accent);
-  }
-  .editorial-icon-venues { color: var(--night-warm); }
-  .editorial-icon-walks { color: #bcdbfa; }
-  .saved-remove { background: var(--night-raised); color: #ffb4ba; }
-
-  /* Details and dialogs. */
-  .modal { background: var(--night-surface); color: var(--ink); box-shadow: 0 16px 60px #0009; }
-  .modal-shade { background: #030a0ed1; }
-  .modal-close, .guide-x, #modal .tour-detail-close, .guide-hero-note,
-  #guideAudioStop, .tour-step-check, .walk-stop-marker, button.walk-stop-marker[aria-pressed=true] {
-    background: var(--night-raised);
-    color: var(--ink);
-    border-color: var(--line);
-  }
-  .guide-nearby:hover, .guide-nearby:focus-visible { background: var(--night-hover); border-color: var(--night-accent); }
-  .guide-content .guide-lead { color: var(--muted)!important; }
-  .guide-picks-heading small, .guide-pick small, .guide-feature p, .guide-tip p, .guide-fact p,
-  .guide-notes p, .guide-nearby small, .guide-source, .guide-photo-credit, .guide-audio-copy small,
-  .modal-body p, .detail-facts span, .nearby-place small { color: var(--muted); }
-  .guide-source, .detail-facts span, .guide-tip, .guide-notes { border-color: var(--line); }
-  .guide-kicker, .guide-fact strong, .guide-tip strong, .guide-source a, .guide-source summary,
-  .guide-photo-credit a, .guide-pick-emoji .ns-icon, .guide-notes .ns-icon, .guide-tip .ns-icon,
-  .guide-fact .ns-icon { color: var(--night-accent); }
-  .guide-actions [aria-pressed=true], .tour-step-check.done {
-    background: var(--night-hover);
-    color: var(--night-accent);
-    border-color: var(--night-accent);
-  }
-  .guide-actions [data-guide-save][aria-pressed=true] .ns-icon { fill: currentColor; }
-  .guide-actions .btn:disabled { background: #273840; color: var(--muted); border-color: var(--line); }
-  .notice-orange, .detail-disclaimer, .map-poi-status, .gps-inline-status.error {
-    background: #382d21;
-    color: var(--night-warm);
-    border-color: #6b5439;
-  }
-
-  /* Map background and guide controls. Route and location overlays are rendered separately. */
-  #map, .map-wrap, .map-cover, .tour-raster, #mapFallback {
-    background: var(--night-raised);
-    border-color: var(--line);
-  }
-  .map-cover .roads { opacity: .15; }
-  .map-cover .river { background: #1d5268; }
-  .raster-tiles.raster-modern, .raster-tiles.raster-soft {
-    filter: invert(.9) hue-rotate(180deg) saturate(.7) brightness(.93);
-  }
-  .results-panel, .map-badge, .map-cover p, .map-style-control, .map-poi-toggle,
-  #mapFallback .map-error-content, .calm-map .discovery-map-tray, .calm-map .tour-overview-panel,
-  .gps-inline-status:not(.error), .heading-status, #routePanel, .route-restore,
-  .raster-tour-menu, .raster-cluster-menu, .poi-popup, #nssgMapEmergencyExit,
-  #nssgPersistentTour, .nssg-walk-top, .nssg-walk-bottom {
-    background: var(--night-surface);
-    color: var(--ink);
-    border-color: var(--line);
-  }
-  .calm-map .map-badge, .map-layout .results-panel, .raster-zoom, .place,
-  .venue-surface .venue-card, .venue-footer { border-color: var(--line); }
-  .search { background: var(--bg); color: var(--ink); border-color: var(--line); }
-  .search::placeholder { color: var(--muted); opacity: 1; }
-  .place-icon, .place-icon.park, .place-icon.culture, .saved-editorial-visual { background: var(--night-hover); }
-  .place-sub, .map-error-content p, .poi-popup p, .route-panel-head p, .route-panel-foot,
-  .route-steps-preview, .tour-overview-top small, .tour-preview-loading, .tour-diagnostic,
-  .route-diagnostic, .tour-diagnostic strong, .tour-diagnostic p, .route-diagnostic p,
-  .tour-sticky-copy small, .nssg-walk-turn-copy small, .nssg-walk-target small, .nssg-walk-target p {
-    color: var(--muted);
-  }
-  .tour-diagnostic summary, .route-diagnostic summary, .tour-overview-top span, .nssg-walk-kicker,
-  .tour-sticky-eyebrow, .route-restore .route-rest-arrow, .poi-popup-label { color: var(--night-accent); }
-  .calm-tray-head, .tour-overview-top strong, .raster-cluster-menu strong, .raster-tour-menu strong,
-  .poi-popup strong, .nssg-walk-target strong, .nssg-walk-turn-copy strong, .tour-sticky-copy strong {
-    color: var(--ink);
-  }
-  .raster-attribution { background: var(--night-surface); color: var(--ink); }
-  .raster-zoom button + button { border-color: var(--line); }
-  .step:not(:last-child):before { background: var(--line); }
-  .raster-zoom button, .map-style-control button, .calm-tray-head button, .heading-controls button,
-  .nav-live-controls button, .route-close, .route-stats span, .route-panel-actions a,
-  .raster-cluster-menu button, .raster-tour-menu button, .poi-popup-x, .poi-popup-actions a,
-  #mapFallback .map-error-buttons a, .tour-overview-top button, .tour-overview-top #tourOverviewDetails,
-  .tour-overview-actions button:not(:last-child), .tour-extra-options summary, .nssg-walk-pause,
-  .nssg-walk-buttons button:not(.nssg-walk-primary), .tour-sticky-actions button:not([data-tour-action="resume"]),
-  .tour-preview-button, .tour-stop-actions button, .step button {
-    background: var(--night-raised);
-    color: var(--ink);
-    border-color: var(--line);
-  }
-  .tour-sticky-actions .tour-sticky-finish, .route-end-btn {
-    background: var(--night-raised)!important;
-    color: var(--ink)!important;
-    border-color: var(--line);
-  }
-  .map-style-control button.active, .heading-controls button.active, .nav-live-controls button.active,
-  .raster-cluster-menu button:hover, .route-close:hover { background: var(--night-hover); color: var(--ink); }
-  #modal .walk-stops-header, #modal .walk-stops-body, #modal .walk-stop-next {
-    background: var(--night-raised);
-    color: var(--ink);
-    border-color: var(--line);
-  }
-  #modal .walk-stop-row { background: var(--night-surface); border-color: var(--line); }
-  #modal .walk-stop-next { background: var(--night-hover); border-color: var(--night-accent); }
-  .walk-stop-story, .walk-stops-summary { color: var(--ink); }
-  .walk-stops-summary span { color: var(--muted); }
-  .walk-stop-story small, .walk-stop-chevron { color: var(--night-accent); }
-  .walk-stop-next .walk-stop-marker { background: var(--night-accent); color: var(--night-on-accent); }
-  .walk-stop-story:active, button.walk-stop-marker:active {
-    background: var(--night-accent);
-    color: var(--night-on-accent);
-  }
-  .walk-stop-story:active small, .walk-stop-story:active .walk-stop-chevron { color: inherit; }
-  .walk-stops-progress { background: var(--line); accent-color: var(--night-accent); }
-  .walk-stops-progress::-webkit-progress-bar { background: var(--line); }
-  .walk-stops-progress::-webkit-progress-value { background: var(--night-accent); }
-  .walk-stops-progress::-moz-progress-bar { background: var(--night-accent); }
-
-  /* Venue cards and the optional map setup panel. */
-  .nssg-venue-screen, .venue-header h2, .venue-card-body strong { color: var(--ink); }
-  .venue-surface, .venue-card {
-    background: var(--night-surface);
-    border-color: var(--line);
-  }
-  .venue-header, .venue-footer, .venue-switches button:not([aria-selected=true]),
-  .venue-card-actions button:not(.venue-card-primary) {
-    background: var(--night-raised);
-    color: var(--ink);
-    border-color: var(--line);
-  }
-  .venue-header p, .venue-card-body p, .venue-card-body small,
-  .venue-footer, .venue-message, .venue-empty { color: var(--muted); }
-  .venue-kicker, .venue-icon .ns-icon { color: var(--night-accent); }
-
-  html #nssg-demo-key-ui .panel { background: var(--night-surface); color: var(--ink); }
-  html #nssg-demo-key-ui p { color: var(--muted); }
-  html #nssg-demo-key-ui a { color: var(--night-accent); }
-  html #nssg-demo-key-ui input, html #nssg-demo-key-ui [data-skip] {
-    background: var(--night-raised);
-    border-color: var(--line);
-    color: var(--ink);
-  }
-  html #nssg-demo-key-ui [role=alert] { color: #ffb4ba; }
+.top-right { display: flex; align-items: center; gap: 8px; }
+.appearance-control { position: relative; display: inline-flex; color: #193b49; }
+.appearance-control select {
+  appearance: none;
+  min-height: 44px;
+  padding: 0 27px 0 12px;
+  border: 1px solid #dfe8e4;
+  border-radius: 100px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
 }
+.appearance-control svg { position: absolute; inset-inline-end: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.appearance-control select:focus-visible { outline: 3px solid #087b72; outline-offset: 3px; }
+.main .top-left { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 400px) {
+  .main .top { gap: 7px; }
+  .top-right { gap: 6px; }
+  .appearance-control select { padding-inline: 9px 22px; font-size: 11px; }
+  .appearance-control svg { inset-inline-end: 7px; }
+  .main .top #langBtn { white-space: nowrap; padding-inline: 11px; }
+}
+
+/* System-driven dark palette for the guide. Map tiles and overlays are styled independently. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101b21;
+  --night-ink: #eff6f4;
+  --night-muted: #b1c4c8;
+  --ink: var(--night-ink);
+  --muted: var(--night-muted);
+  --line: #38515a;
+  --night-surface: #182a32;
+  --night-raised: #20353d;
+  --night-hover: #2b4750;
+  --night-accent: #8ce4d2;
+  --night-accent-hover: #b4f2e5;
+  --night-on-accent: #102f32;
+  --night-warm: #f6cc90;
+  --shadow: 0 14px 45px #0006;
+}
+
+html[data-theme="dark"], :where(html[data-theme="dark"]) body { background: var(--bg); color: var(--ink); }
+:where(html[data-theme="dark"]) .editorial-home {
+  --ink: var(--night-ink);
+  --muted: var(--night-muted);
+  --teal: var(--night-accent);
+  --paper: var(--night-surface);
+}
+:where(html[data-theme="dark"]) :focus-visible,
+:where(html[data-theme="dark"]) #page button:focus-visible, :where(html[data-theme="dark"]) #modal button:focus-visible, :where(html[data-theme="dark"]) .venue-surface button:focus-visible {
+  outline-color: var(--night-accent);
+}
+
+/* Navigation, buttons and other shared controls. */
+:where(html[data-theme="dark"]) .top .eyebrow, :where(html[data-theme="dark"]) .eyebrow, :where(html[data-theme="dark"]) .discovery-overline, :where(html[data-theme="dark"]) .section-title .link, :where(html[data-theme="dark"]) .text-link,
+:where(html[data-theme="dark"]) .editorial-arrow, :where(html[data-theme="dark"]) .detail-tag, :where(html[data-theme="dark"]) .spot-eyebrow, :where(html[data-theme="dark"]) .spot-cta, :where(html[data-theme="dark"]) .tour-eyebrow {
+  color: var(--night-accent);
+}
+:where(html[data-theme="dark"]) .footnote, :where(html[data-theme="dark"]) .prototype-note, :where(html[data-theme="dark"]) .feature small, :where(html[data-theme="dark"]) .info-banner p, :where(html[data-theme="dark"]) .empty { color: var(--muted); }
+:where(html[data-theme="dark"]) .mobile-nav {
+  background: var(--night-surface);
+  border-color: var(--line);
+  box-shadow: 0 -8px 26px #0005;
+}
+:where(html[data-theme="dark"]) .mobile-nav button { color: var(--muted); }
+:where(html[data-theme="dark"]) .mobile-nav button.active, :where(html[data-theme="dark"]) .mobile-nav button.active svg { color: var(--night-accent); }
+:where(html[data-theme="dark"]) .mobile-nav button[aria-current=page] svg {
+  background: var(--night-hover);
+  box-shadow: 0 0 0 5px var(--night-hover);
+}
+:where(html[data-theme="dark"]) .main .top #langBtn, :where(html[data-theme="dark"]) .pill, :where(html[data-theme="dark"]) .btn-white, :where(html[data-theme="dark"]) .map-actions .btn-white, :where(html[data-theme="dark"]) .filter-bar .chip, :where(html[data-theme="dark"]) .radius-select,
+:where(html[data-theme="dark"]) .calm-map .calm-tool, :where(html[data-theme="dark"]) .calm-map .discovery-map-quick button, :where(html[data-theme="dark"]) .calm-map .calm-zoom-tools button, :where(html[data-theme="dark"]) .discover-results-toggle,
+:where(html[data-theme="dark"]) .city-discovery-bar button, :where(html[data-theme="dark"]) #locationStatus button, :where(html[data-theme="dark"]) .venue-close {
+  background: var(--night-raised);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .pill.soft, :where(html[data-theme="dark"]) .counter, :where(html[data-theme="dark"]) .num, :where(html[data-theme="dark"]) .tour-detail-meta span, :where(html[data-theme="dark"]) .guide-meta span {
+  background: var(--night-raised);
+  color: var(--night-accent);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .pill.click:hover, :where(html[data-theme="dark"]) .btn-white:hover, :where(html[data-theme="dark"]) .filter-bar .chip:hover { background: var(--night-hover); }
+:where(html[data-theme="dark"]) .btn-primary, :where(html[data-theme="dark"]) .btn-primary:hover, :where(html[data-theme="dark"]) .map-actions .btn-primary,
+:where(html[data-theme="dark"]) .editorial-hero .hero-bottom .btn-primary, :where(html[data-theme="dark"]) .editorial-home .discovery-next button,
+:where(html[data-theme="dark"]) .editorial-home .discover-button, :where(html[data-theme="dark"]) .tours-page-grid .discover-button, :where(html[data-theme="dark"]) .saved-empty .btn,
+:where(html[data-theme="dark"]) .guide-actions .btn-primary, :where(html[data-theme="dark"]) .guide-actions .btn-primary:hover:not(:disabled), :where(html[data-theme="dark"]) #guideSpeakButton,
+:where(html[data-theme="dark"]) .tour-start-button, :where(html[data-theme="dark"]) .tour-overview-actions button:last-child,
+:where(html[data-theme="dark"]) .nssg-walk-buttons .nssg-walk-primary, :where(html[data-theme="dark"]) .tour-sticky-actions button[data-tour-action="resume"],
+:where(html[data-theme="dark"]) .venue-load, :where(html[data-theme="dark"]) .venue-search-shortcut, :where(html[data-theme="dark"]) .venue-card-actions .venue-card-primary,
+:where(html[data-theme="dark"]) .filter-bar .chip.active, :where(html[data-theme="dark"]) .city-discovery-bar button[aria-pressed=true],
+:where(html[data-theme="dark"]) .city-discovery-bar button.active, :where(html[data-theme="dark"]) .venue-switches button[aria-selected=true] {
+  background: var(--night-accent);
+  color: var(--night-on-accent);
+  border-color: var(--night-accent);
+}
+:where(html[data-theme="dark"]) .btn-primary:hover, :where(html[data-theme="dark"]) .editorial-home .discover-button:hover, :where(html[data-theme="dark"]) .tours-page-grid .discover-button:hover,
+:where(html[data-theme="dark"]) .guide-actions .btn-primary:hover:not(:disabled) { background: var(--night-accent-hover); }
+:where(html[data-theme="dark"]) .filter-bar .chip.active:hover { background: var(--night-accent-hover); }
+
+/* Home, place cards, favourites, walks and information pages. */
+:where(html[data-theme="dark"]) .editorial-shortcut, :where(html[data-theme="dark"]) .discover-tour-card, :where(html[data-theme="dark"]) .spot-card, :where(html[data-theme="dark"]) .feature, :where(html[data-theme="dark"]) .info-banner, :where(html[data-theme="dark"]) .saved-empty,
+:where(html[data-theme="dark"]) .saved-editorial-card, :where(html[data-theme="dark"]) .about-editorial-card, :where(html[data-theme="dark"]) .about-disclosure, :where(html[data-theme="dark"]) .route-steps, :where(html[data-theme="dark"]) .walk-card,
+:where(html[data-theme="dark"]) .tour-stop-body, :where(html[data-theme="dark"]) .guide-pick, :where(html[data-theme="dark"]) .guide-nearby, :where(html[data-theme="dark"]) .nearby-place,
+:where(html[data-theme="dark"]) .editorial-home .discover-tour-card, :where(html[data-theme="dark"]) .editorial-home .spot-card, :where(html[data-theme="dark"]) .tours-page-grid .discover-tour-card {
+  background: var(--night-surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+:where(html[data-theme="dark"]) .editorial-page-head, :where(html[data-theme="dark"]) .city-discovery-bar, :where(html[data-theme="dark"]) .discovery-local-tip, :where(html[data-theme="dark"]) .nearby-discovery-status,
+:where(html[data-theme="dark"]) #locationStatus, :where(html[data-theme="dark"]) .guide-tip, :where(html[data-theme="dark"]) .guide-fact, :where(html[data-theme="dark"]) .guide-notes, :where(html[data-theme="dark"]) .guide-audio, :where(html[data-theme="dark"]) .guide-pick-emoji {
+  background: var(--night-raised);
+  border-color: var(--line);
+  color: var(--ink);
+}
+:where(html[data-theme="dark"]) .editorial-page-head h1, :where(html[data-theme="dark"]) .saved-editorial-open, :where(html[data-theme="dark"]) .guide-picks-heading strong,
+:where(html[data-theme="dark"]) .guide-content h2, :where(html[data-theme="dark"]) .guide-feature h3, :where(html[data-theme="dark"]) .guide-near-title, :where(html[data-theme="dark"]) .guide-audio-copy strong {
+  color: var(--ink);
+}
+:where(html[data-theme="dark"]) .editorial-page-head p, :where(html[data-theme="dark"]) .tour-selection-note, :where(html[data-theme="dark"]) .tour-card-content p, :where(html[data-theme="dark"]) .tour-pace, :where(html[data-theme="dark"]) .spot-description,
+:where(html[data-theme="dark"]) .editorial-home .discovery-trust, :where(html[data-theme="dark"]) .editorial-credits, :where(html[data-theme="dark"]) .saved-empty p, :where(html[data-theme="dark"]) .about-editorial-card p,
+:where(html[data-theme="dark"]) .about-disclosure p, :where(html[data-theme="dark"]) .tour-time-note, :where(html[data-theme="dark"]) .tour-stop-body small, :where(html[data-theme="dark"]) .step p {
+  color: var(--muted);
+}
+:where(html[data-theme="dark"]) .editorial-home .discovery-trust a, :where(html[data-theme="dark"]) .editorial-credits summary, :where(html[data-theme="dark"]) .editorial-credits a,
+:where(html[data-theme="dark"]) .about-disclosure a, :where(html[data-theme="dark"]) .saved-editorial-copy small, :where(html[data-theme="dark"]) .saved-editorial-copy>span, :where(html[data-theme="dark"]) .place-source a,
+:where(html[data-theme="dark"]) .discovery-source, :where(html[data-theme="dark"]) .place:hover .place-name { color: var(--night-accent); }
+:where(html[data-theme="dark"]) .editorial-shortcut-icon, :where(html[data-theme="dark"]) .info-banner .bubble, :where(html[data-theme="dark"]) .about-editorial-icon, :where(html[data-theme="dark"]) .saved-heart,
+:where(html[data-theme="dark"]) .guide-near-icon, :where(html[data-theme="dark"]) .guide-audio-icon, :where(html[data-theme="dark"]) .venue-icon {
+  background: var(--night-hover);
+  color: var(--night-accent);
+}
+:where(html[data-theme="dark"]) .editorial-icon-venues { color: var(--night-warm); }
+:where(html[data-theme="dark"]) .editorial-icon-walks { color: #bcdbfa; }
+:where(html[data-theme="dark"]) .saved-remove { background: var(--night-raised); color: #ffb4ba; }
+
+/* Details and dialogs. */
+:where(html[data-theme="dark"]) .modal { background: var(--night-surface); color: var(--ink); box-shadow: 0 16px 60px #0009; }
+:where(html[data-theme="dark"]) .modal-shade { background: #030a0ed1; }
+:where(html[data-theme="dark"]) .modal-close, :where(html[data-theme="dark"]) .guide-x, :where(html[data-theme="dark"]) #modal .tour-detail-close, :where(html[data-theme="dark"]) .guide-hero-note,
+:where(html[data-theme="dark"]) #guideAudioStop, :where(html[data-theme="dark"]) .tour-step-check, :where(html[data-theme="dark"]) .walk-stop-marker, :where(html[data-theme="dark"]) button.walk-stop-marker[aria-pressed=true] {
+  background: var(--night-raised);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .guide-nearby:hover, :where(html[data-theme="dark"]) .guide-nearby:focus-visible { background: var(--night-hover); border-color: var(--night-accent); }
+:where(html[data-theme="dark"]) .guide-content .guide-lead { color: var(--muted)!important; }
+:where(html[data-theme="dark"]) .guide-picks-heading small, :where(html[data-theme="dark"]) .guide-pick small, :where(html[data-theme="dark"]) .guide-feature p, :where(html[data-theme="dark"]) .guide-tip p, :where(html[data-theme="dark"]) .guide-fact p,
+:where(html[data-theme="dark"]) .guide-notes p, :where(html[data-theme="dark"]) .guide-nearby small, :where(html[data-theme="dark"]) .guide-source, :where(html[data-theme="dark"]) .guide-photo-credit, :where(html[data-theme="dark"]) .guide-audio-copy small,
+:where(html[data-theme="dark"]) .modal-body p, :where(html[data-theme="dark"]) .detail-facts span, :where(html[data-theme="dark"]) .nearby-place small { color: var(--muted); }
+:where(html[data-theme="dark"]) .guide-source, :where(html[data-theme="dark"]) .detail-facts span, :where(html[data-theme="dark"]) .guide-tip, :where(html[data-theme="dark"]) .guide-notes { border-color: var(--line); }
+:where(html[data-theme="dark"]) .guide-kicker, :where(html[data-theme="dark"]) .guide-fact strong, :where(html[data-theme="dark"]) .guide-tip strong, :where(html[data-theme="dark"]) .guide-source a, :where(html[data-theme="dark"]) .guide-source summary,
+:where(html[data-theme="dark"]) .guide-photo-credit a, :where(html[data-theme="dark"]) .guide-pick-emoji .ns-icon, :where(html[data-theme="dark"]) .guide-notes .ns-icon, :where(html[data-theme="dark"]) .guide-tip .ns-icon,
+:where(html[data-theme="dark"]) .guide-fact .ns-icon { color: var(--night-accent); }
+:where(html[data-theme="dark"]) .guide-actions [aria-pressed=true], :where(html[data-theme="dark"]) .tour-step-check.done {
+  background: var(--night-hover);
+  color: var(--night-accent);
+  border-color: var(--night-accent);
+}
+:where(html[data-theme="dark"]) .guide-actions [data-guide-save][aria-pressed=true] .ns-icon { fill: currentColor; }
+:where(html[data-theme="dark"]) .guide-actions .btn:disabled { background: #273840; color: var(--muted); border-color: var(--line); }
+:where(html[data-theme="dark"]) .notice-orange, :where(html[data-theme="dark"]) .detail-disclaimer, :where(html[data-theme="dark"]) .map-poi-status, :where(html[data-theme="dark"]) .gps-inline-status.error {
+  background: #382d21;
+  color: var(--night-warm);
+  border-color: #6b5439;
+}
+
+/* Map background and guide controls. Route and location overlays are rendered separately. */
+:where(html[data-theme="dark"]) #map, :where(html[data-theme="dark"]) .map-wrap, :where(html[data-theme="dark"]) .map-cover, :where(html[data-theme="dark"]) .tour-raster, :where(html[data-theme="dark"]) #mapFallback {
+  background: var(--night-raised);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .map-cover .roads { opacity: .15; }
+:where(html[data-theme="dark"]) .map-cover .river { background: #1d5268; }
+:where(html[data-theme="dark"]) .raster-tiles.raster-modern, :where(html[data-theme="dark"]) .raster-tiles.raster-soft {
+  filter: invert(.9) hue-rotate(180deg) saturate(.7) brightness(.93);
+}
+:where(html[data-theme="dark"]) .results-panel, :where(html[data-theme="dark"]) .map-badge, :where(html[data-theme="dark"]) .map-cover p, :where(html[data-theme="dark"]) .map-style-control, :where(html[data-theme="dark"]) .map-poi-toggle,
+:where(html[data-theme="dark"]) #mapFallback .map-error-content, :where(html[data-theme="dark"]) .calm-map .discovery-map-tray, :where(html[data-theme="dark"]) .calm-map .tour-overview-panel,
+:where(html[data-theme="dark"]) .gps-inline-status:not(.error), :where(html[data-theme="dark"]) .heading-status, :where(html[data-theme="dark"]) #routePanel, :where(html[data-theme="dark"]) .route-restore,
+:where(html[data-theme="dark"]) .raster-tour-menu, :where(html[data-theme="dark"]) .raster-cluster-menu, :where(html[data-theme="dark"]) .poi-popup, :where(html[data-theme="dark"]) #nssgMapEmergencyExit,
+:where(html[data-theme="dark"]) #nssgPersistentTour, :where(html[data-theme="dark"]) .nssg-walk-top, :where(html[data-theme="dark"]) .nssg-walk-bottom {
+  background: var(--night-surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .calm-map .map-badge, :where(html[data-theme="dark"]) .map-layout .results-panel, :where(html[data-theme="dark"]) .raster-zoom, :where(html[data-theme="dark"]) .place,
+:where(html[data-theme="dark"]) .venue-surface .venue-card, :where(html[data-theme="dark"]) .venue-footer { border-color: var(--line); }
+:where(html[data-theme="dark"]) .search { background: var(--bg); color: var(--ink); border-color: var(--line); }
+:where(html[data-theme="dark"]) .search::placeholder { color: var(--muted); opacity: 1; }
+:where(html[data-theme="dark"]) .place-icon, :where(html[data-theme="dark"]) .place-icon.park, :where(html[data-theme="dark"]) .place-icon.culture, :where(html[data-theme="dark"]) .saved-editorial-visual { background: var(--night-hover); }
+:where(html[data-theme="dark"]) .place-sub, :where(html[data-theme="dark"]) .map-error-content p, :where(html[data-theme="dark"]) .poi-popup p, :where(html[data-theme="dark"]) .route-panel-head p, :where(html[data-theme="dark"]) .route-panel-foot,
+:where(html[data-theme="dark"]) .route-steps-preview, :where(html[data-theme="dark"]) .tour-overview-top small, :where(html[data-theme="dark"]) .tour-preview-loading, :where(html[data-theme="dark"]) .tour-diagnostic,
+:where(html[data-theme="dark"]) .route-diagnostic, :where(html[data-theme="dark"]) .tour-diagnostic strong, :where(html[data-theme="dark"]) .tour-diagnostic p, :where(html[data-theme="dark"]) .route-diagnostic p,
+:where(html[data-theme="dark"]) .tour-sticky-copy small, :where(html[data-theme="dark"]) .nssg-walk-turn-copy small, :where(html[data-theme="dark"]) .nssg-walk-target small, :where(html[data-theme="dark"]) .nssg-walk-target p {
+  color: var(--muted);
+}
+:where(html[data-theme="dark"]) .tour-diagnostic summary, :where(html[data-theme="dark"]) .route-diagnostic summary, :where(html[data-theme="dark"]) .tour-overview-top span, :where(html[data-theme="dark"]) .nssg-walk-kicker,
+:where(html[data-theme="dark"]) .tour-sticky-eyebrow, :where(html[data-theme="dark"]) .route-restore .route-rest-arrow, :where(html[data-theme="dark"]) .poi-popup-label { color: var(--night-accent); }
+:where(html[data-theme="dark"]) .calm-tray-head, :where(html[data-theme="dark"]) .tour-overview-top strong, :where(html[data-theme="dark"]) .raster-cluster-menu strong, :where(html[data-theme="dark"]) .raster-tour-menu strong,
+:where(html[data-theme="dark"]) .poi-popup strong, :where(html[data-theme="dark"]) .nssg-walk-target strong, :where(html[data-theme="dark"]) .nssg-walk-turn-copy strong, :where(html[data-theme="dark"]) .tour-sticky-copy strong {
+  color: var(--ink);
+}
+:where(html[data-theme="dark"]) .raster-attribution { background: var(--night-surface); color: var(--ink); }
+:where(html[data-theme="dark"]) .raster-zoom button + button { border-color: var(--line); }
+:where(html[data-theme="dark"]) .step:not(:last-child):before { background: var(--line); }
+:where(html[data-theme="dark"]) .raster-zoom button, :where(html[data-theme="dark"]) .map-style-control button, :where(html[data-theme="dark"]) .calm-tray-head button, :where(html[data-theme="dark"]) .heading-controls button,
+:where(html[data-theme="dark"]) .nav-live-controls button, :where(html[data-theme="dark"]) .route-close, :where(html[data-theme="dark"]) .route-stats span, :where(html[data-theme="dark"]) .route-panel-actions a,
+:where(html[data-theme="dark"]) .raster-cluster-menu button, :where(html[data-theme="dark"]) .raster-tour-menu button, :where(html[data-theme="dark"]) .poi-popup-x, :where(html[data-theme="dark"]) .poi-popup-actions a,
+:where(html[data-theme="dark"]) #mapFallback .map-error-buttons a, :where(html[data-theme="dark"]) .tour-overview-top button, :where(html[data-theme="dark"]) .tour-overview-top #tourOverviewDetails,
+:where(html[data-theme="dark"]) .tour-overview-actions button:not(:last-child), :where(html[data-theme="dark"]) .tour-extra-options summary, :where(html[data-theme="dark"]) .nssg-walk-pause,
+:where(html[data-theme="dark"]) .nssg-walk-buttons button:not(.nssg-walk-primary), :where(html[data-theme="dark"]) .tour-sticky-actions button:not([data-tour-action="resume"]),
+:where(html[data-theme="dark"]) .tour-preview-button, :where(html[data-theme="dark"]) .tour-stop-actions button, :where(html[data-theme="dark"]) .step button {
+  background: var(--night-raised);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .tour-sticky-actions .tour-sticky-finish, :where(html[data-theme="dark"]) .route-end-btn {
+  background: var(--night-raised)!important;
+  color: var(--ink)!important;
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .map-style-control button.active, :where(html[data-theme="dark"]) .heading-controls button.active, :where(html[data-theme="dark"]) .nav-live-controls button.active,
+:where(html[data-theme="dark"]) .raster-cluster-menu button:hover, :where(html[data-theme="dark"]) .route-close:hover { background: var(--night-hover); color: var(--ink); }
+:where(html[data-theme="dark"]) #modal .walk-stops-header, :where(html[data-theme="dark"]) #modal .walk-stops-body, :where(html[data-theme="dark"]) #modal .walk-stop-next {
+  background: var(--night-raised);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) #modal .walk-stop-row { background: var(--night-surface); border-color: var(--line); }
+:where(html[data-theme="dark"]) #modal .walk-stop-next { background: var(--night-hover); border-color: var(--night-accent); }
+:where(html[data-theme="dark"]) .walk-stop-story, :where(html[data-theme="dark"]) .walk-stops-summary { color: var(--ink); }
+:where(html[data-theme="dark"]) .walk-stops-summary span { color: var(--muted); }
+:where(html[data-theme="dark"]) .walk-stop-story small, :where(html[data-theme="dark"]) .walk-stop-chevron { color: var(--night-accent); }
+:where(html[data-theme="dark"]) .walk-stop-next .walk-stop-marker { background: var(--night-accent); color: var(--night-on-accent); }
+:where(html[data-theme="dark"]) .walk-stop-story:active, :where(html[data-theme="dark"]) button.walk-stop-marker:active {
+  background: var(--night-accent);
+  color: var(--night-on-accent);
+}
+:where(html[data-theme="dark"]) .walk-stop-story:active small, :where(html[data-theme="dark"]) .walk-stop-story:active .walk-stop-chevron { color: inherit; }
+:where(html[data-theme="dark"]) .walk-stops-progress { background: var(--line); accent-color: var(--night-accent); }
+:where(html[data-theme="dark"]) .walk-stops-progress::-webkit-progress-bar { background: var(--line); }
+:where(html[data-theme="dark"]) .walk-stops-progress::-webkit-progress-value { background: var(--night-accent); }
+:where(html[data-theme="dark"]) .walk-stops-progress::-moz-progress-bar { background: var(--night-accent); }
+
+/* Venue cards and the optional map setup panel. */
+:where(html[data-theme="dark"]) .nssg-venue-screen, :where(html[data-theme="dark"]) .venue-header h2, :where(html[data-theme="dark"]) .venue-card-body strong { color: var(--ink); }
+:where(html[data-theme="dark"]) .venue-surface, :where(html[data-theme="dark"]) .venue-card {
+  background: var(--night-surface);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .venue-header, :where(html[data-theme="dark"]) .venue-footer, :where(html[data-theme="dark"]) .venue-switches button:not([aria-selected=true]),
+:where(html[data-theme="dark"]) .venue-card-actions button:not(.venue-card-primary) {
+  background: var(--night-raised);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:where(html[data-theme="dark"]) .venue-header p, :where(html[data-theme="dark"]) .venue-card-body p, :where(html[data-theme="dark"]) .venue-card-body small,
+:where(html[data-theme="dark"]) .venue-footer, :where(html[data-theme="dark"]) .venue-message, :where(html[data-theme="dark"]) .venue-empty { color: var(--muted); }
+:where(html[data-theme="dark"]) .venue-kicker, :where(html[data-theme="dark"]) .venue-icon .ns-icon { color: var(--night-accent); }
+
+html:where([data-theme="dark"]) #nssg-demo-key-ui .panel { background: var(--night-surface); color: var(--ink); }
+html:where([data-theme="dark"]) #nssg-demo-key-ui p { color: var(--muted); }
+html:where([data-theme="dark"]) #nssg-demo-key-ui a { color: var(--night-accent); }
+html:where([data-theme="dark"]) #nssg-demo-key-ui input, html:where([data-theme="dark"]) #nssg-demo-key-ui [data-skip] {
+  background: var(--night-raised);
+  border-color: var(--line);
+  color: var(--ink);
+}
+html:where([data-theme="dark"]) #nssg-demo-key-ui [role=alert] { color: #ffb4ba; }
+
+:where(html[data-theme="dark"]) .appearance-control { color: var(--ink); }
+:where(html[data-theme="dark"]) .appearance-control select { background: var(--night-raised); border-color: var(--line); }
+:where(html[data-theme="dark"]) .appearance-control select:focus-visible { outline-color: var(--night-accent); }
