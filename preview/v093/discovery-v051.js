@@ -313,18 +313,40 @@ function tourOnPosition(){
    renderTourOverview();
    renderPersistentTour();
  }
- // Once a visitor opts in, recompute real Google walking directions only
- // after sustained off-route movement; throttle to avoid excessive requests.
- if(tourPreview.startFromGps&&good&&route?.isTour&&route.coords?.length&&state.navWatchId!==null){
-   const progress=navigationProgress(route,state.position);
-   if(progress&&progress.offRoute>100 && next&&distKm(state.position,next)*1000>75){
-     if(!tourOffRouteSince)tourOffRouteSince=Date.now();
-     if(Date.now()-tourOffRouteSince>=15000&&Date.now()-tourRerouteAt>=120000){
-       tourRerouteAt=Date.now();
-       recalculateGuidedTour();
-     }
-   }else tourOffRouteSince=0;
+ if(!tourPreview.startFromGps||!good||!route?.isTour||!route.coords?.length||
+    state.navWatchId===null||!next||tourPreview.routing==='loading'){
+   tourOffRouteSince=0;
+   return;
  }
+ const progress=routeNextPoint(route.coords,state.position);
+ if(!progress)return;
+ const offRouteLimit=Math.max(35,state.locationAccuracy*1.6);
+ if(progress.offRoute<=offRouteLimit){
+   tourOffRouteSince=0;
+   if(tourPreview.guiding&&!tourPreview.mapPeekPlaceId&&progress.offRoute<=30){
+     drawRemainingWalk(route,progress,next);
+   }
+   return;
+ }
+ const now=Date.now();
+ if(!tourOffRouteSince)tourOffRouteSince=now;
+ if(now-tourOffRouteSince>=4000&&(!tourPreview.rerouteAt||now-tourPreview.rerouteAt>=25000)){
+   tourPreview.rerouteAt=now;
+   tourOffRouteSince=0;
+   computeFullTour(tourPreview.id,++tourRouteSequence,true);
+ }
+}
+
+function drawRemainingWalk(route,progress,next){
+ if(!state.map)return;
+ // Never trim past the next unvisited stop, even if the route loops near the user.
+ const stop=routeNextPoint(route.coords,next);
+ if(!stop||progress.segment>stop.segment||
+    (progress.segment===stop.segment&&progress.fraction>stop.fraction))return;
+ if(route.drawnFrom&&geoDistance(route.drawnFrom,progress.projected)<8)return;
+ route.drawnFrom=progress.projected;
+ const {lng,lat}=progress.projected;
+ state.map.setRoute([[lng,lat],...route.coords.slice(progress.segment+1)],route.destination,false);
 }
 
 function fitTour(){
@@ -338,7 +360,6 @@ function fitTour(){
 
 let tourRouteSequence=0;
 let tourOffRouteSince=0;
-let tourRerouteAt=0;
 const GPS_MAX_ACCURACY=120;
 const GPS_RECENT_MS=120000;
 const gpsFixUsable=()=>state.fromGps&&Number.isFinite(state.position?.lat)&&Number.isFinite(state.position?.lng)
@@ -423,7 +444,7 @@ function tourWaypoints(){
  }
  return points;
 }
-async function computeFullTour(id,seq){
+async function computeFullTour(id,seq,keepRoute=false){
  if(!tourPreview||tourPreview.id!==id||seq!==tourRouteSequence)return;
  const points=tourWaypoints();
  tourPreview.routing='loading';
@@ -466,7 +487,7 @@ async function computeFullTour(id,seq){
    tourPreview.minutes=Number(result.minutes);
    state.map?.setRoute(result.coords,dest);
    if(tourPreview.guiding)focusGuidedCamera();
-   else state.map?.fitRoute(result.coords,{top:68,bottom:180,left:35,right:35,maxZoom:16});
+   else if(!keepRoute)state.map?.fitRoute(result.coords,{top:68,bottom:180,left:35,right:35,maxZoom:16});
    if(tourPreview.routeFromGps&&state.fromGps){
      state.followMode=true;
      // One consent at tour start is also the opt-in for foreground GPS tracking.
@@ -492,6 +513,12 @@ async function computeFullTour(id,seq){
    }else if(tourPreview.guiding)updateWalkHud();
  }catch(error){
    if(seq!==tourRouteSequence||tourPreview?.id!==id)return;
+   if(keepRoute&&state.activeRoute?.isTour){
+     tourPreview.routing='ready';
+     showToast(label('Nova ruta trenutno nije dostupna.','Could not update the walking route.'));
+     renderTourOverview();
+     return;
+   }
    console.warn('Google whole-tour walking route error:',window.NSSG_GOOGLE_ENGINE.diagnoseRouteError(error).code);
    tourPreview.routing='error';
    tourPreview.message=window.NSSG_KEYLESS_MAP?label('Pešačka ruta trenutno nije dostupna. Stanice su prikazane na mapi.','Walking directions unavailable. Stops are shown on the map.'):routeErrorCopy(error?.code||window.NSSG_GOOGLE_ENGINE?.classifyRouteError?.(error)||'UNKNOWN');

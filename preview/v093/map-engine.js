@@ -143,10 +143,12 @@ class SimpleTourMap{
   easeTo(opts){if(opts.center){this.center={lng:opts.center[0],lat:opts.center[1]}}if(opts.zoom)this.zoom=clamp(Math.round(opts.zoom),MINZOOM,MAXZOOM);this.render()}
   setStyle(s){if(this.style!==s){this.style=s;this.render()}}
   setPlaces(arr){this.places=arr;this.drawOverlay()}
-  setRoute(coords,destination){
+  setRoute(coords,destination,fit=true){
     if(!Array.isArray(coords)||coords.length<2||coords.length>20000)throw Error('Invalid route geometry');
     if(!coords.every(c=>Array.isArray(c)&&c.length===2&&c.every(Number.isFinite)))throw Error('Invalid route coordinates');
-    this.routeCoords=coords;this.routeDestination=destination||null;this.fitRoute(coords);
+    this.routeCoords=coords;this.routeDestination=destination||null;
+    if(fit)this.fitRoute(coords);
+    else this.drawOverlay();
   }
   clearRoute(){this.routeCoords=[];this.routeDestination=null;this.drawOverlay();}
   setTourStops(stops){
